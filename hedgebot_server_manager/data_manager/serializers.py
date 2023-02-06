@@ -60,7 +60,7 @@ class MarketDataSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = market_data
-        fields = ('ticker','date','value','units')
+        fields = ('id','ticker','date','value','units')
 
 class FinSimMetaDataSerializer(serializers.ModelSerializer):
 

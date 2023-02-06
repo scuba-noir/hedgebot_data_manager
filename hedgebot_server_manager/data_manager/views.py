@@ -299,7 +299,8 @@ def fin_sim_meta_data_api(request):
 def market_data_api(request):
 
     if request.method == "GET":
-        data = market_data.objects.all()
+        columns_ls = ['SB1 Comdty','USDBRL Curncy','BAAWHYDP Index','BAAWANAB Index']
+        data = market_data.objects.filter(ticker__in = columns_ls)
 
         serializer = MarketDataSerializer(data, context={'request': request}, many=True)
 
