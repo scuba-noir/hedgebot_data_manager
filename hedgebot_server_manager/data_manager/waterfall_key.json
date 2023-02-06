@@ -1,0 +1,21 @@
+{
+    "Sugar":{"account":"Sugar revenues","data_group":"Income Statement Forecasts", "alt_name":"Sugar Revenues BRL"},
+    "Hydrous":{"account":"Hydrous revenues","data_group":"Income Statement Forecasts", "alt_name":"Hydrous Revenues BRL"},
+    "Anhydrous":{"account":"Anhydrous revenues","data_group":"Income Statement Forecasts", "alt_name":"Anhydrous Revenues BRL"},
+    "Energy":{"account":"Energy revenues","data_group":"Income Statement Forecasts", "alt_name":"Energy Revenues BRL"},
+    "Inputs":{"account":"Inputs","data_group":"Income Statement Forecasts", "alt_name":"Input Cost BRL"},
+    "Fuel":{"account":"Fuel","data_group":"Income Statement Forecasts", "alt_name":"Fuel Cost BRL"},
+    "Freight":{"account":"Freights","data_group":"Income Statement Forecasts", "alt_name":"Freight Cost BRL"},
+    "Wages":{"account":"Labor cost","data_group":"Income Statement Forecasts", "alt_name":"Labor Cost BRL"},
+    "Industrial":{"account":"Industrial cost","data_group":"Income Statement Forecasts", "alt_name":"Industrial Cost BRL"},
+    "Depreciation":{"account":"Depreciation","data_group":"Income Statement Forecasts", "alt_name":"Depreciation BRL"},
+    "Planting":{"account":"Planting cost","data_group":"Income Statement Forecasts", "alt_name":"Planting Cost BRL"},
+    "Other Expenses":{"account":"Financial expenses","data_group":"Cash Flow Statement Forecasts", "alt_name":"Lease Cost BRL"},
+    "Gross Profit":{"account":"Gross profit","data_group":"Income Statement Forecasts", "alt_name":"Gross Profit BRL"},
+    "SG&A":{"account":"Total SG&A","data_group":"Cash Flow Statement Forecasts", "alt_name":"Total SG&A BRL"},
+    "EBIT":{"account":"EBIT","data_group":"Cash Flow Statement Forecasts", "alt_name":"EBIT"},
+    "Financial":{"account":"Financial expenses","data_group":"Cash Flow Statement Forecasts", "alt_name":"Financial Expenses BRL"},
+    "EBT":{"account":"Profit before taxes","data_group":"Cash Flow Statement Forecasts", "alt_name":"Profit Before Tax BRL"},
+    "Tax":{"account":"Income tax","data_group":"Cash Flow Statement Forecasts", "alt_name":"Income Tax BRL"},
+    "Net Income":{"account":"Net income","data_group":"Cash Flow Statement Forecasts", "alt_name":"Net Income BRL"}
+}
