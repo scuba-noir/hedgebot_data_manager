@@ -9,6 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         next = False
+        emp_2 = True
         if next == True:
             data_df = pd.read_csv('Final_Final_MC.csv', index_col=False)
             data_df['sim_date'] = pd.to_datetime(data_df['sim_date'])
@@ -35,3 +36,12 @@ class Command(BaseCommand):
                 current_mc_data_df['std_returned'] = current_mc_data_df['std_returned'].div(current_mc_data_df['mean_returned'])
                 current_mc_data_df['pct_change'] = current_mc_data_df.groupby('factor_label')['mean_returned'].pct_change().fillna(0)
                 print(current_mc_data_df)
+        if emp_2 == True:
+            data_df = pd.read_csv('temp_price_csv.csv')
+            temp_cols = data_df.columns
+            for cols in temp_cols:
+                if cols == 'date':
+                    continue
+                temp_ref = cols
+                temp_df = data_df.filter([temp_ref, 'date'])
+                print(temp_df)
