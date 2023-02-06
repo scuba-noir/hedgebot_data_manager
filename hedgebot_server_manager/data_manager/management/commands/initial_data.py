@@ -43,6 +43,7 @@ class Command(BaseCommand):
         if emp_2 == True:
             data_df = pd.read_csv('temp_market_csv.csv', index_col=False)
             data_df = data_df.drop(['id'], axis=1).drop_duplicates()
+            print(data_df)
             data_df['date'] = pd.to_datetime(data_df['date'])
             for row, items in data_df:
                 obj = market_data.objects.update_or_create(ticker=items['ticker'], date=items['date'], value=items['value'], units=items['units'])
