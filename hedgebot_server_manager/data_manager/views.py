@@ -342,7 +342,7 @@ def current_mc_data_api(request):
     if request.method == "GET":
         relevant_factors = ['sugar_1', 'hydrous', 'anhydrous', 'usdbrl']
         max_date = monte_carlo_market_data.objects.latest('simulation_date').simulation_date    
-        data = monte_carlo_market_data.objects.filter(reference__in = relevant_factors).filter(simulation_date = max_date
+        data = monte_carlo_market_data.objects.filter(reference__in = relevant_factors).filter(simulation_date = max_date)
         serializer = MonteCarloDataSerializer(data, context={'request':request}, many=True)
         return Response(serializer.data)
 
