@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from data_manager import models
-from models import monte_carlo_market_data
+from data_manager.models import monte_carlo_market_data
 import pandas as pd
 
 
