@@ -339,39 +339,51 @@ def historical_mc_data_api(request):
 @api_view(['GET'])
 def current_mc_data_api(request):
 
-    #Need to Check Season Here
-    relevant_factors = ['sugar_1', 'hydrous', 'anhydrous', 'usdbrl']
-    max_date = monte_carlo_market_data.objects.latest('simulation_date').simulation_date
-    current_mc_data_df = pd.DataFrame(monte_carlo_market_data.objects.filter(reference__in = relevant_factors).filter(simulation_date = max_date).values())
-    current_mc_data_df.columns = ['Id','start_date', 'target_date', 'end_date', 'factor_label', 'mean_returned', 'std_returned']
-    current_mc_data_df['season'] = '23_24'
-    current_mc_data_df = current_mc_data_df.drop(['Id'], axis = 1).drop_duplicates()
-    current_mc_data_df.loc[current_mc_data_df['std_returned'] < 0.0001, 'std_returned'] = 0
-    current_mc_data_df['std_returned'] = current_mc_data_df['std_returned'].div(current_mc_data_df['mean_returned'])
-    current_mc_data_df['pct_change'] = current_mc_data_df.groupby('factor_label')['mean_returned'].pct_change().fillna(0)
-    current_mc_data_df.to_csv('error_test.csv')
-    #current_mc_data_df['end_date'] = '2024-03-31'
-    current_mc_data_df.index = pd.to_datetime(current_mc_data_df['target_date'])
-    final_temp_df = []
-    counter = 0
-    for reference in relevant_factors:
-        temp_df = current_mc_data_df.loc[current_mc_data_df['factor_label'] == reference]
-        temp_rows = []
-        for items, rows in temp_df.iterrows():
-            temp_rows = [reference]
-            temp_rows.append(rows['target_date'])
-            temp_mu = rows['pct_change']
-            temp_std = rows['std_returned']
-            temp_drift = temp_mu - (0.5 * temp_std**2)
-            
-            temp_row_final = np.exp(temp_drift + temp_std * norm.ppf(np.random.rand(1, 1000)))
-            temp_rows.extend(temp_row_final[0])
-            if counter == 0:
-                final_temp_df = pd.DataFrame([temp_rows])
-                counter += 1
-            else:
-                final_temp_df = pd.concat([final_temp_df, pd.DataFrame([temp_rows])], ignore_index=True)
-    return final_temp_df, current_mc_data_df
+    if request.method == "GET":
+        #Final Temp DF is dataframe of all simulations
+        #Current mc data df is dataframe of most recent MC sim meta variables
+
+        relevant_factors = ['sugar_1', 'hydrous', 'anhydrous', 'usdbrl']
+        max_date = monte_carlo_market_data.objects.latest('simulation_date').simulation_date
+        current_mc_data_df = pd.DataFrame(monte_carlo_market_data.objects.filter(reference__in = relevant_factors).filter(simulation_date = max_date).values())
+        current_mc_data_df.columns = ['Id','start_date', 'target_date', 'end_date', 'factor_label', 'mean_returned', 'std_returned']
+        current_mc_data_df['season'] = '23_24'
+        current_mc_data_df = current_mc_data_df.drop(['Id'], axis = 1).drop_duplicates()
+        current_mc_data_df.loc[current_mc_data_df['std_returned'] < 0.0001, 'std_returned'] = 0
+        current_mc_data_df['std_returned'] = current_mc_data_df['std_returned'].div(current_mc_data_df['mean_returned'])
+        current_mc_data_df['pct_change'] = current_mc_data_df.groupby('factor_label')['mean_returned'].pct_change().fillna(0)
+        print(current_mc_data_df)
+        
+        """
+        #current_mc_data_df['end_date'] = '2024-03-31'
+        current_mc_data_df.index = pd.to_datetime(current_mc_data_df['target_date'])
+        final_temp_df = []
+        counter = 0
+        for reference in relevant_factors:
+            temp_df = current_mc_data_df.loc[current_mc_data_df['factor_label'] == reference]
+            temp_rows = []
+            for items, rows in temp_df.iterrows():
+                temp_rows = [reference]
+                temp_rows.append(rows['target_date'])
+                temp_mu = rows['pct_change']
+                temp_std = rows['std_returned']
+                temp_drift = temp_mu - (0.5 * temp_std**2)
+                
+                temp_row_final = np.exp(temp_drift + temp_std * norm.ppf(np.random.rand(1, 1000)))
+                temp_rows.extend(temp_row_final[0])
+                if counter == 0:
+                    final_temp_df = pd.DataFrame([temp_rows])
+                    counter += 1
+                else:
+                    final_temp_df = pd.concat([final_temp_df, pd.DataFrame([temp_rows])], ignore_index=True)
+        
+        serializer = SugarPositionSerializers(data, context={'request': request}, many=True)
+
+        return Response(serializer.data)
+        """
+
+@api_view
+def 
 
 @api_view(['GET'])
 def market_price_data_api(request):

@@ -71,3 +71,4 @@ class RiskVarTableSerializer(serializers.ModelSerializer):
     class Meta:
         model = risk_var_table
         fields = ('label','prev_season','actual_estimate','low_10','high_90','prob_estimate')    
+
