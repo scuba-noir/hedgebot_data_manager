@@ -402,3 +402,5 @@ def market_price_data_api(request):
     price_data_df = price_data_df.dropna().to_dict(orient='list')
     
     return price_data_df
+
+
