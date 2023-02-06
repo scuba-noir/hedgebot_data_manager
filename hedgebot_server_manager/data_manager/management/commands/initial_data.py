@@ -45,5 +45,5 @@ class Command(BaseCommand):
             data_df = data_df.drop(['id'], axis=1).drop_duplicates()
             print(data_df)
             data_df['date'] = pd.to_datetime(data_df['date'])
-            for row, items in data_df:
+            for row, items in data_df.iterrows():
                 obj = market_data.objects.update_or_create(ticker=items['ticker'], date=items['date'], value=items['value'], units=items['units'])
