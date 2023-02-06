@@ -834,3 +834,17 @@ class target_prices(models.Model):
     oct_brl = models.FloatField(default= 0)
     mar2_cts = models.FloatField(default= 0)
     mar2_brl = models.FloatField(default= 0)
+
+class current_mc_data(models.Model):
+
+    id = models.BigAutoField(primary_key=True)
+    start_date = models.DateField(default=django.utils.timezone.now)
+    target_date = models.DateField()
+    end_date = models.DateField(default='2024-03-31')
+    factor_label = models.CharField(max_length=50)
+    mean_returned = models.FloatField(default = 0)
+    std_returned = models.FloatField(default=0)
+    season = models.CharField(max_length=10)
+    pct_change = models.FloatField()
+
+    
