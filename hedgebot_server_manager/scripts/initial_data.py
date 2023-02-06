@@ -1,4 +1,4 @@
-from hedgebot_server_manager.data_manager import models
+from data_manager import models
 import pandas as pd
 
 def run():
