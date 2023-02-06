@@ -382,8 +382,7 @@ def current_mc_data_api(request):
         return Response(serializer.data)
         """
 
-@api_view
-def 
+
 
 @api_view(['GET'])
 def market_price_data_api(request):
