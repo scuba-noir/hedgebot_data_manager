@@ -1,4 +1,4 @@
-import models
+from data_manager import models
 import pandas as pd
 
 
