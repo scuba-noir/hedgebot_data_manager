@@ -15,12 +15,6 @@ from data_manager.models import current_financial_simulations
 from data_manager.models import monte_carlo_market_data
 from data_manager.models import market_data, risk_var_table
 from data_manager.models import sugar_position_info_2
-from django.core import serializers
-from django.core.serializers.json import DjangoJSONEncoder
-from django.shortcuts import render, redirect
-from django.http import HttpRequest, HttpResponse, JsonResponse, FileResponse
-from django.db.models import F
-from django.contrib.auth.decorators import login_required
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from rest_framework.response import Response
