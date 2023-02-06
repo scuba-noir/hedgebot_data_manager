@@ -343,7 +343,7 @@ def historical_mc_data_api(request):
     return hist_mc_data_df
 
 @api_view(['GET'])
-def current_mc_data_api():
+def current_mc_data_api(request):
 
     #Need to Check Season Here
     relevant_factors = ['sugar_1', 'hydrous', 'anhydrous', 'usdbrl']
