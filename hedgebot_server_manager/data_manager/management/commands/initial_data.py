@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from data_manager import models
+import pandas as pd
 
 
 
