@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
-from models import fields
 from .models import sugar_position_info, monte_carlo_market_data, market_data, financial_simulation_meta_data_historical, risk_var_table, sugar_position_info_2
 from .models import current_mc_data
 
