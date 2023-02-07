@@ -21,10 +21,6 @@ class finSimMetaAdmin(admin.ModelAdmin):
 class userForAssumAdmin(admin.ModelAdmin):
     list_display = [field.name for field in user_forecasts_assumptions_results._meta.get_fields()]
 
-@admin.register(risk_var_table)
-class riskVarTableAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in risk_var_table._meta.get_fields()]
-
 @admin.register(monte_carlo_market_data)
 class monteCarloAdmin(admin.ModelAdmin):
     list_display = [field.name for field in monte_carlo_market_data._meta.get_fields()]
