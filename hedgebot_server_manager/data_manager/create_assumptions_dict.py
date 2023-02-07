@@ -59,14 +59,20 @@ def main(new_drivers_dict, new_drivers_ls, prev_season_df, current_season_df):
         new_fuel = new_drivers_dict['Crude oil'].values[0]
     except:
         new_fuel = new_drivers_dict['Crude oil']
+
     prev_fuel = prev_season_values_df['Crude oil'].values[0]
     prev_fuel_costs = temp_prev_season_df['Value'].loc[(temp_prev_season_df['Variable_name_eng'] == 'Fuel') & (temp_prev_season_df['Data_group'] == 'Production Cost Assumptions')].values[0]
-    new_fuel_costs = prev_fuel_costs * (new_fuel / prev_fuel)
+    try:
+        new_fuel_costs = prev_fuel_costs * (new_fuel / prev_fuel)
+    except:
+        new_fuel_costs = 0
 
     #Freight Costs
     prev_freight_costs = temp_prev_season_df['Value'].loc[(temp_prev_season_df['Variable_name_eng'] == 'Freights') & (temp_prev_season_df['Data_group'] == 'Production Cost Assumptions')].values[0]
-    new_freight_costs = prev_freight_costs * (new_fuel / prev_fuel)
-
+    try:
+        new_freight_costs = prev_freight_costs * (new_fuel / prev_fuel)
+    except:
+        new_freight_costs = 0
     #Labor Costs
     inflation_rate = new_drivers_dict['Inflation'] / 100
     prev_labor_costs = temp_prev_season_df['Value'].loc[(temp_prev_season_df['Variable_name_eng'] == 'Labor cost') & (temp_prev_season_df['Data_group'] == 'Production Cost Assumptions')].values[0]

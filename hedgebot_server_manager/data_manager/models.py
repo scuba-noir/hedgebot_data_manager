@@ -856,6 +856,7 @@ class user_list(models.Model):
 class current_financial_simulations(models.Model):
 
     id = models.BigAutoField(primary_key=True)
+    user = models.CharField(max_length=30)
     simulation_number = models.IntegerField()
     sugar_price = models.FloatField(default=0, verbose_name='Sugar')
     hydrous_price = models.FloatField(default=0, verbose_name='Hydrous')
