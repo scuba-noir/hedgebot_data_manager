@@ -36,7 +36,7 @@ def current_financial_sim(username):
             var_name = temp_str
 
         try:
-            group_name = new_str[:temp_str.index('-')]
+            group_name = new_str[:new_str.index('-')]
         except:
             group_name = "NOT LISTED"
         print(var_name)
