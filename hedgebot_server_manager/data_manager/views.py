@@ -43,7 +43,7 @@ def current_financial_sim(username):
             
         except:
             var_name = temp_str
-        print('test', temp_str)
+
         try:
             group_name = re.search('-(.*)-', temp_str).group(1)
         except:
@@ -56,9 +56,9 @@ def current_financial_sim(username):
             units ='not_listed'
 
         if counter == 0:
-            temp_df = pd.DataFrame([temp_str, group_name, units], columns = ['Original','Variable_name_eng','Data_group','Units'])
+            temp_df = pd.DataFrame([temp_str, var_name, group_name, units], columns = ['Original','Variable_name_eng','Data_group','Units'])
         else:
-            df_temp = pd.DataFrame([temp_str, group_name, units], columns = ['Original','Variable_name_eng','Data_group','Units'])
+            df_temp = pd.DataFrame([temp_str, var_name, group_name, units], columns = ['Original','Variable_name_eng','Data_group','Units'])
             temp_df = pd.concat([temp_df, df_temp], ignore_index=True)
 
     print(temp_df)
