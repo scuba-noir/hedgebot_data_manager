@@ -9,7 +9,7 @@ def custom_append(dict_1, dict_2):
     print(dict_1)
     if len(dict_1) == 0:
         for items in dict_2.items():
-            print(items)
+            print(items.values)
             dict_1.update(items)
     else:
         for keys in dict_2.keys():
