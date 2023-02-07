@@ -186,6 +186,8 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
             "current_ratio":final_df['Mean Returned'].loc[final_df['Account'] == 'Current Ratio'].values[0]
         }
 
+        print(temp_dict)
+
         final_value_dict = custom_append(final_value_dict, temp_dict, i)
     
     return final_value_dict
