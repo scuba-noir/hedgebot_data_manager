@@ -24,6 +24,12 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from data_manager.serializers import SugarPositionSerializers, MonteCarloDataSerializer, MarketDataSerializer, FinSimMetaDataSerializer, UserListSerializers
 
+def findnth(string, substring, n):
+   parts = string.split(substring, n + 1)
+   if len(parts) <= n + 1:
+      return -1
+   return len(string) - len(parts[-1]) - len(substring)
+
 def current_financial_sim(username):
 
     current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='23_24')
@@ -42,7 +48,7 @@ def current_financial_sim(username):
             group_name = "not_listed"
 
         try:
-            index = temp_str.index('-',2)
+            index = findnth(temp_str, '-', 2)
             units = temp_str[:index]
         except:
             units ='not_listed'
