@@ -367,7 +367,8 @@ def userlist_api(request):
         serializer = UserListSerializers(data=data)
         if serializer.is_valid():
             serializer.save()
-            initiate_models(request.data.get('username'))
+            print('Saved New User')
+            #initiate_models(request.data.get('username'))
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
