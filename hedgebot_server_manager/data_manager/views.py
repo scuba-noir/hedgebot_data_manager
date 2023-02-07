@@ -34,6 +34,8 @@ def current_financial_sim(username):
 
     current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='23_24')
     verbose_name_dict = user_forecasts_assumptions_results.return_verbose(user_forecasts_assumptions_results)
+    temp_df = []
+    counter = 0
     for key in verbose_name_dict:
         temp_str = verbose_name_dict[key]
         try:
@@ -52,10 +54,14 @@ def current_financial_sim(username):
             units = temp_str[index+1:]
         except:
             units ='not_listed'
-        print('-------------')
-        print(var_name)
-        print(group_name)
-        print(units)
+
+        if counter == 0:
+            temp_df = pd.DataFrame([temp_str, group_name, units], columns = ['Original','Variable_name_eng','Data_group','Units'])
+        else:
+            df_temp = pd.DataFrame([temp_str, group_name, units], columns = ['Original','Variable_name_eng','Data_group','Units'])
+            temp_df = pd.concat([temp_df, df_temp], ignore_index=True)
+
+    print(temp_df)
     current_season_df = pd.DataFrame(current_season_df.values())
     current_season_df['date'] = pd.to_datetime(current_season_df['date'])
     
