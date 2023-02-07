@@ -22,7 +22,8 @@ from dateutil.relativedelta import relativedelta
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-from data_manager.serializers import SugarPositionSerializers, MonteCarloDataSerializer, MarketDataSerializer, FinSimMetaDataSerializer, UserListSerializers
+from data_manager.serializers import SugarPositionSerializers, MonteCarloDataSerializer, MarketDataSerializer, FinSimMetaDataSerializer, UserListSerializers, HistMCDataSerializer
+from rest_framework.renderers import JSONRenderer
 
 from . import full_simulation_run
 
@@ -270,14 +271,11 @@ def sugar_position_api(request):
 @api_view(['GET'])
 def historical_mc_data_api(request):
 
-    hist_mc_data_df = pd.DataFrame(monte_carlo_market_data.objects.all().values())
-    hist_mc_data_df.columns = ['Id','start_date', 'target_date', 'end_date', 'factor_label', 'mean_returned', 'std_returned']
-    hist_mc_data_df['season'] = '23_24'
-    season_bool = '23_24'
     temp_date = date.today() + relativedelta(months=-6)
-    hist_mc_data_df = hist_mc_data_df.loc[(hist_mc_data_df['season'] == season_bool) & (pd.to_datetime(hist_mc_data_df['start_date']) >= pd.to_datetime(temp_date))]
-    return hist_mc_data_df
-
+    data = monte_carlo_market_data.objects.filter(simulation_date__gte = temp_date)
+    serializer = HistMCDataSerializer(data, context={'request':request}, many=True)
+    return Response(serializer.data)
+    
 @api_view(['GET'])
 def current_mc_data_api(request):
 

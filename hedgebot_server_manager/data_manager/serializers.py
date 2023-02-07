@@ -79,3 +79,13 @@ class CurrentFinSimSerializer(serializers.ModelSerializer):
     class Meta:
         model = current_financial_simulations
         fields ='__all__'
+
+class HistMCDataSerializer(serializers.Serializers):
+
+    id = serializers.CharField(max_length = 10)
+    start_date = serializers.DateTimeField()
+    target_date = serializers.DateTimeField()
+    end_date = serializers.DateTimeField()
+    factor_label = serializers.CharField(max_length = 30)
+    mean_returned = serializers.FloatField()
+    std_returned = serializers.FloatField()
