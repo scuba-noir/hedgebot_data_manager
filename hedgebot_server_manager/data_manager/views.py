@@ -234,7 +234,7 @@ def initiate_models(username):
     date_range = pd.date_range(today, end_season_date, freq = 'W-FRI').to_list()
     for i in range(0,len(date_range)):
         print(date_range[i])
-        hedgebot_results.objects.get_or_create(username = username, date = date.strftime("%d %B %Y"))
+        hedgebot_results.objects.get_or_create(username = username, forecast_period = date_range[i].strftime('%d %B %Y'))
     financial_simulations_results.objects.get_or_create(username=username)
     target_prices.objects.get_or_create(username=username)
     sugar_position_info_2.objects.get_or_create(username=username)

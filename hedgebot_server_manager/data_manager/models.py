@@ -597,7 +597,7 @@ class hedgebot_results(models.Model):
 
     id = models.AutoField(primary_key=True, verbose_name=longnames[0])
     date = models.DateField(default = django.utils.timezone.now, verbose_name=longnames[1])
-    forecast_period = models.DateField(default=django.utils.timezone.now, verbose_name=longnames[2])
+    forecast_period = models.DateField(verbose_name=longnames[2])
     season = models.CharField(max_length=50, verbose_name=longnames[3], default='23_24')
     weighted_average_price = models.FloatField(default = 0, verbose_name=longnames[4])
     fixed_revenues = models.IntegerField(default = 0, verbose_name=longnames[5])
