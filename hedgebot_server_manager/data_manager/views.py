@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import numpy as np
 import datetime
+import re
 
 from scipy.stats import norm, percentileofscore
 from django.db.models import F, Q, When, Max, Avg, Window, StdDev
@@ -36,7 +37,7 @@ def current_financial_sim(username):
             var_name = temp_str
         print('test', temp_str)
         try:
-            group_name = temp_str[:temp_str.index('-',2)] 
+            group_name = re.search('-(.*)-', temp_str)
         except:
             group_name = "not_listed"
         print(var_name)
