@@ -381,3 +381,4 @@ def fin_sim_current_api(request):
 
         return Response(serializer.data)
 
+financial_sim_update('ct_beast')
