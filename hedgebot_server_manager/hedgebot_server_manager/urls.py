@@ -26,5 +26,4 @@ urlpatterns = [
     re_path(r'^api/current_mc_data/$', views.current_mc_data_api),
     re_path(r'^api/market_data/$', views.market_data_api),
     re_path(r'^api/user_list/$', views.userlist_api),
-    
 ]

@@ -208,8 +208,6 @@ def financial_sim_update(username):
         current_ratio_std = statistics.stdev(list(final_value_dict['current_ratio']))        
     )
 
-
-    
 # Create your views here.
 def transformPrices(daily_chgs, price_data, price_date_ls):
 
@@ -237,9 +235,6 @@ def initiate_models(username):
     user_forecasts_assumptions_results.objects.get_or_create(username=username)
     user_forecasts_assumptions_results.objects.get_or_create(username=username, season = '22_23')
 
-@api_view(['GET'])
-def fin_sim_meta_data_api(request):
-    t = 5
 
 @api_view(['GET'])
 def market_data_api(request):
@@ -371,14 +366,11 @@ def userlist_api(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-def fin_sim_current_api(request):
+def fin_sim_meta_data_api(request):
 
     if request.method == 'GET':
 
         max_date =  current_financial_simulations.objects.latest("date").date
         data = market_data.objects.filter(user = request.user).filter(date__gte = max_date)
         serializer = MarketDataSerializer(data, context={'request': request}, many=True)
-
         return Response(serializer.data)
-
-financial_sim_update('ct_beast')
