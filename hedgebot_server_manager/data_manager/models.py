@@ -243,7 +243,7 @@ class user_forecasts_assumptions_results(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     date = models.DateField(default = django.utils.timezone.now)
-    season = models.CharField(max_length=10, verbose_name='Season', editable=True)
+    season = models.CharField(max_length=10, verbose_name='Season', editable=True, default = '23_24')
     i = 0
     own_area = models.FloatField(default=0, verbose_name=desc_names[i]); i += 1 
     leased_area= models.FloatField(default=0, verbose_name=desc_names[i]); i += 1 
@@ -389,7 +389,7 @@ class user_forecasts_assumptions_results(models.Model):
     revenue_variation= models.FloatField(default=0, verbose_name=desc_names[i]); i += 1 
     income_variation= models.FloatField(default=0, verbose_name=desc_names[i]); i += 1 
     dscr= models.FloatField(default=0, verbose_name=desc_names[i]); i += 1 
-    username = models.CharField(max_length=30, verbose_name='Username', default="Default User")
+    username = models.CharField(max_length=30, verbose_name='Username')
     
     def return_values(self, id_child):
 
@@ -456,7 +456,7 @@ class sugar_position_info(models.Model):
 class sugar_position_info_2(models.Model):
 
     id = models.BigAutoField(primary_key=True)
-    season = models.CharField(max_length=10, verbose_name='Season', choices=[('2021_22','2021_22'),('2022_23','2022_23'), ('2023_24','2023_24')], default='2023_24')
+    season = models.CharField(max_length=10, verbose_name='Season', default='23_24')
     date = models.DateField(default = django.utils.timezone.now)
     mar1_fxpassive_obligation = models.FloatField(default=0)
     mar1_fxpassive_fixed = models.FloatField(default=0)
@@ -498,7 +498,7 @@ class sugar_position_info_2(models.Model):
     mar2_brlfixed_fixed = models.FloatField(default=0)
     mar2_brlfixed_avg_price_cts = models.FloatField(default=0)
     mar2_brlfixed_avg_price_brl = models.FloatField(default=0)
-    username = models.CharField(max_length=30, verbose_name='Username', default="Default User")
+    username = models.CharField(max_length=30, verbose_name='Username')
 
     def return_values(self, id_child):
         temp_self = sugar_position_info_2.objects.filter(id = int(id_child)).first()
@@ -587,7 +587,7 @@ class hedgebot_results(models.Model):
     id = models.AutoField(primary_key=True, verbose_name=longnames[0])
     date = models.DateField(default = django.utils.timezone.now, verbose_name=longnames[1])
     forecast_period = models.DateField(default=django.utils.timezone.now, verbose_name=longnames[2])
-    season = models.CharField(max_length=50, verbose_name=longnames[3])
+    season = models.CharField(max_length=50, verbose_name=longnames[3], default='23_24')
     weighted_average_price = models.FloatField(default = 0, verbose_name=longnames[4])
     fixed_revenues = models.IntegerField(default = 0, verbose_name=longnames[5])
     unhedged_volumes_march_1 = models.IntegerField(default = 0, verbose_name=longnames[6])
@@ -738,10 +738,9 @@ class financial_simulation_meta_data_historical(models.Model):
     def __str__(self):
         return self.id
 
-class current_financial_simulations(models.Model):
+class financial_simulations_results(models.Model):
 
     id = models.BigAutoField(primary_key=True)
-    simulation_number = models.IntegerField()
     sugar_price = models.FloatField(default=0, verbose_name='Sugar')
     hydrous_price = models.FloatField(default=0, verbose_name='Hydrous')
     anhydrous_price = models.FloatField(default=0, verbose_name ='Anhydrous')
@@ -779,7 +778,8 @@ class current_financial_simulations(models.Model):
     indebtness = models.FloatField(default=0, verbose_name='Indebtness')
     short_term_debt = models.FloatField(default=0, verbose_name='Short Term Debt Percent')
     current_ratio = models.FloatField(default=0, verbose_name='Current Ratio')
-    username = models.CharField(max_length=30, verbose_name='Username', default="Default User")
+    season = models.CharField(max_length=10, default='23_24')
+    username = models.CharField(max_length=30, verbose_name='Username')
 
 class hedgebot_results_meta_data(models.Model):
     
@@ -808,21 +808,11 @@ class market_data(models.Model):
     value = models.FloatField()
     units = models.CharField(max_length=30)
 
-class risk_var_table(models.Model):
-
-    id = models.BigAutoField(primary_key=True)
-    label = models.CharField(max_length=30)
-    prev_season = models.IntegerField()
-    actual_estimate = models.IntegerField()
-    low_10 = models.IntegerField()
-    high_90 = models.IntegerField()
-    prob_estimate = models.FloatField()
-    username = models.CharField(max_length=30)
-
 class target_prices(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     season = models.CharField(max_length=30, default = '23_24')
+    username = models.CharField(max_length=30, verbose_name='Username')
     date = models.DateField(default = django.utils.timezone.now)
     mar1_cts = models.FloatField(default = 0)
     mar1_brl = models.FloatField(default= 0)
@@ -847,4 +837,7 @@ class current_mc_data(models.Model):
     season = models.CharField(max_length=10)
     pct_change = models.FloatField()
 
-    
+class user_list(models.Model):
+
+    username = models.CharField(max_length=20, primary_key=True, unique=True)
+    create_date = models.DateField(default=django.utils.timezone.now)

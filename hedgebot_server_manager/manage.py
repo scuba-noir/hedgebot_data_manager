@@ -4,13 +4,6 @@ import os
 import sys
 import pandas as pd
 
-def initial_data():
-
-    from data_manager import models
-    
-    data_df = pd.read_csv('Final_Final_MC.csv', index_col=False)
-    print(data_df)
-
 
 def main():
     """Run administrative tasks."""

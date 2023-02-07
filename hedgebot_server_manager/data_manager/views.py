@@ -11,16 +11,17 @@ from data_manager.models import user_forecasts_assumptions_results
 from data_manager.models import hedgebot_results
 from data_manager.models import sugar_position_info
 from data_manager.models import financial_simulation_meta_data_historical
-from data_manager.models import current_financial_simulations
+from data_manager.models import financial_simulations_results
 from data_manager.models import monte_carlo_market_data
 from data_manager.models import market_data, risk_var_table
 from data_manager.models import sugar_position_info_2
+from data_manager.models import user_list, target_prices, hedgebot_results_meta_data
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-from data_manager.serializers import SugarPositionSerializers, MonteCarloDataSerializer, MarketDataSerializer, FinSimMetaDataSerializer, RiskVarTableSerializer
+from data_manager.serializers import SugarPositionSerializers, MonteCarloDataSerializer, MarketDataSerializer, FinSimMetaDataSerializer, RiskVarTableSerializer, UserListSerializers
 
 
 # Create your views here.
@@ -41,45 +42,15 @@ def transformPrices(daily_chgs, price_data, price_date_ls):
     final_df['factor_label'] = reference
     return final_df
 
-def update_market_data_model():
+def initiate_models(username):
+    
+    financial_simulations_results.objects.get_or_create(username=username)
+    hedgebot_results.objects.get_or_create(username=username)
+    target_prices.objects.get_or_create(username=username)
+    sugar_position_info_2.objects.get_or_create(username=username)
+    user_forecasts_assumptions_results.objects.get_or_create(username=username)
+    user_forecasts_assumptions_results.objects.get_or_create(username=username, season = '22_23')
 
-    label_dict = {
-        'SBMAY1 Comdty':'SBMAY1 Comdty',
-        'SBJUL1 Comdty':'SBJUL1 Comdty',
-        'SBOCT1 Comdty':'SBOCT1 Comdty',
-        'SBMAR2 Comdty':'SBMAR2 Comdty',
-        'NY No.11':'SB1 Comdty',
-        'Hydrous Ethanol':'BAAWHYDP Index',
-        'Anhydrous Ethanol':'BAAWANAB Index',
-        'Fertilizer Costs':'Fert_Costs',
-        'Brent Crude':'CL1 Comdty',
-        'USDBRL':'USDBRL Curncy',
-        'Energy Prices':'Energy_Costs',
-        'SBMAR1 Comdty':'SBMAR1 Comdty'
-        }
-
-    temp_price_data = pd.read_csv("temp_price_data.csv")
-    temp_price_data['Date'] = pd.to_datetime(temp_price_data['Date'])
-    for keys in label_dict.keys():
-        temp_label = label_dict[keys]
-        max_date_bool = False
-        try:
-            max_date = market_data.objects.filter(ticker = temp_label).latest('date').date
-            max_date = datetime.datetime(max_date.year, max_date.month, max_date.day)
-            max_date_bool = True
-        except:
-            print('No data for ' + str(keys))
-        temp_price_data_df = temp_price_data.filter([keys, 'Date'], axis = 1)
-        temp_price_data_df = temp_price_data_df.dropna()
-        if max_date_bool == True:
-            temp_price_data_df = temp_price_data_df.loc[temp_price_data_df['Date'] > max_date]
-        for row, items in temp_price_data_df.iterrows():
-            temp_val = items[keys]
-            temp_date = items['Date']
-            
-            market_data.objects.get_or_create(ticker = label_dict[keys], date = temp_date, value = temp_val, units = 'temp_fill')
-            
-    return 0 
 
 @api_view(['GET'])
 def fin_sim_meta_data_api(request):
@@ -347,7 +318,6 @@ def current_mc_data_api(request):
         serializer = MonteCarloDataSerializer(data, context={'request':request}, many=True)
         return Response(serializer.data)
 
-
 @api_view(['GET'])
 def market_price_data_api(request):
 
@@ -378,4 +348,26 @@ def market_price_data_api(request):
     
     return price_data_df
 
+@api_view(['GET', 'PUT', 'POST'])
+def userlist_api(request):
 
+    if request.method == 'GET':
+        
+        data = user_list.objects.filter(username=request.user)
+        serializer = UserListSerializers(data, context={'request':request})
+        return Response(serializer.data)
+
+    if request.method == 'POST':
+
+        new_user = request.data.get('username')
+        data = {
+            'username': request.data.get('username'), 
+            'create_date': request.data.get('create_date'), 
+        }
+        serializer = UserListSerializers(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            initiate_models(request.data.get('username'))
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
