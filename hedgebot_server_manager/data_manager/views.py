@@ -267,8 +267,7 @@ def mc_data_api(request):
 def sugar_position_api(request):
 
     if request.method == "GET":
-        data = sugar_position_info.objects.all()
-    
+        data = sugar_position_info.objects.filter(username = request.user)
         serializer = SugarPositionSerializers(data, context={'request': request}, many=True)
 
         return Response(serializer.data)
@@ -385,3 +384,4 @@ def hedgebot_best_path_api(request):
         data = hedgebot_results.objects.filter(username = request.user)
         serializer = HedgebotBestSerializer(data, context={'request':request}, many=True)
         return Response(serializer.data)
+
