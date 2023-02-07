@@ -29,7 +29,10 @@ def current_financial_sim(username):
     verbose_name_dict = user_forecasts_assumptions_results.return_verbose(user_forecasts_assumptions_results)
     for key in verbose_name_dict:
         temp_str = verbose_name_dict[key]
-        var_name = temp_str[:temp_str.index('-')]
+        try:
+            var_name = temp_str[:temp_str.index('-')]
+        except:
+            var_name = temp_str
         print(var_name)
     current_season_df = pd.DataFrame(current_season_df.values())
     current_season_df['date'] = pd.to_datetime(current_season_df['date'])
