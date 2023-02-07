@@ -7,7 +7,7 @@ from . import models
 
 def custom_append(dict_1, dict_2):
 
-    for keys in dict_1.keys:
+    for keys in dict_1.keys():
         dict_1[keys].append(dict_2[keys])
 
 def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
