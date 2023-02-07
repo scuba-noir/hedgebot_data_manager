@@ -15,13 +15,18 @@ from data_manager.models import financial_simulations_results
 from data_manager.models import monte_carlo_market_data
 from data_manager.models import market_data
 from data_manager.models import sugar_position_info_2
-from data_manager.models import user_list, target_prices, hedgebot_results_meta_data
+from data_manager.models import user_list, target_prices, hedgebot_results_meta_data, user_forecasts_assumptions_results
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from data_manager.serializers import SugarPositionSerializers, MonteCarloDataSerializer, MarketDataSerializer, FinSimMetaDataSerializer, UserListSerializers
+
+def current_financial_sim(username):
+
+    data_df = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = username).values())
+    print(data_df)
 
 
 # Create your views here.
@@ -50,7 +55,6 @@ def initiate_models(username):
     sugar_position_info_2.objects.get_or_create(username=username)
     user_forecasts_assumptions_results.objects.get_or_create(username=username)
     user_forecasts_assumptions_results.objects.get_or_create(username=username, season = '22_23')
-
 
 @api_view(['GET'])
 def fin_sim_meta_data_api(request):
@@ -312,3 +316,5 @@ def userlist_api(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+current_financial_sim('ct_beast')
