@@ -7,9 +7,9 @@ from . import models
 
 def custom_append(dict_1, dict_2):
     print(dict_1)
-    if len(dict_1) == 0:
+    if dict_1['sugar_price']) == 1:
         for items in dict_2.items():
-            print(items.values)
+            print(items)
             dict_1.update(items)
     else:
         for keys in dict_2.keys():
@@ -104,7 +104,6 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
             "current_ratio":1
     }
 
-    final_value_dict = {}
 
     for i in range(0,10000):
         sugar_price = temp_values['NY No.11'][0][0][i]
