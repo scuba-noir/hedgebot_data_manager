@@ -75,7 +75,7 @@ def current_financial_sim(username):
         counter += 1
 
     
-
+    print(temp_df)
     
     
 
