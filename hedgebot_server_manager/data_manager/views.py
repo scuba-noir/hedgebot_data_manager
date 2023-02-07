@@ -122,8 +122,6 @@ def return_prev_season_df(username):
 
     return temp_df
 
-
-
 def current_financial_sim(username):
 
     current_season_df = return_current_season_df(username)
@@ -132,10 +130,7 @@ def current_financial_sim(username):
     mc_meta_data = pd.DataFrame(monte_carlo_market_data.objects.all().values())
     fin_return_df = full_simulation_run.main(current_season_df, prev_season_df, mc_meta_data)
     print(fin_return_df)
-
-    #pd.DataFrame(fin_return_df.values()).to_csv('final_sim_output.csv')
     
-
 # Create your views here.
 def transformPrices(daily_chgs, price_data, price_date_ls):
 
