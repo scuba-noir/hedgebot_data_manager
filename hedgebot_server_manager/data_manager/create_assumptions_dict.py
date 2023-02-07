@@ -33,7 +33,6 @@ def main(new_drivers_dict, new_drivers_ls, prev_season_df, current_season_df):
         prev_season_values.append(temp_prev_season_df['Value'].loc[(temp_prev_season_df['Variable_name_eng'].isin(drivers_to_change[i])) & (temp_prev_season_df['Data_group'].isin(drivers_to_change[i]))].values[0])
 
     prev_season_values_df = pd.DataFrame([prev_season_values], columns = ['Sugar', 'Hydrous', 'Anhydrous', 'Energy','Exchange Rate','Domestic interest rate','Foreign interest rate','Inflation','Crude oil','Fertilizers'])
-    forecast_chg['Most_recent_company_forecast'].loc[:] = 0
     forecast_chg['Date_published'].loc[:] = datetime.datetime.today().strftime("%Y-%m-%d")
     #forecast_baseline = pd.concat([forecast_baseline, forecast_chg])
    
