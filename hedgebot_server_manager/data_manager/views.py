@@ -75,8 +75,7 @@ def return_current_season_df(username):
             temp_df = pd.concat([temp_df, df_temp], ignore_index=True)
         counter += 1
 
-    
-    print(temp_df)
+    return temp_df
 
 def return_prev_season_df(username):
     current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='22_23')
@@ -121,9 +120,7 @@ def return_prev_season_df(username):
             temp_df = pd.concat([temp_df, df_temp], ignore_index=True)
         counter += 1
 
-    
-    print(temp_df)
-
+    return temp_df
 
 
 
