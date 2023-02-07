@@ -48,7 +48,7 @@ def current_financial_sim(username):
             group_name = "not_listed"
 
         try:
-            index = findnth(temp_str, '-', 2)
+            index = findnth(temp_str, '-', 1)
             units = temp_str[index:]
         except:
             units ='not_listed'
