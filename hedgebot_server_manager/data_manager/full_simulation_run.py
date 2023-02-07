@@ -13,7 +13,7 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
     translation_market_var_list = ['NY No.11','Hydrous Ethanol','Anhydrous Ethanol','Energy Prices','USDBRL','Brent Crude','Fertilizers Costs']    
     driver_values = initial_simulation_variables_2.loc[initial_simulation_variables_2['Variable_name_eng'].isin(market_var_list)]
 
-    max_date = mc_meta_data_1['date_published'].max()
+    max_date = mc_meta_data_1['simulation_date'].max()
     mc_meta_data_1 = mc_meta_data_1.loc[(mc_meta_data_1['simulation_date'] == max_date) & (mc_meta_data_1['end_date'] == pd.to_datetime('2024-03-31', dayfirst=False))]
     driver_values['Value'].loc[(driver_values['Variable_name_eng'] == 'Domestic interest rate')].values[0] * 100,
     temp_values = {
