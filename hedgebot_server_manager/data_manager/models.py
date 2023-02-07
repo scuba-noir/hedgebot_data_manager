@@ -423,7 +423,7 @@ class user_forecasts_assumptions_results(models.Model):
         date_boolean = False
         for field in field_names:
             temp_ls = {}          
-            data_ls[field] = field.verbose_name
+            data_ls[field.field_name] = field.verbose_name
         return data_ls
 
 class sugar_position_info(models.Model):
