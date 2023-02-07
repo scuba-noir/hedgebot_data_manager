@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 from .models import sugar_position_info, monte_carlo_market_data, market_data, financial_simulation_meta_data_historical, sugar_position_info_2, user_list
-from .models import current_mc_data
+from .models import current_mc_data, market_data
 
 class SugarPositionSerializers(serializers.ModelSerializer):
 
@@ -56,12 +56,6 @@ class MonteCarloDataSerializer(serializers.ModelSerializer):
         model = monte_carlo_market_data
         fields = ('simulation_date','forecast_period','end_date','reference','mean_returned', 'std_returned')
 
-class MarketDataSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = market_data
-        fields = ('id','ticker','date','value','units')
-
 class FinSimMetaDataSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -73,3 +67,9 @@ class UserListSerializers(serializers.ModelSerializer):
     class Meta:
         model = user_list
         fields = ('username', 'create_date')
+
+class MarketDataSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = market_data
+        fields = ('ticker','date','value','units')
