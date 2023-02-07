@@ -25,7 +25,7 @@ from data_manager.serializers import SugarPositionSerializers, MonteCarloDataSer
 
 def current_financial_sim(username):
 
-    current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='23_24')
+    current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='23_24').all()
     verbose_name_ls = current_season_df.return_verbose()
     print(verbose_name_ls)
     current_season_df = pd.DataFrame(current_season_df.values())
