@@ -7,7 +7,7 @@ from . import models
 
 def custom_append(dict_1, dict_2):
     print(dict_1)
-    if dict_1['sugar_price']) == 1:
+    if dict_1['sugar_price'] == 1:
         for items in dict_2.items():
             print(items)
             dict_1.update(items)
