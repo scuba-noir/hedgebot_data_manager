@@ -2,9 +2,6 @@ import pandas as pd
 import numpy as np
 import math as m
 
-from external_python_scripts import aws_database_connector as aws
-from external_python_scripts import create_assumptions_dict
-
 
 def Simulate_Three_Statements(assumptions_data_dict, prev_yr_data_dict):
 
@@ -214,10 +211,10 @@ def Simulate_Financial_Indices(assumptions_data_dict, income_statement_df, cash_
 
     return final_df
 
-def simulate_large_scale(simulation_date):
+def simulate_large_scale(simulation_date, mc_data, forecast_data):
 
-    forecast_source_data = aws.return_source_forecast_data()
-    mc_forecast_df = aws.return_market_forecast_data()
+    forecast_source_data = forecast_data
+    mc_forecast_df = mc_data
     mc_forecast_df = mc_forecast_df.loc[mc_forecast_df['Date_published'] == simulation_date]
     mc_forecast_df['Forecast_date'] = pd.to_datetime(mc_forecast_df['Forecast_date'], format = "%Y-%m-%d")
     mc_forecast_df = mc_forecast_df.loc[mc_forecast_df['Forecast_date'] == mc_forecast_df['Forecast_date'].max()]
