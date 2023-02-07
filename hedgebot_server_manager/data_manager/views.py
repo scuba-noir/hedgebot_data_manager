@@ -27,7 +27,7 @@ def current_financial_sim(username):
 
     current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='23_24')
     verbose_name_dict = user_forecasts_assumptions_results.return_verbose(user_forecasts_assumptions_results)
-    for key, items in verbose_name_dict:
+    for items in verbose_name_dict:
         print(items)
     current_season_df = pd.DataFrame(current_season_df.values())
     current_season_df['date'] = pd.to_datetime(current_season_df['date'])
