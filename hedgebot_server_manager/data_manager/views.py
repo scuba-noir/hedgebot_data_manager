@@ -122,7 +122,7 @@ def return_prev_season_df(username):
 
     return temp_df
 
-def current_financial_sim(username):
+def financial_sim_update(username):
 
     current_season_df = return_current_season_df(username)
     prev_season_df = return_prev_season_df(username)
@@ -370,3 +370,4 @@ def userlist_api(request):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+financial_sim_update('test_user')
