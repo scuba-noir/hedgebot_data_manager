@@ -49,7 +49,7 @@ def current_financial_sim(username):
 
         try:
             index = findnth(temp_str, '-', 2)
-            units = temp_str[:index]
+            units = temp_str[index:]
         except:
             units ='not_listed'
         print('-------------')
