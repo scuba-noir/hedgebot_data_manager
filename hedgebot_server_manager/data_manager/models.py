@@ -417,7 +417,7 @@ class user_forecasts_assumptions_results(models.Model):
 
     def return_verbose(self):
 
-        temp_self = user_forecasts_assumptions_results.objects.filter(id = int(id_child)).first()
+        temp_self = user_forecasts_assumptions_results.objects.last()
         field_names = temp_self._meta.get_fields()
         data_ls = {}
         date_boolean = False
