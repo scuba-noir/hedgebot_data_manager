@@ -206,8 +206,6 @@ def fin_sim_meta_data_api(request):
             'Username'
             ]
 
-
-
 @api_view(['GET'])
 def market_data_api(request):
 
