@@ -26,7 +26,9 @@ from data_manager.serializers import SugarPositionSerializers, MonteCarloDataSer
 def current_financial_sim(username):
 
     current_season_df = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = username).filter(season='23_24').values())
-    print(current_season_df)
+    current_season_df['date'] = pd.to_datetime(current_season_df['date'])
+    max_date_current_season = max(current_season_df['date'])
+    print(max_date_current_season)
 
 # Create your views here.
 def transformPrices(daily_chgs, price_data, price_date_ls):
