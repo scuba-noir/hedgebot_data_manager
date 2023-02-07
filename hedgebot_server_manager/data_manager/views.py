@@ -370,4 +370,3 @@ def userlist_api(request):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-financial_sim_update('test_user')
