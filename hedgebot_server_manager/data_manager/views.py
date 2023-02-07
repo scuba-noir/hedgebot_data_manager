@@ -25,7 +25,7 @@ from data_manager.serializers import SugarPositionSerializers, MonteCarloDataSer
 
 def current_financial_sim(username):
 
-    current_season_df = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = username)/filter(season='23_24').latest('date').values())
+    current_season_df = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = username).filter(season='23_24').latest('date').values())
     print(current_season_df)
 
 # Create your views here.
