@@ -31,14 +31,14 @@ def current_financial_sim(username):
         temp_str = verbose_name_dict[key]
         try:
             var_name = temp_str[:temp_str.index('-')]
-            new_str = temp_str[temp_str.index('-'):]
+            
         except:
             var_name = temp_str
-
+        print('test', temp_str)
         try:
-            group_name = new_str[:new_str.index('-')]
+            group_name = temp_str[:temp_str.index('-',2)] 
         except:
-            group_name = "NOT LISTED"
+            group_name = "not_listed"
         print(var_name)
         print(group_name)
     current_season_df = pd.DataFrame(current_season_df.values())
