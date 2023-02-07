@@ -206,65 +206,7 @@ def fin_sim_meta_data_api(request):
             'Username'
             ]
 
-    data = financial_simulation_meta_data_historical.objects.filter(username = request.user).filter(season = '23_24')
-    max_date = data.latest('simulation_date').simulation_date
-    data_df = pd.DataFrame(data.filter(simulation_date = max_date).values())
-    temp_ls = []
-    company_forecast_df = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = request.user).filter(season='23_24').values())
-    company_forecast_df.columns = desc_names
-    obj, created = user_forecasts_assumptions_results.objects.get_or_create(username = request.user, season = '23_24')
-    obj, created = user_forecasts_assumptions_results.objects.get_or_create(username = request.user, season = '22_23')
-    old_company_forecast = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = request.user).filter(season='22_23').values())
-    old_company_forecast.columns = desc_names
-    relevant_accounts = ['Total assets','Net debt/mt of cane','EBITDA','Gross margin','Total revenues','Net income']
-    account_labels = ['CMV Total (000 R$)','Dívida Líquida/EBITDA','EBITDA (000 R$)','Margem Líquida (%)','Receita Total (000 R$)','Resultado Líquido (000 R$)']
-    data_df = data_df.loc[data_df['account'].isin(relevant_accounts)]
-    for row, items in data_df.iterrows():
-        temp_account = items['account']
-        if (temp_account in relevant_accounts) == False:
-            continue
-        final_label = account_labels[relevant_accounts.index(temp_account)]
-        temp_datagroup = items['datagroup']
-        subs = temp_account + '-' + temp_datagroup
-        temp_index_name = [i for i in desc_names if subs in i]
-        temp_mu = items['mean_returned']
-        temp_sigma = items['std_returned']
-        temp_distribution = np.random.normal(temp_mu, temp_sigma, 1000)
-        temp_comp_forecast = company_forecast_df[temp_index_name].values.tolist()[0]
-        try:
-            temp_comp_forecast = temp_comp_forecast[0]
-        except:
-            temp_comp_forecast = temp_comp_forecast
 
-        try:
-            temp_comp_forecast = temp_comp_forecast[0]
-        except:
-            temp_comp_forecast = temp_comp_forecast
-
-        temp_perc_comp_fore = percentileofscore(temp_distribution, temp_comp_forecast, kind = 'weak')
-        temp_prev_season = old_company_forecast[temp_index_name].values.tolist()[0]
-
-        try:
-            temp_prev_season = temp_prev_season[0]
-        except:
-            temp_prev_season = temp_prev_season
-
-        try:
-            temp_prev_season = temp_prev_season[0]
-        except:
-            temp_prev_season = temp_prev_season
-
-        temp_low_10 = np.percentile(temp_distribution, 10)
-        temp_high_90 = np.percentile(temp_distribution, 90)
-
-        try:
-            obj = risk_var_table.objects.update_or_create(label = final_label, prev_season = int(temp_prev_season), actual_estimate = int(temp_comp_forecast), low_10 = int(temp_low_10), high_90 = int(temp_high_90), prob_estimate = temp_perc_comp_fore, username = request.user)
-        except:
-            continue
-
-    data = risk_var_table.objects.filter(username = request.user)
-    serializer = RiskVarTableSerializer(data, context={'request': request}, many=True)
-    return Response(serializer.data)  
 
 @api_view(['GET'])
 def market_data_api(request):
