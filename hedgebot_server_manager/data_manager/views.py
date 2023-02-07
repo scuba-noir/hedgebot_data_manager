@@ -57,6 +57,7 @@ def current_financial_sim(username):
         except:
             units ='not_listed'
         temp_ls.append(units)
+        print(temp_ls)
         if counter == 0:
             temp_df = pd.DataFrame(temp_ls, columns = ['Original','Variable_name_eng','Data_group','Units'])
         else:
