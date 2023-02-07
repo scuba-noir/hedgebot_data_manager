@@ -208,7 +208,7 @@ def financial_sim_update(username):
         current_ratio_std = statistics.stdev(list(final_value_dict['current_ratio']))        
     )
 
-    print(temp.values_list())
+
     
 # Create your views here.
 def transformPrices(daily_chgs, price_data, price_date_ls):
@@ -381,4 +381,3 @@ def fin_sim_current_api(request):
 
         return Response(serializer.data)
 
-financial_sim_update('ct_beast')
