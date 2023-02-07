@@ -9,10 +9,12 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
 
     initial_simulation_variables_2 = initial_simulation_variables.loc[initial_simulation_variables['Most_recent_company_forecast'] == 1]
     market_var_list = ['Sugar','Hydrous','Anhydrous','Energy','Exchange rate','Domestic interest rate','Foreign interest rate','Inflation','Crude oil','Fertilizers']
+    mc_market_var_list = ['sugar_1', 'hydrous', 'anhydrous', 'energy', 'usdbrl', 'brent', 'fert']
+    translation_market_var_list = ['NY No.11','Hydrous Ethanol','Anhydrous Ethanol','Energy Prices','USDBRL','Brent Crude','Fertilizers Costs']    
     driver_values = initial_simulation_variables_2.loc[initial_simulation_variables_2['Variable_name_eng'].isin(market_var_list)]
 
     max_date = mc_meta_data_1['date_published'].max()
-    mc_meta_data_1 = mc_meta_data_1.loc[(mc_meta_data_1['date_published'] == max_date) & (mc_meta_data_1['forecast_date'] == pd.to_datetime('2023-03-24', dayfirst=False))]
+    mc_meta_data_1 = mc_meta_data_1.loc[(mc_meta_data_1['simulation_date'] == max_date) & (mc_meta_data_1['end_date'] == pd.to_datetime('2024-03-31', dayfirst=False))]
     driver_values['Value'].loc[(driver_values['Variable_name_eng'] == 'Domestic interest rate')].values[0] * 100,
     temp_values = {
         'Anhydrous Ethanol':[],
@@ -33,13 +35,14 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
         ]
     counter = 0
 
-    mc_meta_data = mc_meta_data_1.loc[mc_meta_data_1['variable_name'].isin(ls_name)]
+    mc_meta_data = mc_meta_data_1.loc[mc_meta_data_1['reference'].isin(mc_market_var_list)]
     
     for row, values in mc_meta_data.iterrows():
         temp_sim = []
+        label_index = mc_market_var_list.index(values.reference)
         mean = values.mean_returned
         std = values.std_returned
-        factor_name = values.variable_name
+        factor_name = translation_market_var_list[label_index]
         sim_data = np.random.normal(mean, std, 10000).tolist()
         temp_values[factor_name].append([
             sim_data  
