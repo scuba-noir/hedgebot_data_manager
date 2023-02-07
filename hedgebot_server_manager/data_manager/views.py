@@ -13,7 +13,7 @@ from data_manager.models import sugar_position_info
 from data_manager.models import financial_simulation_meta_data_historical
 from data_manager.models import financial_simulations_results
 from data_manager.models import monte_carlo_market_data
-from data_manager.models import market_data, risk_var_table
+from data_manager.models import market_data
 from data_manager.models import sugar_position_info_2
 from data_manager.models import user_list, target_prices, hedgebot_results_meta_data
 from datetime import date
