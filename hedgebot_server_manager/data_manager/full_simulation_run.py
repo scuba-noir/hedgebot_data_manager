@@ -8,11 +8,11 @@ from . import models
 def custom_append(dict_1, dict_2):
     print(dict_1)
     if len(dict_1) == 0:
-        for keys in dict_2.keys():
-            print(keys)
+        for items in dict_2.items():
+            print(items)
             dict_1.update(dict_2[keys])
     else:
-        for keys in dict_1.keys():
+        for keys in dict_2.keys():
             print(keys)
             dict_1[keys].append(dict_2[keys])
 
