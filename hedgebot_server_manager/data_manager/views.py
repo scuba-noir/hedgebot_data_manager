@@ -40,8 +40,15 @@ def current_financial_sim(username):
             group_name = re.search('-(.*)-', temp_str).group(1)
         except:
             group_name = "not_listed"
+
+        try:
+            units = re.search('-(.*)', temp_str).group(3)
+        except:
+            units ='not_listed'
+        print('-------------')
         print(var_name)
         print(group_name)
+        print(units)
     current_season_df = pd.DataFrame(current_season_df.values())
     current_season_df['date'] = pd.to_datetime(current_season_df['date'])
     
