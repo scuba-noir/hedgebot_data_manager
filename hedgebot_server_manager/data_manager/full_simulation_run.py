@@ -87,6 +87,7 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
         financial_indices_final_df = pd.DataFrame(temp_financial_indices_df)
 
         final_df = simulate_statements.aggregate_fin_sim_results(income_statement_final_df, cash_flow_final_df, assets_final_df, liabilities_final_df, financial_indices_final_df)
+        final_df.to_csv('final_sim_output.csv')
 
         temp = models.current_financial_simulations(
             simulation_number = i,
