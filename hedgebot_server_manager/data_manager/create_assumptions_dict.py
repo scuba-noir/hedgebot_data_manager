@@ -1,63 +1,14 @@
 from lib2to3.pgen2 import driver
-from external_python_scripts import aws_database_connector as aws
 
 
 import pandas as pd
 import numpy as np
 import datetime
 
-def get_current_mc_mean():
+def main(new_drivers_dict, new_drivers_ls, prev_season_df, current_season_df):
 
-    forecast_source_data = aws.return_source_forecast_data()
-    forecast_mc_date = aws.return_market_forecast_data()
-
-    temp_df = forecast_mc_date.loc[forecast_mc_date['Forecast_date'] == forecast_mc_date['Forecast_date'].max()]
-    temp_df = temp_df.loc[temp_df['Date_published'] == temp_df['Date_published'].max()]
-    sugar_df = temp_df.loc[temp_df['Variable'] == 'NY No.11']
-    
-    sugar_price = sugar_df['Mean_returned']
-    hydrous_price = temp_df['Mean_returned'].loc[temp_df['Variable'] == 'Hydrous Ethanol']
-    anhydrous_price = temp_df['Mean_returned'].loc[temp_df['Variable'] == 'Anhydrous Ethanol']
-    energy_price = temp_df['Mean_returned'].loc[temp_df['Variable'] == 'Energy Prices']
-    fx_rate = temp_df['Mean_returned'].loc[temp_df['Variable'] == 'USDBRL']
-    crude_price = temp_df['Mean_returned'].loc[temp_df['Variable'] == 'Brent Crude']
-    fertilizer_price = temp_df['Mean_returned'].loc[temp_df['Variable'] == 'Fertilizer Costs']
-
-    #print(forecast_source_data)
-    column_ls = list(forecast_source_data['Description'].drop_duplicates())
-
-    inflation_rate = forecast_source_data.loc[forecast_source_data['Description'] == column_ls[1]]
-    inflation_rate = inflation_rate.loc[inflation_rate['Forecast_period'] == inflation_rate['Forecast_period'].max()]
-    inflation_rate = inflation_rate['Forecasted_value'].loc[inflation_rate['Date_published'] == inflation_rate['Date_published'].max()].values[0]
-
-    selic_rate = forecast_source_data.loc[forecast_source_data['Description'] == column_ls[4]]
-    selic_rate = selic_rate.loc[selic_rate['Forecast_period'] == selic_rate['Forecast_period'].max()]
-    selic_rate = selic_rate['Forecasted_value'].loc[selic_rate['Date_published'] == selic_rate['Date_published'].max()].values[0]
-
-    foreign_debt_rate = forecast_source_data.loc[forecast_source_data['Description'] == column_ls[3]]
-    foreign_debt_rate = foreign_debt_rate.loc[foreign_debt_rate['Forecast_period'] == foreign_debt_rate['Forecast_period'].max()]
-    foreign_debt_rate = foreign_debt_rate['Forecasted_value'].loc[foreign_debt_rate['Date_published'] == foreign_debt_rate['Date_published'].max()].values[0]
-
-    new_drivers_ls = [sugar_price, hydrous_price, anhydrous_price, energy_price, fx_rate, selic_rate, foreign_debt_rate, inflation_rate, crude_price, fertilizer_price]
-
-    new_drivers_dict = {
-        'Sugar':sugar_price, 
-        'Hydrous':hydrous_price,
-        'Anhydrous':anhydrous_price, 
-        'Energy':energy_price, 
-        'Exchange rate':fx_rate, 
-        'Domestic interest rate':selic_rate, 
-        'Foreign interest rate':foreign_debt_rate, 
-        'Inflation':inflation_rate, 
-        'Crude oil':crude_price, 
-        'Fertilizers':fertilizer_price}
-
-    return new_drivers_dict, new_drivers_ls
-
-def main(new_drivers_dict, new_drivers_ls):
-
-    forecast_baseline = aws.return_forecast_assumptions(0)
-    temp_baseline = forecast_baseline.loc[forecast_baseline['Season'] == "2022/23"]
+    forecast_baseline = prev_season_df
+    temp_baseline = current_season_df
 
     drivers_to_change = [
         ('Sugar','Price Assumptions'),
@@ -74,7 +25,7 @@ def main(new_drivers_dict, new_drivers_ls):
 
     forecast_chg = temp_baseline
     prev_season_values  = []
-    temp_prev_season_df = forecast_baseline.loc[forecast_baseline['Season'] == '2021/22']
+    temp_prev_season_df = forecast_baseline
     for i in range(0,len(drivers_to_change)):
         index = forecast_chg['Value'].loc[(forecast_chg['Variable_name_eng'].isin(drivers_to_change[i])) & (forecast_chg['Data_group'].isin(drivers_to_change[i]))].index.values[0]
         print(i)

@@ -7,7 +7,7 @@ from models import current_financial_simulations
 
 def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
 
-    initial_simulation_variables_2 = initial_simulation_variables.loc[initial_simulation_variables['Most_recent_company_forecast'] == 1]
+    initial_simulation_variables_2 = initial_simulation_variables
     market_var_list = ['Sugar','Hydrous','Anhydrous','Energy','Exchange rate','Domestic interest rate','Foreign interest rate','Inflation','Crude oil','Fertilizers']
     mc_market_var_list = ['sugar_1', 'hydrous', 'anhydrous', 'energy', 'usdbrl', 'brent', 'fert']
     translation_market_var_list = ['NY No.11','Hydrous Ethanol','Anhydrous Ethanol','Energy Prices','USDBRL','Brent Crude','Fertilizers Costs']    
@@ -78,7 +78,7 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
             'Crude oil':crude_price, 
             'Fertilizers':fertilizer_price}
 
-        forecast_chg = create_assumptions_dict.main(new_drivers_dict, new_drivers_ls)
+        forecast_chg = create_assumptions_dict.main(new_drivers_dict, new_drivers_ls, prev_year_financial_df, initial_simulation_variables)
         temp_income_statement_df, temp_cash_flow_df, temp_assets_df, temp_liabilities_df, temp_financial_indices_df = simulate_statements.Simulate_Three_Statements(forecast_chg, prev_year_financial_df)
         income_statement_final_df = pd.DataFrame(temp_income_statement_df)
         cash_flow_final_df = pd.DataFrame(temp_cash_flow_df)
