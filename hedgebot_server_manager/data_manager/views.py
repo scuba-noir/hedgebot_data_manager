@@ -24,7 +24,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from data_manager.serializers import SugarPositionSerializers, MonteCarloDataSerializer, MarketDataSerializer, FinSimMetaDataSerializer, UserListSerializers
 
-from management.commands import full_simulation_run
+from . import full_simulation_run
 
 def findnth(string, substring, n):
    parts = string.split(substring, n + 1)
