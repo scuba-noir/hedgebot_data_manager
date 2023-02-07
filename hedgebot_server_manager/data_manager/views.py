@@ -10,7 +10,6 @@ from scipy.stats import norm, percentileofscore
 from django.db.models import F, Q, When, Max, Avg, Window, StdDev
 from data_manager.models import user_forecasts_assumptions_results
 from data_manager.models import hedgebot_results
-from data_manager.models import sugar_position_info
 from data_manager.models import financial_simulation_meta_data_historical
 from data_manager.models import financial_simulations_results
 from data_manager.models import monte_carlo_market_data
@@ -267,6 +266,7 @@ def mc_data_api(request):
 def sugar_position_api(request):
 
     if request.method == "GET":
+        print(request.user)
         data = sugar_position_info_2.objects.filter(username = request.user)
         serializer = SugarPosition2Serializers(data, context={'request': request}, many=True)
 
