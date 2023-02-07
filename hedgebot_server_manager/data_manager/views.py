@@ -27,6 +27,7 @@ def current_financial_sim(username):
 
     current_season_df = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = username).filter(season='23_24').values())
     current_season_df['date'] = pd.to_datetime(current_season_df['date'])
+    print(current_season_df)
     max_date_current_season = max(current_season_df['date'])
     print(max_date_current_season)
 
