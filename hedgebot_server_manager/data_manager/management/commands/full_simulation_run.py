@@ -91,8 +91,8 @@ def main():
         financial_indices_final_df = pd.DataFrame(temp_financial_indices_df)
 
         final_df = simulate_statements.aggregate_fin_sim_results(income_statement_final_df, cash_flow_final_df, assets_final_df, liabilities_final_df, financial_indices_final_df)
-
-        temp = current_financial_simulations.objects.create(
+        """
+        temp = current_financial_simulations.objects(
             simulation_number = i,
             sugar_price = sugar_price,
             hydrous_price = hydrous_price,
@@ -132,3 +132,4 @@ def main():
             short_term_debt =final_df['Mean Returned'].loc[final_df['Account'] == 'Short Term Debt Percent'].values[0],
             current_ratio =final_df['Mean Returned'].loc[final_df['Account'] == 'Current Ratio'].values[0]
         )
+        """
