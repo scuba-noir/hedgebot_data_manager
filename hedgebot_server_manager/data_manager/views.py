@@ -63,6 +63,7 @@ def current_financial_sim(username):
         else:
             df_temp = pd.DataFrame(temp_ls, columns = ['Original','Variable_name_eng','Data_group','Units'])
             temp_df = pd.concat([temp_df, df_temp], ignore_index=True)
+        print(temp_df)
 
     print(temp_df)
     current_season_df = pd.DataFrame(current_season_df.values())
