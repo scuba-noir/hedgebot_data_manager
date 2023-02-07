@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
-from .models import sugar_position_info, monte_carlo_market_data, market_data, financial_simulation_meta_data_historical, risk_var_table, sugar_position_info_2, user_list
+from .models import sugar_position_info, monte_carlo_market_data, market_data, financial_simulation_meta_data_historical, sugar_position_info_2, user_list
 from .models import current_mc_data
 
 class SugarPositionSerializers(serializers.ModelSerializer):
@@ -67,12 +67,6 @@ class FinSimMetaDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = financial_simulation_meta_data_historical
         fields = ('simulation_date','account','datagroup','mean_returned','std_returned','season','username')
-
-class RiskVarTableSerializer(serializers.ModelSerializer):
-    label = serializers.CharField()
-    class Meta:
-        model = risk_var_table
-        fields = ('label','prev_season','actual_estimate','low_10','high_90','prob_estimate')    
 
 class UserListSerializers(serializers.ModelSerializer):
 
