@@ -42,7 +42,8 @@ def current_financial_sim(username):
             group_name = "not_listed"
 
         try:
-            units = re.search('-(.*)', temp_str).group(2)
+            index = temp_str.index('-',2)
+            units = temp_str[:index]
         except:
             units ='not_listed'
         print('-------------')
