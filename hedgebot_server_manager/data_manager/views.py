@@ -37,7 +37,7 @@ def current_financial_sim(username):
             var_name = temp_str
         print('test', temp_str)
         try:
-            group_name = re.search('-(.*)-', temp_str)
+            group_name = re.search('-(.*)-', temp_str).group(1)
         except:
             group_name = "not_listed"
         print(var_name)
