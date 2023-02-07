@@ -120,6 +120,8 @@ def Simulate_Cash_Flow_Statement(assumptions_data_dict, financial_performance_df
     other_current_liabilities_pct = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Other current liabilities') & (assumptions_data_dict['Data_group'] == 'Balance Sheet Assumptions')].values[0]
     other_non_current_liabilities_pct = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Other non current liabilities') & (assumptions_data_dict['Data_group'] == 'Balance Sheet Assumptions')].values[0]
     write_offs = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Write-offs') & (assumptions_data_dict['Data_group'] == 'Cash Flow Statement Forecasts')].values[0]
+    write_offs = 0
+
     st_debt = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Total debt, short term') & (assumptions_data_dict['Data_group'] == 'Indebtness Assumptions')].values[0]
     lt_debt = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Total debt, long term') & (assumptions_data_dict['Data_group'] == 'Indebtness Assumptions')].values[0]
     initial_cash = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Initial cash') & (assumptions_data_dict['Data_group'] == 'Balance Sheet Assumptions')].values[0]
