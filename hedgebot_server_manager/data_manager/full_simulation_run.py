@@ -6,7 +6,7 @@ from . import create_assumptions_dict, simulate_statements
 from . import models
 
 def custom_append(dict_1, dict_2):
-
+    print(dict_1)
     for keys in dict_1.keys():
         dict_1[keys].append(dict_2[keys])
 
