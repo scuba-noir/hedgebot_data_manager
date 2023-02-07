@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import forecast_assumptions_user_fin_sim, sugar_trade_book, simulation_drivers, user_forecasts_assumptions_results, hedgebot_results, sugar_position_info
-from .models import financial_simulation_meta_data_historical, monte_carlo_market_data, market_data, sugar_position_info_2, user_list
+from .models import financial_simulation_meta_data_historical, monte_carlo_market_data, market_data, sugar_position_info_2, user_list, current_financial_simulations
 
 # Register your models here.
 admin.site.register(forecast_assumptions_user_fin_sim)
@@ -9,6 +9,7 @@ admin.site.register(simulation_drivers)
 admin.site.register(hedgebot_results)
 admin.site.register(sugar_position_info)
 admin.site.register(user_list)
+admin.site.register(current_financial_simulations)
 
 @admin.register(market_data)
 class marketAdmin(admin.ModelAdmin):
