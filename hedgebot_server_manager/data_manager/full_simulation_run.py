@@ -144,49 +144,45 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
         final_df = simulate_statements.aggregate_fin_sim_results(income_statement_final_df, cash_flow_final_df, assets_final_df, liabilities_final_df, financial_indices_final_df)
         final_df['Mean Returned'] = pd.to_numeric(final_df['Mean Returned'].astype(str).str.replace(',',''), errors='coerce').fillna(0).astype(int)
 
-        temp_dict = {
-            "simulation_number":i,
-            "sugar_price":sugar_price,
-            "hydrous_price":hydrous_price,
-            "anhydrous_price":anhydrous_price,
-            "energy_price":energy_price,
-            "fx_rate":fx_rate,
-            "selic_rate":selic_rate,
-            "foreign_debt_rate":foreign_debt_rate,
-            "inflation_rate":inflation_rate,
-            "crude_price":crude_price,
-            "fertilizer_price":fertilizer_price,
-            "sugar_revenues":final_df['Mean Returned'].loc[final_df['Account'] == 'Sugar Revenues BRL'].values[0],
-            "hydrous_revenues":final_df['Mean Returned'].loc[final_df['Account'] == 'Hydrous Revenues BRL'].values[0],
-            "anhydrous_revenues":final_df['Mean Returned'].loc[final_df['Account'] == 'Anhydrous Revenues BRL'].values[0],
-            "energy_revenues":final_df['Mean Returned'].loc[final_df['Account'] == 'Energy Revenues BRL'].values[0],
-            "input_costs":final_df['Mean Returned'].loc[final_df['Account'] == 'Input Cost BRL'].values[0],
-            "fuel_costs":final_df['Mean Returned'].loc[final_df['Account'] == 'Fuel Cost BRL'].values[0],
-            "freight_costs":final_df['Mean Returned'].loc[final_df['Account'] == 'Freight Cost BRL'].values[0],
-            "labor_costs":final_df['Mean Returned'].loc[final_df['Account'] == 'Labor Cost BRL'].values[0],
-            "indutrial_costs":final_df['Mean Returned'].loc[final_df['Account'] == 'Industrial Cost BRL'].values[0],
-            "depreciation":final_df['Mean Returned'].loc[final_df['Account'] == 'Depreciation BRL'].values[0],
-            "planting_costs":final_df['Mean Returned'].loc[final_df['Account'] == 'Planting Cost BRL'].values[0],
-            "lease_costs":final_df['Mean Returned'].loc[final_df['Account'] == 'Lease Cost BRL'].values[0],
-            "gross_profit":final_df['Mean Returned'].loc[final_df['Account'] == 'Gross Profit BRL'].values[0],
-            "sga_costs":final_df['Mean Returned'].loc[final_df['Account'] == 'Total SG&A BRL'].values[0],
-            "ebit":final_df['Mean Returned'].loc[final_df['Account'] == 'EBIT'].values[0],
-            "financial_costs":final_df['Mean Returned'].loc[final_df['Account'] == 'Financial Expenses BRL'].values[0],
-            "ebt":final_df['Mean Returned'].loc[final_df['Account'] == 'Profit Before Tax BRL'].values[0],
-            "tax":final_df['Mean Returned'].loc[final_df['Account'] == 'Income Tax BRL'].values[0],
-            "net_income":final_df['Mean Returned'].loc[final_df['Account'] == 'Net Income BRL'].values[0],
-            "gross_margin":final_df['Mean Returned'].loc[final_df['Account'] == 'Gross Margin'].values[0],
-            "ebitda_margin":final_df['Mean Returned'].loc[final_df['Account'] == 'EBITDA Margin'].values[0],
-            "net_margin":final_df['Mean Returned'].loc[final_df['Account'] == 'Net Margin'].values[0],
-            "net_debt_to_ebitda":final_df['Mean Returned'].loc[final_df['Account'] == 'Net Debt / EBITDA'].values[0],
-            "net_debt_to_mt_cane": final_df['Mean Returned'].loc[final_df['Account'] == 'Net Debt / MT of Cane'].values[0],
-            "indebtness":final_df['Mean Returned'].loc[final_df['Account'] == 'Indebtness'].values[0],
-            "short_term_debt":final_df['Mean Returned'].loc[final_df['Account'] == 'Short Term Debt Percent'].values[0],
-            "current_ratio":final_df['Mean Returned'].loc[final_df['Account'] == 'Current Ratio'].values[0]
-        }
-
-        print(temp_dict)
-
-        final_value_dict = custom_append(final_value_dict, temp_dict, i)
+        
+        final_value_dict["simulation_number"].append(i)
+        final_value_dict["sugar_price"].append(sugar_price)
+        final_value_dict["hydrous_price"].append(hydrous_price)
+        final_value_dict["anhydrous_price"].append(anhydrous_price)
+        final_value_dict["energy_price"].append(energy_price)
+        final_value_dict["fx_rate"].append(fx_rate)
+        final_value_dict["selic_rate"].append(selic_rate)
+        final_value_dict["foreign_debt_rate"].append(foreign_debt_rate)
+        final_value_dict["inflation_rate"].append(inflation_rate)
+        final_value_dict["crude_price"].append(crude_price)
+        final_value_dict["fertilizer_price"].append(fertilizer_price)
+        final_value_dict["sugar_revenues"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Sugar Revenues BRL'].values[0])
+        final_value_dict["hydrous_revenues"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Hydrous Revenues BRL'].values[0])
+        final_value_dict["anhydrous_revenues"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Anhydrous Revenues BRL'].values[0])
+        final_value_dict["energy_revenues"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Energy Revenues BRL'].values[0])
+        final_value_dict["input_costs"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Input Cost BRL'].values[0])
+        final_value_dict["fuel_costs"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Fuel Cost BRL'].values[0])
+        final_value_dict["freight_costs"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Freight Cost BRL'].values[0])
+        final_value_dict["labor_costs"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Labor Cost BRL'].values[0])
+        final_value_dict["indutrial_costs"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Industrial Cost BRL'].values[0])
+        final_value_dict["depreciation"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Depreciation BRL'].values[0])
+        final_value_dict["planting_costs"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Planting Cost BRL'].values[0])
+        final_value_dict["lease_costs"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Lease Cost BRL'].values[0])
+        final_value_dict["gross_profit"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Gross Profit BRL'].values[0])
+        final_value_dict["sga_costs"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Total SG&A BRL'].values[0])
+        final_value_dict["ebit"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'EBIT'].values[0])
+        final_value_dict["financial_costs"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Financial Expenses BRL'].values[0])
+        final_value_dict["ebt"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Profit Before Tax BRL'].values[0])
+        final_value_dict["tax"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Income Tax BRL'].values[0])
+        final_value_dict["net_income"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Net Income BRL'].values[0])
+        final_value_dict["gross_margin"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Gross Margin'].values[0])
+        final_value_dict["ebitda_margin"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'EBITDA Margin'].values[0])
+        final_value_dict["net_margin"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Net Margin'].values[0])
+        final_value_dict["net_debt_to_ebitda"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Net Debt / EBITDA'].values[0])
+        final_value_dict["net_debt_to_mt_cane"].append( final_df['Mean Returned'].loc[final_df['Account'] == 'Net Debt / MT of Cane'].values[0])
+        final_value_dict["indebtness"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Indebtness'].values[0])
+        final_value_dict["short_term_debt"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Short Term Debt Percent'].values[0])
+        final_value_dict["current_ratio"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Current Ratio'].values[0])
     
+    print(final_value_dict)
     return final_value_dict
