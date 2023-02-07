@@ -133,7 +133,7 @@ def current_financial_sim(username):
     fin_return_df = full_simulation_run.main(current_season_df, prev_season_df, mc_meta_data)
     print(fin_return_df)
 
-    pd.DataFrame(fin_return_df.values()).to_csv('final_sim_output.csv')
+    #pd.DataFrame(fin_return_df.values()).to_csv('final_sim_output.csv')
     
 
 # Create your views here.
