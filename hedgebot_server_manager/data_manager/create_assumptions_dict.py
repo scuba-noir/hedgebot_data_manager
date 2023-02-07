@@ -9,6 +9,7 @@ def main(new_drivers_dict, new_drivers_ls, prev_season_df, current_season_df):
 
     forecast_baseline = prev_season_df
     temp_baseline = current_season_df
+    print(temp_baseline)
 
     drivers_to_change = [
         ('Sugar','Price Assumptions'),
