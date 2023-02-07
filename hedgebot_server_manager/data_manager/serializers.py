@@ -80,7 +80,7 @@ class CurrentFinSimSerializer(serializers.ModelSerializer):
         model = current_financial_simulations
         fields ='__all__'
 
-class HistMCDataSerializer(serializers.Serializers):
+class HistMCDataSerializer(serializers.Serializer):
 
     id = serializers.CharField(max_length = 10)
     start_date = serializers.DateTimeField()
