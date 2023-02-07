@@ -31,9 +31,16 @@ def current_financial_sim(username):
         temp_str = verbose_name_dict[key]
         try:
             var_name = temp_str[:temp_str.index('-')]
+            new_str = temp_str[temp_str.index('-'):]
         except:
             var_name = temp_str
+
+        try:
+            group_name = new_str[:temp_str.index('-')]
+        except:
+            group_name = "NOT LISTED"
         print(var_name)
+        print(group_name)
     current_season_df = pd.DataFrame(current_season_df.values())
     current_season_df['date'] = pd.to_datetime(current_season_df['date'])
     
