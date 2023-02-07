@@ -424,4 +424,3 @@ def userlist_api(request):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-current_financial_sim('ct_beast')
