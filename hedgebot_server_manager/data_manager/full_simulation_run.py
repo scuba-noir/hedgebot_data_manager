@@ -10,7 +10,7 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
     initial_simulation_variables_2 = initial_simulation_variables
     market_var_list = ['Sugar','Hydrous','Anhydrous','Energy','Exchange rate','Domestic interest rate','Foreign interest rate','Inflation','Crude oil','Fertilizers']
     mc_market_var_list = ['sugar_1', 'hydrous', 'anhydrous', 'energy', 'usdbrl', 'brent', 'fert']
-    translation_market_var_list = ['NY No.11','Hydrous Ethanol','Anhydrous Ethanol','Energy Prices','USDBRL','Brent Crude','Fertilizers Costs']    
+    translation_market_var_list = ['NY No.11','Hydrous Ethanol','Anhydrous Ethanol','Energy Prices','USDBRL','Brent Crude','Fertilizer Costs']    
     driver_values = initial_simulation_variables_2.loc[initial_simulation_variables_2['Variable_name_eng'].isin(market_var_list)]
 
     max_date = mc_meta_data_1['simulation_date'].max()
