@@ -94,8 +94,10 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
     }
 
 
-    for i in range(0,10000):
+    for i in range(0,100):
 
+        if i in np.arange(0,10000, 1000):
+            print('The simulation is ', str(int(i/10000)*100),'% complete')
 
         sugar_price = temp_values['NY No.11'][0][0][i]
         hydrous_price = temp_values['Hydrous Ethanol'][0][0][i]

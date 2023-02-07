@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import math as m
 
+import warnings
+warnings.filterwarnings("ignore")
 
 def Simulate_Three_Statements(assumptions_data_dict, prev_yr_data_dict):
 

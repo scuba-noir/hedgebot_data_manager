@@ -9,7 +9,6 @@ def main(new_drivers_dict, new_drivers_ls, prev_season_df, current_season_df):
 
     forecast_baseline = prev_season_df
     temp_baseline = current_season_df
-    print(temp_baseline)
 
     drivers_to_change = [
         ('Sugar','Price Assumptions'),
@@ -29,7 +28,6 @@ def main(new_drivers_dict, new_drivers_ls, prev_season_df, current_season_df):
     temp_prev_season_df = forecast_baseline
     for i in range(0,len(drivers_to_change)):
         index = forecast_chg['Value'].loc[(forecast_chg['Variable_name_eng'].isin(drivers_to_change[i])) & (forecast_chg['Data_group'].isin(drivers_to_change[i]))].index.values[0]
-        print(i)
         forecast_chg.at[index, 'Value'] = new_drivers_ls[i]
         prev_season_values.append(temp_prev_season_df['Value'].loc[(temp_prev_season_df['Variable_name_eng'].isin(drivers_to_change[i])) & (temp_prev_season_df['Data_group'].isin(drivers_to_change[i]))].values[0])
 

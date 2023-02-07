@@ -370,4 +370,13 @@ def userlist_api(request):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-financial_sim_update('ct_beast')
+@api_view(['GET'])
+def fin_sim_current_api(request):
+
+    if request.method == 'GET':
+        
+        max_date =  current_financial_simulations.objects.latest("date").date
+        data = market_data.objects.filter(user = request.user).filter(date__gte = max_date)
+        serializer = MarketDataSerializer(data, context={'request': request}, many=True)
+
+        return Response(serializer.data)
