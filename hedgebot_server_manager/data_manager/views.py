@@ -67,7 +67,7 @@ def current_financial_sim(username):
         if counter == 0:
             temp_df = pd.DataFrame([temp_ls], columns = ['Original','Variable_name_eng','Data_group','Units'])
         else:
-            df_temp = pd.DataFrame(temp_ls, columns = ['Original','Variable_name_eng','Data_group','Units'])
+            df_temp = pd.DataFrame([temp_ls], columns = ['Original','Variable_name_eng','Data_group','Units'])
             temp_df = pd.concat([temp_df, df_temp], ignore_index=True)
         counter += 1
         print(temp_df)
