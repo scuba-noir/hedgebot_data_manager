@@ -415,6 +415,17 @@ class user_forecasts_assumptions_results(models.Model):
         temp_self = user_forecasts_assumptions_results.objects.filter(id = int(child_id).first())
         return temp_self
 
+    def return_verbose(self, id_child):
+
+        temp_self = user_forecasts_assumptions_results.objects.filter(id = int(id_child)).first()
+        field_names = temp_self._meta.get_fields()
+        data_ls = {}
+        date_boolean = False
+        for field in field_names:
+            temp_ls = {}          
+            data_ls[field.attname] = (getattr(temp_self, field.verbose_name))
+        return data_ls
+
 class sugar_position_info(models.Model):
 
     id = models.BigAutoField(primary_key=True)
