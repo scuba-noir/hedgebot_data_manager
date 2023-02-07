@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 from . import create_assumptions_dict, simulate_statements
-from models import current_financial_simulations
+from . import models
 
 def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
 
@@ -88,7 +88,7 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
 
         final_df = simulate_statements.aggregate_fin_sim_results(income_statement_final_df, cash_flow_final_df, assets_final_df, liabilities_final_df, financial_indices_final_df)
 
-        temp = current_financial_simulations(
+        temp = models.current_financial_simulations(
             simulation_number = i,
             sugar_price = sugar_price,
             hydrous_price = hydrous_price,
