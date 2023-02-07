@@ -5,9 +5,9 @@ import pandas as pd
 from . import create_assumptions_dict, simulate_statements
 from . import models
 
-def custom_append(dict_1, dict_2):
+def custom_append(dict_1, dict_2, counter):
     print(dict_1)
-    if dict_1.sugar_price == 1:
+    if counter == 0:
         dict_1.update(dict_2)
     else:
         for keys in dict_2.keys():
@@ -186,6 +186,6 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
             "current_ratio":final_df['Mean Returned'].loc[final_df['Account'] == 'Current Ratio'].values[0]
         }
 
-        final_value_dict = custom_append(final_value_dict, temp_dict)
+        final_value_dict = custom_append(final_value_dict, temp_dict, i)
     
     return final_value_dict
