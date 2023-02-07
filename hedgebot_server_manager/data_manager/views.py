@@ -22,7 +22,7 @@ from dateutil.relativedelta import relativedelta
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-from data_manager.serializers import SugarPositionSerializers, MonteCarloDataSerializer, MarketDataSerializer, FinSimMetaDataSerializer, UserListSerializers, HistMCDataSerializer, HedgebotBestSerializer
+from data_manager.serializers import SugarPosition2Serializers, MonteCarloDataSerializer, MarketDataSerializer, FinSimMetaDataSerializer, UserListSerializers, HistMCDataSerializer, HedgebotBestSerializer
 from rest_framework.renderers import JSONRenderer
 
 from . import full_simulation_run
@@ -267,8 +267,8 @@ def mc_data_api(request):
 def sugar_position_api(request):
 
     if request.method == "GET":
-        data = sugar_position_info.objects.filter(username = request.user)
-        serializer = SugarPositionSerializers(data, context={'request': request}, many=True)
+        data = sugar_position_info_2.objects.filter(username = request.user)
+        serializer = SugarPosition2Serializers(data, context={'request': request}, many=True)
 
         return Response(serializer.data)
 

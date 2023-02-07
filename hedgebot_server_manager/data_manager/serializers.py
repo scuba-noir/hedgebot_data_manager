@@ -80,7 +80,7 @@ class CurrentFinSimSerializer(serializers.ModelSerializer):
         model = current_financial_simulations
         fields ='__all__'
 
-class HistMCDataSerializer(serializers.Serializer):
+class HistMCDataSerializer(serializers.Serializers):
 
     id = serializers.CharField(max_length = 10)
     start_date = serializers.DateTimeField()
@@ -94,47 +94,4 @@ class HedgebotBestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = hedgebot_results
-        fields =  [
-                    'date',
-                    'mar1_fxpassive_obligation',
-                    'mar1_fxpassive_fixed',
-                    'mar1_fxpassive_avg_price_cts',
-                    'mar1_fxpassive_avg_price_brl',
-                    'may_fxpassive_obligation',
-                    'may_fxpassive_fixed',
-                    'may_fxpassive_avg_price_cts',
-                    'may_fxpassive_avg_price_brl',
-                    'jul_fxpassive_obligation',
-                    'jul_fxpassive_fixed',
-                    'jul_fxpassive_avg_price_cts',
-                    'jul_fxpassive_avg_price_brl',
-                    'oct_fxpassive_obligation',
-                    'oct_fxpassive_fixed',
-                    'oct_fxpassive_avg_price_cts',
-                    'oct_fxpassive_avg_price_brl',
-                    'mar2_fxpassive_obligation',
-                    'mar2_fxpassive_fixed',
-                    'mar2_fxpassive_avg_price_cts',
-                    'mar2_fxpassive_avg_price_brl',
-                    'mar1_brlfixed_obligation',
-                    'mar1_brlfixed_fixed',
-                    'mar1_brlfixed_avg_price_cts',
-                    'mar1_brlfixed_avg_price_brl',
-                    'may_brlfixed_obligation',
-                    'may_brlfixed_fixed',
-                    'may_brlfixed_avg_price_cts',
-                    'may_brlfixed_avg_price_brl',
-                    'jul_brlfixed_obligation',
-                    'jul_brlfixed_fixed',
-                    'jul_brlfixed_avg_price_cts',
-                    'jul_brlfixed_avg_price_brl',
-                    'oct_brlfixed_obligation',
-                    'oct_brlfixed_fixed',
-                    'oct_brlfixed_avg_price_cts',
-                    'oct_brlfixed_avg_price_brl',
-                    'mar2_brlfixed_obligation',
-                    'mar2_brlfixed_fixed',
-                    'mar2_brlfixed_avg_price_cts',
-                    'mar2_brlfixed_avg_price_brl',
-                    'username'
-                ]
+        fields = '__all__'
