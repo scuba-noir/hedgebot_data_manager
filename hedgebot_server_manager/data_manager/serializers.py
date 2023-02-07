@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 from .models import sugar_position_info, monte_carlo_market_data, market_data, financial_simulation_meta_data_historical, sugar_position_info_2, user_list
-from .models import current_mc_data, market_data, current_financial_simulations
+from .models import current_mc_data, market_data, current_financial_simulations, hedgebot_results
 
 class SugarPositionSerializers(serializers.ModelSerializer):
 
@@ -80,7 +80,7 @@ class CurrentFinSimSerializer(serializers.ModelSerializer):
         model = current_financial_simulations
         fields ='__all__'
 
-class HistMCDataSerializer(serializers.Serializers):
+class HistMCDataSerializer(serializers.Serializer):
 
     id = serializers.CharField(max_length = 10)
     start_date = serializers.DateTimeField()
@@ -89,3 +89,9 @@ class HistMCDataSerializer(serializers.Serializers):
     factor_label = serializers.CharField(max_length = 30)
     mean_returned = serializers.FloatField()
     std_returned = serializers.FloatField()
+
+class HedgebotBestSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = hedgebot_results
+        fields = '__all__'

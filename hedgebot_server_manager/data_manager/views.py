@@ -22,7 +22,7 @@ from dateutil.relativedelta import relativedelta
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
-from data_manager.serializers import SugarPositionSerializers, MonteCarloDataSerializer, MarketDataSerializer, FinSimMetaDataSerializer, UserListSerializers, HistMCDataSerializer
+from data_manager.serializers import SugarPositionSerializers, MonteCarloDataSerializer, MarketDataSerializer, FinSimMetaDataSerializer, UserListSerializers, HistMCDataSerializer, HedgebotBestSerializer
 from rest_framework.renderers import JSONRenderer
 
 from . import full_simulation_run
@@ -229,8 +229,13 @@ def transformPrices(daily_chgs, price_data, price_date_ls):
 
 def initiate_models(username):
     
+    end_season_date = datetime.datetime(2024, 3, 31)
+    today = datetime.datetime.now()
+    date_range = pd.date_range(today, end_season_date, freq = 'W-FRI').to_list()
+    for i in range(0,len(date_range)):
+        print(date_range[i])
+        hedgebot_results.objects.get_or_create(username = username, date = date)
     financial_simulations_results.objects.get_or_create(username=username)
-    hedgebot_results.objects.get_or_create(username=username)
     target_prices.objects.get_or_create(username=username)
     sugar_position_info_2.objects.get_or_create(username=username)
     user_forecasts_assumptions_results.objects.get_or_create(username=username)
@@ -275,7 +280,7 @@ def historical_mc_data_api(request):
     data = monte_carlo_market_data.objects.filter(simulation_date__gte = temp_date)
     serializer = HistMCDataSerializer(data, context={'request':request}, many=True)
     return Response(serializer.data)
-    
+
 @api_view(['GET'])
 def current_mc_data_api(request):
 
@@ -371,4 +376,14 @@ def fin_sim_meta_data_api(request):
         max_date =  current_financial_simulations.objects.latest("date").date
         data = market_data.objects.filter(user = request.user).filter(date__gte = max_date)
         serializer = MarketDataSerializer(data, context={'request': request}, many=True)
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def hedgebot_best_path_api(request):
+
+    if request.method == 'GET':
+        data = hedgebot_results.objects.filter(user = request.user)
+        max_date = data.latest('date').date
+        data = data.filer(date__gte = max_date)
+        serializer = HedgebotBestSerializer(data, context={'request':request}, many=True)
         return Response(serializer.data)
