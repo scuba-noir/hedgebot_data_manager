@@ -34,33 +34,38 @@ def current_financial_sim(username):
 
     current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='23_24')
     verbose_name_dict = user_forecasts_assumptions_results.return_verbose(user_forecasts_assumptions_results)
-    temp_df = []
+
     counter = 0
     for key in verbose_name_dict:
         temp_ls = []
         temp_str = verbose_name_dict[key]
         temp_ls.append(temp_str)
+        
         try:
             var_name = temp_str[:temp_str.index('-')]
-            
         except:
             var_name = temp_str
+        
         temp_ls.append(var_name)
+        
         try:
             group_name = re.search('-(.*)-', temp_str).group(1)
         except:
             group_name = "not_listed"
+        
         temp_ls.append(group_name)
+        
         try:
             index = findnth(temp_str, '-', 1)
             units = temp_str[index+1:]
         except:
             units ='not_listed'
+        
         temp_ls.append(units)
         print(temp_ls)
 
         if counter == 0:
-            temp_df = pd.DataFrame(temp_ls, columns = ['Original','Variable_name_eng','Data_group','Units'])
+            temp_df = pd.DataFrame([temp_ls], columns = ['Original','Variable_name_eng','Data_group','Units'])
         else:
             df_temp = pd.DataFrame(temp_ls, columns = ['Original','Variable_name_eng','Data_group','Units'])
             temp_df = pd.concat([temp_df, df_temp], ignore_index=True)
