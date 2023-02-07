@@ -8,12 +8,10 @@ from . import models
 def custom_append(dict_1, dict_2):
     print(dict_1)
     if dict_1['sugar_price'] == 1:
-        for items in dict_2.items():
-            print(items)
-            dict_1.update(items)
+        dict_1.update(dict_2)
     else:
         for keys in dict_2.keys():
-            print(keys)
+            print(dict_2[keys])
             dict_1[keys].append(dict_2[keys])
 
 def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
