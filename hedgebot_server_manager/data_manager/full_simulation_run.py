@@ -5,15 +5,6 @@ import pandas as pd
 from . import create_assumptions_dict, simulate_statements
 from . import models
 
-def custom_append(dict_1, dict_2, counter):
-    print(dict_1)
-    if counter == 0:
-        dict_1.update(dict_2)
-    else:
-        for keys in dict_2.keys():
-            print(dict_2[keys])
-            dict_1[keys].append(dict_2[keys])
-
 def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
 
     initial_simulation_variables_2 = initial_simulation_variables
@@ -105,7 +96,6 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
 
     for i in range(0,10000):
 
-        print(final_value_dict)
 
         sugar_price = temp_values['NY No.11'][0][0][i]
         hydrous_price = temp_values['Hydrous Ethanol'][0][0][i]
@@ -184,5 +174,4 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1):
         final_value_dict["short_term_debt"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Short Term Debt Percent'].values[0])
         final_value_dict["current_ratio"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Current Ratio'].values[0])
     
-    print(final_value_dict)
     return final_value_dict
