@@ -267,7 +267,7 @@ def sugar_position_api(request):
 
     if request.method == "GET":
         print(request)
-        username = request.query_params.get['username']
+        username = request.query_params.get('username')
         data = sugar_position_info_2.objects.filter(username = username)
         serializer = SugarPosition2Serializers(data, context={'request': request}, many=True)
 
