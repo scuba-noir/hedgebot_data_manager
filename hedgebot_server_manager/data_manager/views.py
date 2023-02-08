@@ -289,6 +289,7 @@ def current_mc_data_api(request):
         max_date = monte_carlo_market_data.objects.latest('simulation_date').simulation_date    
         data = monte_carlo_market_data.objects.filter(reference__in = relevant_factors).filter(simulation_date = max_date)
         serializer = MonteCarloDataSerializer(data, context={'request':request}, many=True)
+        print(data.values())
         return Response(serializer.data)
 
 @api_view(['GET','POST'])
