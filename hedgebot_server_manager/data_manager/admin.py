@@ -27,6 +27,7 @@ class userForAssumAdmin(admin.ModelAdmin):
 class monteCarloAdmin(admin.ModelAdmin):
     list_display = [field.name for field in monte_carlo_market_data._meta.get_fields()]
     list_filter = ("reference","simulation_date","forecast_period")
+    search_fields = ("simulation_date")
 @admin.register(sugar_position_info_2)
 class sugarPosition2Admin(admin.ModelAdmin):
     list_display = [field.name for field in sugar_position_info_2._meta.get_fields()]
