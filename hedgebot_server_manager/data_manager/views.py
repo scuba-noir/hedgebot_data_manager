@@ -622,7 +622,7 @@ def risk_var_table_api(request):
     serializer = RiskVarTableSerializer(data, context={'request': request}, many=True)
     return Response(serializer.data)   
 
-class hedgebot_best_path_api2(generics.ListAPIView):
+class hedgebot_best_path_api(generics.ListAPIView):
     serializer_class = HedgebotBestSerializer
 
     def get_queryset(self):
