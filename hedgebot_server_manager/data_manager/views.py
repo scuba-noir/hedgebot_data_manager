@@ -626,7 +626,9 @@ class hedgebot_best_path_api(generics.ListAPIView):
     serializer_class = HedgebotBestSerializer
 
     def get_queryset(self):
+        print(self.kwargs)
         username = self.kwargs['username']
+        username = 'etergerg'
         data = hedgebot_results.objects.filter(username = username)
         print(data.values)
         return Response(data)
