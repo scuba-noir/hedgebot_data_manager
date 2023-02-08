@@ -382,7 +382,8 @@ def fin_sim_meta_data_api(request):
 def hedgebot_best_path_api(request):
 
     if request.method == 'GET':
-        data = hedgebot_results.objects.filter(username = request.user)
+        username = request.kwargs['username']
+        data = hedgebot_results.objects.filter(username = username)
         serializer = HedgebotBestSerializer(data, context={'request':request}, many=True)
         return Response(serializer.data)
 
