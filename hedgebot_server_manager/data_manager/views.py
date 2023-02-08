@@ -379,10 +379,10 @@ def fin_sim_meta_data_api(request):
         return Response(serializer.data)
 
 @api_view(['GET'])
-def hedgebot_best_path_api2(request):
+def hedgebot_best_path_api(request):
 
     if request.method == 'GET':
-        username = request.kwargs['username']
+        username = request.query_params.get('username')
         data = hedgebot_results.objects.filter(username = username)
         serializer = HedgebotBestSerializer(data, context={'request':request}, many=True)
         return Response(serializer.data)
@@ -622,7 +622,7 @@ def risk_var_table_api(request):
     serializer = RiskVarTableSerializer(data, context={'request': request}, many=True)
     return Response(serializer.data)   
 
-class hedgebot_best_path_api(generics.ListAPIView):
+class hedgebot_best_path_api2(generics.ListAPIView):
     serializer_class = HedgebotBestSerializer
 
     def get_queryset(self):
