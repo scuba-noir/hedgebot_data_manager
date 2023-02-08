@@ -278,9 +278,9 @@ def historical_mc_data_api(request):
 
     temp_date = datetime.datetime.today() + relativedelta(months=-12)
     forecast_date = monte_carlo_market_data.objects.latest('forecast_period').forecast_period
-    print(forecast_date)
     data = monte_carlo_market_data.objects.filter(simulation_date__gte = temp_date).filter(forecast_period__gte = forecast_date)
     serializer = HistMCDataSerializer(data, context={'request':request}, many=True)
+    print(data.values_list())
     return Response(serializer.data)
 
 @api_view(['GET'])
@@ -291,7 +291,6 @@ def current_mc_data_api(request):
         max_date = monte_carlo_market_data.objects.latest('simulation_date').simulation_date    
         data = monte_carlo_market_data.objects.filter(reference__in = relevant_factors).filter(simulation_date = max_date)
         serializer = MonteCarloDataSerializer(data, context={'request':request}, many=True)
-        print(data.values())
         return Response(serializer.data)
 
 @api_view(['GET','POST'])
