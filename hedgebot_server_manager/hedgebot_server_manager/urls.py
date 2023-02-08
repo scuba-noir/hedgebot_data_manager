@@ -20,12 +20,13 @@ from data_manager import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'^api/sugar_position/$', views.sugar_position_api),
+    re_path(r'^api/sugar_position/(?P<username>.+)/$', views.sugar_position_api),
     re_path(r'^api/mc_data/$', views.mc_data_api),
     re_path(r'^api/fin_sim_meta/$', views.fin_sim_meta_data_api),
     re_path(r'^api/current_mc_data/$', views.current_mc_data_api),
     re_path(r'^api/market_data/$', views.market_data_api),
     re_path(r'^api/user_list/$', views.userlist_api),
-    re_path(r'^api/hedgebot_bp/$', views.hedgebot_best_path_api)
+    re_path(r'^api/hedgebot_bp/$', views.hedgebot_best_path_api),
+    re_path(r'^api/risk_var_table_api/$', views.userlist_api),    
 
 ]
