@@ -385,3 +385,23 @@ def hedgebot_best_path_api(request):
         serializer = HedgebotBestSerializer(data, context={'request':request}, many=True)
         return Response(serializer.data)
 
+@api_view(['GET'])
+def hedgebot_best_path_api2(request):
+    hedgebot_results_data = hedgebot_results.objects.all()
+    fixed_revenues_max = hedgebot_results.objects.all().annotate(max_revenues_fixed = Max('fixed_revenues'))
+    dates = list(hedgebot_results_data.dates('date', 'day', order='DESC'))
+    forecast_period = list(hedgebot_results_data.dates('forecast_period', 'day', order='DESC'))
+    final_date = max(dates)
+    forecast_period_max = max(forecast_period)
+    super_rev_ls = list(fixed_revenues_max.filter(date__gte= final_date).filter(forecast_period__gte=forecast_period_max).filter(fixed_revenues__gte = F('max_revenues_fixed')).values_list('max_revenues_fixed', flat=True))
+    best_mill = list(fixed_revenues_max.filter(date__gte= final_date).filter(forecast_period__gte=forecast_period_max).filter(fixed_revenues__gte = F('max_revenues_fixed')).values_list('mill_identification_number', flat=True))
+    super_rev = max(super_rev_ls)
+    index_a = super_rev_ls.index(super_rev)
+    best_mill_int = best_mill[index_a]
+    best_mill_data = hedgebot_results.objects.all().filter(mill_identification_number = best_mill_int)
+    best_mill_data_serialized = []
+    for data in best_mill_data:
+        x = data.return_values()
+        x['date'] = x['date'].strftime("%Y-%m-%d")
+        x['forecast_period'] = x['forecast_period'].strftime("%Y-%m-%d")
+        best_mill_data_serialized.append(list(x.values()))
