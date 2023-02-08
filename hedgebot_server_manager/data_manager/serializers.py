@@ -83,10 +83,10 @@ class CurrentFinSimSerializer(serializers.ModelSerializer):
 class HistMCDataSerializer(serializers.Serializer):
 
     id = serializers.CharField(max_length = 10)
-    start_date = serializers.DateTimeField()
-    target_date = serializers.DateTimeField()
+    simulation_date = serializers.DateTimeField()
+    forecast_period = serializers.DateTimeField()
     end_date = serializers.DateTimeField()
-    factor_label = serializers.CharField(max_length = 30)
+    reference = serializers.CharField(max_length = 30)
     mean_returned = serializers.FloatField()
     std_returned = serializers.FloatField()
 
