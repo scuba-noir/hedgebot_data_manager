@@ -15,7 +15,7 @@ from data_manager.models import financial_simulations_results
 from data_manager.models import monte_carlo_market_data
 from data_manager.models import market_data
 from data_manager.models import sugar_position_info_2
-from data_manager.models import user_list, target_prices, hedgebot_results_meta_data, user_forecasts_assumptions_results, current_financial_simulations, get
+from data_manager.models import user_list, target_prices, hedgebot_results_meta_data, user_forecasts_assumptions_results, current_financial_simulations
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from rest_framework.response import Response
