@@ -628,4 +628,5 @@ class hedgebot_best_path_api(generics.ListAPIView):
     def get_queryset(self):
         username = self.kwargs['username']
         data = hedgebot_results.objects.filter(username = username)
+        print(data.values)
         return Response(data)
