@@ -278,6 +278,7 @@ def historical_mc_data_api(request):
 
     temp_date = date.today() + relativedelta(months=-6)
     forecast_date = monte_carlo_market_data.objects.latest('forecast_period').forecast_period
+    print(forecast_date)
     data = monte_carlo_market_data.objects.filter(simulation_date__gte = temp_date).filter(forecast_period__gte = forecast_date)
     serializer = HistMCDataSerializer(data, context={'request':request}, many=True)
     return Response(serializer.data)
