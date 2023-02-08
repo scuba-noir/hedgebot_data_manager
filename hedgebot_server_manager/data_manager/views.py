@@ -267,7 +267,7 @@ def sugar_position_api(request):
 
     if request.method == "GET":
         print(request)
-        username = request.kwargs['username']
+        username = request.query_params.get['username']
         data = sugar_position_info_2.objects.filter(username = username)
         serializer = SugarPosition2Serializers(data, context={'request': request}, many=True)
 
@@ -382,8 +382,8 @@ def fin_sim_meta_data_api(request):
 def hedgebot_best_path_api(request):
 
     if request.method == 'GET':
-       # username = request.query_params.get('username')
-        data = hedgebot_results.objects.all()
+        username = request.query_params.get('username')
+        data = hedgebot_results.objects.filter(username=username)
         serializer = HedgebotBestSerializer(data, context={'request':request}, many=True)
         return Response(serializer.data)
 
