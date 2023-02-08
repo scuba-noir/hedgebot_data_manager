@@ -20,7 +20,7 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework import status
+from rest_framework import status, generics
 from data_manager.serializers import SugarPosition2Serializers, MonteCarloDataSerializer, MarketDataSerializer, FinSimMetaDataSerializer, UserListSerializers, HistMCDataSerializer, HedgebotBestSerializer
 from rest_framework.renderers import JSONRenderer
 
@@ -379,7 +379,7 @@ def fin_sim_meta_data_api(request):
         return Response(serializer.data)
 
 @api_view(['GET'])
-def hedgebot_best_path_api(request):
+def hedgebot_best_path_api2(request):
 
     if request.method == 'GET':
         username = request.kwargs['username']
@@ -407,7 +407,6 @@ def hedgebot_best_path_api2(request):
         x['date'] = x['date'].strftime("%Y-%m-%d")
         x['forecast_period'] = x['forecast_period'].strftime("%Y-%m-%d")
         best_mill_data_serialized.append(list(x.values()))
-
 
 @api_view(['GET'])
 def risk_var_table_api(request):
@@ -622,3 +621,11 @@ def risk_var_table_api(request):
     data = risk_var_table.objects.filter(username = request.user)
     serializer = RiskVarTableSerializer(data, context={'request': request}, many=True)
     return Response(serializer.data)   
+
+class hedgebot_best_path_api2(generics.ListAPIView):
+    serializer_class = HedgebotBestSerializer
+
+    def get_queryset(self):
+        username = self.kwargs['username']
+        data = hedgebot_results.objects.filter(username = username)
+        return Response(data)
