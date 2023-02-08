@@ -26,7 +26,7 @@ urlpatterns = [
     re_path(r'^api/current_mc_data/$', views.current_mc_data_api),
     re_path(r'^api/market_data/$', views.market_data_api),
     re_path(r'^api/user_list/$', views.userlist_api),
-    re_path(r'^api/hedgebot_bp/(?P<username>.+)/$', views.hedgebot_best_path_api.as_view()),
+    re_path(r'^api/hedgebot_bp/(?P<username>.+)/$', views.hedgebot_best_path_api),
     re_path(r'^api/risk_var_table_api/$', views.userlist_api),    
 
 ]
