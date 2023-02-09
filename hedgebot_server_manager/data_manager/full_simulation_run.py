@@ -76,6 +76,7 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1, n
             "depreciation":[],
             "planting_costs":[],
             "lease_costs":[],
+            "cogs":[],
             "gross_profit":[],
             "sga_costs":[],
             "financial_costs":[],
