@@ -161,7 +161,7 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1, n
         final_value_dict["depreciation"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Depreciation BRL'].values[0])
         final_value_dict["planting_costs"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Planting Cost BRL'].values[0])
         final_value_dict["lease_costs"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Lease Cost BRL'].values[0])
-        final_value_dict["costs_of_goods_sold"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Total COGS BRL'].values[0])
+        final_value_dict["cogs"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Total COGS BRL'].values[0])
         final_value_dict["gross_profit"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Gross Profit BRL'].values[0])
         final_value_dict["sga_costs"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'Total SG&A BRL'].values[0])
         final_value_dict["ebit"].append(final_df['Mean Returned'].loc[final_df['Account'] == 'EBIT'].values[0])
