@@ -57,6 +57,7 @@ def Simulate_Income_Statement(assumptions_data_dict):
     #print('Sugar Revenues BRL: ' + str(sugar_revenues_BRL))
     hydrous_revenues_BRL = (hydrous_esalq * hydrous_production) 
     
+    print(anhydrous_esalq)
     if anhydrous_esalq < 1000:
         print(anhydrous_esalq)
         anhydrous_revenues_BRL = anhydrous_esalq * anhydrous_production * 1000 
