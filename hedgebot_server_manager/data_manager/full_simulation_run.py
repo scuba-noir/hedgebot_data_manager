@@ -81,7 +81,6 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1, n
             "sga_costs":[],
             "financial_costs":[],
             "ebit":[],
-            "costs_of_goods_sold":[],
             "ebt":[],
             "tax":[],
             "net_income":[],
