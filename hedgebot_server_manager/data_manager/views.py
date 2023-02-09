@@ -320,7 +320,7 @@ def risk_management_table_api(request):
             return_values_dict[relevent_sim_variables[i] + '_lower'] = final_value_dict_lower[relevent_sim_variables[i]][0]
             return_values_dict[relevent_sim_variables[i] + '_upper'] = final_value_dict_upper[relevent_sim_variables[i]][0]
 
-        data_obj = risk_management_user_input_table(**return_values_dict)
+        data_obj = risk_management_user_input_table.objects.update_or_create(**return_values_dict)
         serializer = RiskManagementUserInputTableSerializer(data_obj, context = {'request':request}, many = True)
 
         return(serializer.data)
