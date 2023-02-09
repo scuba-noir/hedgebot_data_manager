@@ -238,7 +238,7 @@ def initiate_models(username):
     sugar_position_info_2.objects.get_or_create(username=username)
     user_forecasts_assumptions_results.objects.get_or_create(username=username)
     user_forecasts_assumptions_results.objects.get_or_create(username=username, season = '22_23')
-    Users
+
 
 def at_market_sim(initial_sim_data, prev_year_fin_df):
 
@@ -261,8 +261,8 @@ def user_input_sim(user_input, initial_sim_data, prev_year_fin_df):
     mc_meta_data_current_prices_lower = mc_meta_data_current_prices_upper
     relevent_market_var_ls = ['sugar_1','hydrous','anhydrous','usdbrl']
     for i in range(0,len(relevent_market_var_ls)):
-        mc_meta_data_current_prices_upper['mean_returned'].loc[mc_meta_data_current_prices_upper['reference'] == relevent_market_var_ls[i]] = user_input[relevent_market_var_ls[i] + '_upper']
-        mc_meta_data_current_prices_lower['mean_returned'].loc[mc_meta_data_current_prices_upper['reference'] == relevent_market_var_ls[i]] = user_input[relevent_market_var_ls[i] + '_lower']
+        mc_meta_data_current_prices_upper['mean_returned'].loc[mc_meta_data_current_prices_upper['reference'] == relevent_market_var_ls[i]] = float(user_input[relevent_market_var_ls[i] + '_upper'])
+        mc_meta_data_current_prices_lower['mean_returned'].loc[mc_meta_data_current_prices_upper['reference'] == relevent_market_var_ls[i]] = float(user_input[relevent_market_var_ls[i] + '_lower'])
         mc_meta_data_current_prices_upper['std_returned'].loc[mc_meta_data_current_prices_upper['reference'] == relevent_market_var_ls[i]] = 0
         mc_meta_data_current_prices_lower['std_returned'].loc[mc_meta_data_current_prices_upper['reference'] == relevent_market_var_ls[i]] = 0
 
