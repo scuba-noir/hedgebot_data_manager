@@ -128,7 +128,7 @@ def financial_sim_update(username):
     prev_season_df = return_prev_season_df(username)
 
     mc_meta_data = pd.DataFrame(monte_carlo_market_data.objects.all().values())
-    final_value_dict = full_simulation_run.main(current_season_df, prev_season_df, mc_meta_data)
+    final_value_dict = full_simulation_run.main(current_season_df, prev_season_df, mc_meta_data, 1000)
     
     temp = current_financial_simulations.objects.create(
         user = username,
@@ -241,6 +241,50 @@ def initiate_models(username):
     user_forecasts_assumptions_results.objects.get_or_create(username=username, season = '22_23')
     Users
 
+def at_market_sim(initial_sim_data, prev_year_fin_df):
+
+    #Runs financial sim by using same calculation as financial_sim_update but user must input necessary variables
+    """
+        Runs a full financial simulation but only runs a single simulation (num_sims = 1) and passes current values with std of 0 as mc_meta_data
+    
+    """
+    most_recent_mc_date = monte_carlo_market_data.objects.latest('simulation_date').simulation_date
+    mc_meta_data_current_prices = monte_carlo_market_data.objects.filter(simulation_date = most_recent_mc_date).filter(forecast_period = most_recent_mc_date)
+    final_value_dict = full_simulation_run(initial_sim_data, prev_year_fin_df, mc_meta_data_current_prices, 1)
+    return final_value_dict
+
+def user_input_sim(username, user_input):
+
+    i = 1
+
+@api_view(['GET','POST'])
+def risk_management_table_api(request):
+
+    username = request.query_params.get('username')
+    if request.method == 'GET':
+        initial_sim_variables = return_current_season_df(username)
+        prev_season_df = return_prev_season_df(username)
+        at_market_data = at_market_sim(initial_sim_data=initial_sim_variables, prev_year_fin_df=prev_season_df)
+
+        current_expectations = current_financial_simulations.objects.filter(user = username)
+        max_date = current_expectations.latest('date').date
+        current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).values()[0])
+
+        relevent_sim_variables = ['sugar_price','hydrous_price','anhydrous_price','fx_rate','sugar_revenues','hydrous_revenues','anhydrous_revenues','cogs', 'gross_profit','sga_costs','ebit','financial_costs','net_income']
+        
+        return_values_dict = {}
+        
+        for i in range(0,len(relevent_sim_variables)):
+            relevent_std_var = relevent_sim_variables[i] + '_std'
+            temp_mean_returned = current_expectations[relevent_sim_variables]
+            temp_std_returned = current_expectations[relevent_std_var]
+            return_values_dict[relevent_sim_variables[i]] = current_expectations[re]
+            temp_dist = np.random.normal(loc=temp_mean_returned, scale=temp_std_returned, size = 1000)
+            return_values_dict[relevent_sim_variables[i] + '_var'] = np.percentile(temp_dist)
+            return_values_dict[relevent_sim_variables[i] + '_at_market'] = current_expectations[relevent_sim_variables[i]]
+
+        print(return_values_dict)
+        
 @api_view(['GET'])
 def market_data_api(request):
 
@@ -249,16 +293,6 @@ def market_data_api(request):
         data = market_data.objects.filter(ticker__in = columns_ls)
 
         serializer = MarketDataSerializer(data, context={'request': request}, many=True)
-
-        return Response(serializer.data)
-
-@api_view(['GET'])
-def mc_data_api(request):
-
-    if request.method == "GET":
-        data = monte_carlo_market_data.objects.all()
-
-        serializer = MonteCarloDataSerializer(data, context={'request': request}, many=True)
 
         return Response(serializer.data)
 
