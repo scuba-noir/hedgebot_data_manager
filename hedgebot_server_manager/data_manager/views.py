@@ -249,7 +249,7 @@ def at_market_sim(initial_sim_data, prev_year_fin_df):
     
     """
     most_recent_mc_date = monte_carlo_market_data.objects.latest('simulation_date').simulation_date
-    mc_meta_data_current_prices = pd.DataFrame.from_dict(monte_carlo_market_data.objects.filter(simulation_date = most_recent_mc_date).filter(forecast_period = most_recent_mc_date).values()[0])
+    mc_meta_data_current_prices = pd.DataFrame(monte_carlo_market_data.objects.filter(simulation_date = most_recent_mc_date).filter(forecast_period = most_recent_mc_date).values())
     final_value_dict = full_simulation_run.main(initial_sim_data, prev_year_fin_df, mc_meta_data_current_prices, 1)
     return final_value_dict
 
