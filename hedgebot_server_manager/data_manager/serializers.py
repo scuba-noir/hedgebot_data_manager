@@ -91,3 +91,9 @@ class HedgebotBestSerializer(serializers.ModelSerializer):
     class Meta:
         model = hedgebot_results
         fields = '__all__'
+
+class RiskManagementUserInputTableSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = risk_management_user_input_table
+        fields = '__all__'
