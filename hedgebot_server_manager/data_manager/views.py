@@ -35,6 +35,7 @@ def findnth(string, substring, n):
    return len(string) - len(parts[-1]) - len(substring)
 
 def return_current_season_df(username):
+    
     current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='23_24')
     verbose_name_dict = user_forecasts_assumptions_results.return_verbose(user_forecasts_assumptions_results)
     current_season_df = pd.DataFrame(current_season_df.values())
@@ -704,3 +705,51 @@ def risk_var_table_api(request):
     serializer = RiskVarTableSerializer(data, context={'request': request}, many=True)
     return Response(serializer.data)   
 
+@api_view(['GET'])
+def return_current_season_df_api(request):
+    
+    username = request.query_params.get('username')
+    current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='23_24')
+    verbose_name_dict = user_forecasts_assumptions_results.return_verbose(user_forecasts_assumptions_results)
+    current_season_df = pd.DataFrame(current_season_df.values())
+    current_season_df['date'] = pd.to_datetime(current_season_df['date'])
+    current_season_df = current_season_df.loc[current_season_df['date'] == max(current_season_df['date'])]
+    counter = 0
+
+    for key in verbose_name_dict:
+        temp_ls = []
+        temp_str = verbose_name_dict[key]
+        temp_values = current_season_df[key].values[0]
+        temp_ls.append(temp_str)
+        temp_ls.append(temp_values)
+        try:
+            var_name = temp_str[:temp_str.index('-')]
+        except:
+            var_name = temp_str
+        
+        temp_ls.append(var_name)
+        
+        try:
+            group_name = re.search('-(.*)-', temp_str).group(1)
+        except:
+            group_name = "not_listed"
+        
+        temp_ls.append(group_name)
+        
+        try:
+            index = findnth(temp_str, '-', 1)
+            units = temp_str[index+1:]
+        except:
+            units ='not_listed'
+        
+        temp_ls.append(units)
+
+        if counter == 0:
+            temp_df = pd.DataFrame([temp_ls], columns = ['Original','Value','Variable_name_eng','Data_group','Units'])
+        else:
+            df_temp = pd.DataFrame([temp_ls], columns = ['Original','Value','Variable_name_eng','Data_group','Units'])
+            temp_df = pd.concat([temp_df, df_temp], ignore_index=True)
+        counter += 1
+
+    data = json.dumps(temp_df.to_dict(orient = 'list'))
+    return Response(data)

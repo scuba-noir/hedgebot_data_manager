@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 from .models import sugar_position_info, monte_carlo_market_data, market_data, financial_simulation_meta_data_historical, sugar_position_info_2, user_list
 from .models import current_mc_data, market_data, current_financial_simulations, hedgebot_results, risk_management_user_input_table
+from django.db import models
 
 class SugarPositionSerializers(serializers.ModelSerializer):
 
@@ -97,3 +98,11 @@ class RiskManagementUserInputTableSerializer(serializers.ModelSerializer):
     class Meta:
         model = risk_management_user_input_table
         fields = '__all__'
+
+class CurrentAssumptionsSerializer(seralizers.Serializer):
+
+    original = models.CharField(max_length = 50)
+    value = models.FloatField()
+    variable_name_eng = models.CharField(max_length=50)
+    data_group = models.CharField(max_length=50)
+    units = models.CharField(max_length=10)
