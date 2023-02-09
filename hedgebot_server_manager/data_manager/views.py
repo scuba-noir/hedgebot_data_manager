@@ -323,7 +323,7 @@ def risk_management_table_api(request):
         #data_obj = risk_management_user_input_table.objects.update_or_create(**return_values_dict)
         #serializer = RiskManagementUserInputTableSerializer(data_obj, context = {'request':request}, many = True)
 
-        data = json.dumps(return_values_dict, ensure_ascii=Fase)
+        data = json.dumps(return_values_dict, ensure_ascii=False)
 
         return(data)
 
