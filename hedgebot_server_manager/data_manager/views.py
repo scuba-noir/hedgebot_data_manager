@@ -718,6 +718,8 @@ def return_current_season_df_api(request):
     counter = 0
 
     for key in verbose_name_dict:
+        if key == 'date':
+            continue
         temp_ls = []
         temp_str = verbose_name_dict[key]
         temp_values = current_season_df[key].values[0]
