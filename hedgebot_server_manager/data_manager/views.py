@@ -276,8 +276,11 @@ def sugar_position_api(request):
 @api_view(['GET'])
 def historical_mc_data_api(request):
 
-
-    data = monte_carlo_market_data.objects.all()
+    temp_date = datetime.datetime.today() + relativedelta(months=-12)
+    forecast_date = monte_carlo_market_data.objects.latest('forecast_period').forecast_period
+    print('Forecast period: ' + forecast_date.strftime("%Y-%m-%d"))
+    print('Simulation Date: ' + temp_date.strftime("%Y-%m-%d"))
+    data = monte_carlo_market_data.objects.filter(forecast_period__gte = forecast_date)
     serializer = HistMCDataSerializer(data, context={'request':request}, many=True)
     print(data.values())
     return Response(serializer.data)

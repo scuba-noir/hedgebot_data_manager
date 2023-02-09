@@ -82,13 +82,9 @@ class CurrentFinSimSerializer(serializers.ModelSerializer):
 
 class HistMCDataSerializer(serializers.Serializer):
 
-    id = serializers.CharField(max_length = 10)
-    simulation_date = serializers.DateTimeField()
-    forecast_period = serializers.DateTimeField()
-    end_date = serializers.DateTimeField()
-    reference = serializers.CharField(max_length = 30)
-    mean_returned = serializers.FloatField()
-    std_returned = serializers.FloatField()
+    class Meta:
+        model = monte_carlo_market_data
+        fields = ('simulation_date','forecast_period','end_date','reference','mean_returned', 'std_returned')
 
 class HedgebotBestSerializer(serializers.ModelSerializer):
 
