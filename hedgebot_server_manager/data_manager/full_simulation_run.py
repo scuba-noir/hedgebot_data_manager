@@ -43,8 +43,6 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1, n
         mean = values.mean_returned
         std = values.std_returned
         factor_name = translation_market_var_list[label_index]
-        print(mean)
-        print(std)
         sim_data = np.random.normal(mean, std, 10000).tolist()
         temp_values[factor_name].append([
             sim_data  

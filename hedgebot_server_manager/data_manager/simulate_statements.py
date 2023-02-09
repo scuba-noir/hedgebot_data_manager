@@ -56,9 +56,12 @@ def Simulate_Income_Statement(assumptions_data_dict):
     sugar_revenues_BRL = (sugar_revenues_USD * usdbrl) 
     #print('Sugar Revenues BRL: ' + str(sugar_revenues_BRL))
     hydrous_revenues_BRL = (hydrous_esalq * hydrous_production) 
-    anhydrous_revenues_BRL = (anhydrous_esalq * anhydrous_production * 1000) 
+    if anhydrous_esalq < 1000:
+        anhydrous_revenues_BRL = anhydrous_esalq * anhydrous_production * 1000 
+    else:
+        anhydrous_revenues_BRL = anhydrous_esalq * anhydrous_production
     energy_revenues_BRL = (energy_px * energy_production) / 1000
-    total_revenues_BRL = (sugar_revenues_BRL + hydrous_revenues_BRL + anhydrous_revenues_BRL + energy_revenues_BRL)
+    total_revenues_BRL = sugar_revenues_BRL + hydrous_revenues_BRL + anhydrous_revenues_BRL + energy_revenues_BRL
     
     lease_cost = -1 * lease_cost_BRL * leased_area / 1000
     third_party_cane_cost = -1 * third_party_cane_mt * third_party_cane_cost_BRLperMT
