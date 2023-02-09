@@ -310,7 +310,7 @@ def risk_management_table_api(request):
         for i in range(0,len(relevent_sim_variables)):
             relevent_std_var = relevent_sim_variables[i] + '_std'
             temp_mean_returned = current_expectations[relevent_sim_variables[i]][0]
-            temp_std_returned = current_expectations[relevent_std_var].values()[0]
+            temp_std_returned = current_expectations[relevent_std_var][0]
             return_values_dict[relevent_sim_variables[i]] = temp_mean_returned
             temp_dist = np.random.normal(loc=temp_mean_returned, scale=temp_std_returned, size = 1000)
             return_values_dict[relevent_sim_variables[i] + '_var'] = np.percentile(temp_dist, 5)
