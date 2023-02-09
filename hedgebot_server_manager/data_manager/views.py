@@ -13,7 +13,7 @@ from data_manager.models import hedgebot_results
 from data_manager.models import financial_simulation_meta_data_historical
 from data_manager.models import financial_simulations_results
 from data_manager.models import monte_carlo_market_data
-from data_manager.models import market_data
+from data_manager.models import market_data, risk_management_user_input_table
 from data_manager.models import sugar_position_info_2
 from data_manager.models import user_list, target_prices, hedgebot_results_meta_data, user_forecasts_assumptions_results, current_financial_simulations
 from datetime import date
@@ -23,6 +23,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status, generics
 from data_manager.serializers import SugarPosition2Serializers, MonteCarloDataSerializer, MarketDataSerializer, FinSimMetaDataSerializer, UserListSerializers, HistMCDataSerializer, HedgebotBestSerializer
 from rest_framework.renderers import JSONRenderer
+from data_manager.serializers import RiskManagementUserInputTableSerializer
 
 from . import full_simulation_run
 
@@ -286,6 +287,7 @@ def user_input_sim(user_input, initial_sim_data, prev_year_fin_df):
     final_value_dict_lower = full_simulation_run.main(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_lower, 1) 
     final_value_dict_upper = full_simulation_run.main(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_upper, 1)
 
+
     return final_value_dict_lower, final_value_dict_upper
 
 @api_view(['GET','POST'])
@@ -318,7 +320,10 @@ def risk_management_table_api(request):
             return_values_dict[relevent_sim_variables[i] + '_lower'] = final_value_dict_lower[relevent_sim_variables[i]][0]
             return_values_dict[relevent_sim_variables[i] + '_upper'] = final_value_dict_upper[relevent_sim_variables[i]][0]
 
-        return(return_values_dict)
+        data_obj = risk_management_user_input_table(**return_values_dict)
+        serializer = RiskManagementUserInputTableSerializer(data_obj, context = {'request':request}, many = True)
+
+        return(serializer.data)
 
 
 @api_view(['GET'])
