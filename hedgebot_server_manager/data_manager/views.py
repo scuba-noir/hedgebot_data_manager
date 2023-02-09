@@ -267,7 +267,7 @@ def risk_management_table_api(request):
         at_market_data = at_market_sim(initial_sim_data=initial_sim_variables, prev_year_fin_df=prev_season_df)
 
         current_expectations = current_financial_simulations.objects.filter(user = username)
-        max_date = current_expectations.objects.latest('date').date
+        max_date = current_expectations.latest('date').date
         current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).values()[0])
 
         relevent_sim_variables = ['sugar_price','hydrous_price','anhydrous_price','fx_rate','sugar_revenues','hydrous_revenues','anhydrous_revenues','cogs', 'gross_profit','sga_costs','ebit','financial_costs','net_income']
