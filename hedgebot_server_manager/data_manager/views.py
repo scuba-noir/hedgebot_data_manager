@@ -714,6 +714,7 @@ def return_current_season_df_api(request):
     current_season_df = pd.DataFrame(current_season_df.values())
     current_season_df['date'] = pd.to_datetime(current_season_df['date'])
     current_season_df = current_season_df.loc[current_season_df['date'] == max(current_season_df['date'])]
+    current_season_df = current_season_df.drop(['date'], axis = 1)
     counter = 0
 
     for key in verbose_name_dict:
