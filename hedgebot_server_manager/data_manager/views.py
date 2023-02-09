@@ -277,7 +277,7 @@ def risk_management_table_api(request):
 
         max_date = current_expectations.latest('date').date
         current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).values())
-        current_expectations = pd.DataFrame(current_expectations.iloc[0])
+        current_expectations = pd.DataFrame(current_expectations.iloc[:1])
         print(current_expectations)
         print('---------------')
         
