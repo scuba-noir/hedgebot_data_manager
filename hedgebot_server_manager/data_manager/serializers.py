@@ -98,11 +98,3 @@ class RiskManagementUserInputTableSerializer(serializers.ModelSerializer):
     class Meta:
         model = risk_management_user_input_table
         fields = '__all__'
-
-class CurrentAssumptionsSerializer(seralizers.Serializer):
-
-    original = models.CharField(max_length = 50)
-    value = models.FloatField()
-    variable_name_eng = models.CharField(max_length=50)
-    data_group = models.CharField(max_length=50)
-    units = models.CharField(max_length=10)
