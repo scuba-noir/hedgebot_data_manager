@@ -324,8 +324,7 @@ def risk_management_table_api(request):
         #serializer = RiskManagementUserInputTableSerializer(data_obj, context = {'request':request}, many = True)
         
         data = return_values_dict
-        print(data)
-        data = json.dumps(data, ensure_ascii=False)
+        data = json.dumps(data)
 
         return Response(data)
 
