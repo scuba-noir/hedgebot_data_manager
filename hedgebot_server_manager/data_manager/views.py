@@ -232,7 +232,6 @@ def initiate_models(username):
     today = datetime.datetime.now()
     date_range = pd.date_range(today, end_season_date, freq = 'W-FRI').to_list()
     for i in range(0,len(date_range)):
-        print(date_range[i])
         hedgebot_results.objects.get_or_create(username = username, forecast_period = date_range[i].strftime('%Y-%m-%d'))
     financial_simulations_results.objects.get_or_create(username=username)
     target_prices.objects.get_or_create(username=username)
@@ -293,8 +292,7 @@ def risk_management_table_api(request):
 
     if request.method == 'GET':
 
-        user_input = request.query_params()
-        print('User Input: ' + user_input)
+        user_input = request.params
         initial_sim_variables = return_current_season_df(username)
         prev_season_df = return_prev_season_df(username)
         at_market_data = at_market_sim(initial_sim_data=initial_sim_variables, prev_year_fin_df=prev_season_df)
@@ -347,11 +345,11 @@ def historical_mc_data_api(request):
 
     temp_date = datetime.datetime.today() + relativedelta(months=-12)
     forecast_date = monte_carlo_market_data.objects.latest('forecast_period').forecast_period
-    print('Forecast period: ' + forecast_date.strftime("%Y-%m-%d"))
-    print('Simulation Date: ' + temp_date.strftime("%Y-%m-%d"))
+    #print('Forecast period: ' + forecast_date.strftime("%Y-%m-%d"))
+    #print('Simulation Date: ' + temp_date.strftime("%Y-%m-%d"))
     data = monte_carlo_market_data.objects.filter(simulation_date__gte = temp_date).filter(forecast_period__gte = forecast_date)
     serializer = MonteCarloDataSerializer(data, context={'request':request}, many=True)
-    print(data.values())
+    #print(data.values())
     return Response(serializer.data)
 
 @api_view(['GET'])
