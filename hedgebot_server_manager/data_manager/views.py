@@ -327,7 +327,7 @@ def risk_management_table_api(request):
         print(data)
         data = json.dumps(data, ensure_ascii=False)
 
-        return(data)
+        return Response(data)
 
 
 @api_view(['GET'])
