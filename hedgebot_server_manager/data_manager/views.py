@@ -281,7 +281,7 @@ def historical_mc_data_api(request):
     print('Forecast period: ' + forecast_date.strftime("%Y-%m-%d"))
     print('Simulation Date: ' + temp_date.strftime("%Y-%m-%d"))
     data = monte_carlo_market_data.objects.all()
-    serializer = HistMCDataSerializer(data, context={'request':request}, many=True)
+    serializer = MonteCarloDataSerializer(data, context={'request':request}, many=True)
     print(data.values())
     return Response(serializer.data)
 
