@@ -241,7 +241,6 @@ def initiate_models(username):
     user_forecasts_assumptions_results.objects.get_or_create(username=username)
     user_forecasts_assumptions_results.objects.get_or_create(username=username, season = '22_23')
 
-
 def at_market_sim(initial_sim_data, prev_year_fin_df):
 
     #Runs financial sim by using same calculation as financial_sim_update but user must input necessary variables
