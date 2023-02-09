@@ -268,9 +268,12 @@ def user_input_sim(user_input, initial_sim_data, prev_year_fin_df):
 
     print('-----------------')
     print('Monte Carlo Data: Lower')
-    print(mc_meta_data_current_prices_lower)
+    for row, items in mc_meta_data_current_prices_lower.iterrows():
+        print(items)
+    
     print('Monte Carlo Data: Opper')
-    print(mc_meta_data_current_prices_upper)        
+    for row, items in mc_meta_data_current_prices_upper.iterrows():
+        print(items)        
 
     temp_yield = float(user_input['cane_yield'])
     temp_trs = float(user_input['trs'])
@@ -290,6 +293,15 @@ def user_input_sim(user_input, initial_sim_data, prev_year_fin_df):
 
     final_value_dict_lower = full_simulation_run.main(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_lower, 1) 
     final_value_dict_upper = full_simulation_run.main(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_upper, 1)
+
+    print('--------------------')
+    print(final_value_dict_lower)
+
+
+    print('--------------------')
+    print(final_value_dict_upper)
+
+    
     return final_value_dict_lower, final_value_dict_upper
 
 @api_view(['GET','POST'])
