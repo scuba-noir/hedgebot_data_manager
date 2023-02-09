@@ -101,7 +101,10 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1, n
 
         sugar_price = temp_values['NY No.11'][0][0][i]
         hydrous_price = temp_values['Hydrous Ethanol'][0][0][i]
-        anhydrous_price = temp_values['Anhydrous Ethanol'][0][0][i] * 1000
+        if anhydrous_price = temp_values['Anhydrous Ethanol'][0][0][i] < 1000:
+            anhydrous_price = temp_values['Anhydrous Ethanol'][0][0][i] * 1000
+        else:
+            anhydrous_price = temp_values['Anhydrous Ethanol'][0][0][i]
         energy_price = temp_values['Energy Prices'][0][0][i]
         fx_rate = temp_values['USDBRL'][0][0][i]
         selic_rate = temp_selic
