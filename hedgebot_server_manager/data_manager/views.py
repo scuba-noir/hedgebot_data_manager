@@ -274,12 +274,13 @@ def risk_management_table_api(request):
 
         print('--------------')
         print('Currrent Expectations DF: ')
-        print(pd.DataFrame(current_expectations.last().values()))
+
+        max_date = current_expectations.latest('date').date
+        current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).values())
+        current_expectations = pd.DataFrame(current_expectations.iloc[0])
+        print(current_expectations)
         print('---------------')
         
-        max_date = current_expectations.latest('date').date
-        current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).values())[0]
-        current_expectations = pd.DataFrame(current_expectations.iloc[0])
 
         relevent_sim_variables = ['sugar_price','hydrous_price','anhydrous_price','fx_rate','sugar_revenues','hydrous_revenues','anhydrous_revenues','cogs', 'gross_profit','sga_costs','ebit','financial_costs','net_income']
         
