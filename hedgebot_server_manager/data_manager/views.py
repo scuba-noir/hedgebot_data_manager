@@ -271,8 +271,11 @@ def user_input_sim(user_input, initial_sim_data, prev_year_fin_df):
     temp_production_mix_sugar = user_input['production_mix_sugar']
     temp_production_mix_hydrous = user_input['production_mix_hydrous']
     temp_production_mix_anhydrous = user_input['production_mix_anhydrous']
+    print(temp_trs)
+    print(temp_yield)
+    print(temp_cane_area)
     temp_cane_area = initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Planting area') & (initial_sim_data['Data_group'] == 'Own Cane Assumptions')].values[0]
-    temp_atr = temp_cane_area * temp_yield * temp_trs + initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Third party cane') & (initial_sim_data['Units'] == '000 mt')].values[0]
+    temp_atr = temp_cane_area * temp_yield * temp_trs + print(initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Third party cane') & (initial_sim_data['Units'] == '000 mt')].values[0])
     temp_sugar_prod = (temp_atr * temp_production_mix_sugar)/1000/1.06
     temp_hydrous_prod = (temp_atr * temp_production_mix_hydrous)/1000/1.53
     temp_anhydrous_prod = (temp_atr * temp_production_mix_anhydrous)/1000/1.53
