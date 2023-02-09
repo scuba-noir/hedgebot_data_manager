@@ -290,7 +290,7 @@ def risk_management_table_api(request):
             relevent_std_var = relevent_sim_variables[i] + '_std'
             print('--------------')
             print('Relevent STD Var: ' + str(relevent_std_var))
-            temp_mean_returned = current_expectations[relevent_sim_variables]
+            temp_mean_returned = current_expectations[relevent_sim_variables[i]]
             temp_std_returned = current_expectations[relevent_std_var]
             print('Temp Var Returned : ' + str(temp_std_returned))
             print('Temp Mean Returned: ' + str(temp_mean_returned))
