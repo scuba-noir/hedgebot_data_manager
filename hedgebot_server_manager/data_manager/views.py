@@ -271,11 +271,10 @@ def risk_management_table_api(request):
         at_market_data = at_market_sim(initial_sim_data=initial_sim_variables, prev_year_fin_df=prev_season_df)
         
         current_expectations = current_financial_simulations.objects.filter(user = username)
-        current_fin_sim_date = current_expectations.latest('date').date
-        current_expectations = current_expectations.filter(date__gte = current_fin_sim_date)        
+
         print('--------------')
         print('Currrent Expectations DF: ')
-        print(pd.DataFrame(current_expectations.values()))
+        print(pd.DataFrame(current_expectations.values()[0]))
         print('---------------')
         
         max_date = current_expectations.latest('date').date
