@@ -249,7 +249,7 @@ def at_market_sim(initial_sim_data, prev_year_fin_df):
     
     """
     most_recent_mc_date = monte_carlo_market_data.objects.latest('simulation_date').simulation_date
-    mc_meta_data_current_prices = monte_carlo_market_data.objects.filter(simulation_date = most_recent_mc_date).filter(forecast_period = most_recent_mc_date)
+    mc_meta_data_current_prices = pd.DataFrame.from_dict(monte_carlo_market_data.objects.filter(simulation_date = most_recent_mc_date).filter(forecast_period = most_recent_mc_date).values()[0])
     final_value_dict = full_simulation_run.main(initial_sim_data, prev_year_fin_df, mc_meta_data_current_prices, 1)
     return final_value_dict
 
@@ -267,7 +267,7 @@ def risk_management_table_api(request):
         at_market_data = at_market_sim(initial_sim_data=initial_sim_variables, prev_year_fin_df=prev_season_df)
 
         current_expectations = current_financial_simulations.objects.filter(user = username)
-        max_date = current_expectations.latest('date').date
+        max_date = current_expectations.objects.latest('date').date
         current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).values()[0])
 
         relevent_sim_variables = ['sugar_price','hydrous_price','anhydrous_price','fx_rate','sugar_revenues','hydrous_revenues','anhydrous_revenues','cogs', 'gross_profit','sga_costs','ebit','financial_costs','net_income']
