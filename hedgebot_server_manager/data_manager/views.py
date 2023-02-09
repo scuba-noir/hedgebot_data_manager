@@ -287,10 +287,10 @@ def risk_management_table_api(request):
             relevent_std_var = relevent_sim_variables[i] + '_std'
             temp_mean_returned = current_expectations[relevent_sim_variables]
             temp_std_returned = current_expectations[relevent_std_var]
-            return_values_dict[relevent_sim_variables[i]] = current_expectations[re]
+            return_values_dict[relevent_sim_variables[i]] = current_expectations[temp_mean_returned]
             temp_dist = np.random.normal(loc=temp_mean_returned, scale=temp_std_returned, size = 1000)
-            return_values_dict[relevent_sim_variables[i] + '_var'] = np.percentile(temp_dist)
-            return_values_dict[relevent_sim_variables[i] + '_at_market'] = current_expectations[relevent_sim_variables[i]]
+            return_values_dict[relevent_sim_variables[i] + '_var'] = np.percentile(temp_dist, 5)
+            return_values_dict[relevent_sim_variables[i] + '_at_market'] = at_market_data[relevent_sim_variables[i]]
 
         print(return_values_dict)
         
