@@ -261,12 +261,21 @@ def user_input_sim(username, user_input):
 def risk_management_table_api(request):
 
     username = request.query_params.get('username')
+    print('---------')
+    print('Username: ' + username)
+    print('---------')
+
     if request.method == 'GET':
         initial_sim_variables = return_current_season_df(username)
         prev_season_df = return_prev_season_df(username)
         at_market_data = at_market_sim(initial_sim_data=initial_sim_variables, prev_year_fin_df=prev_season_df)
 
         current_expectations = current_financial_simulations.objects.filter(user = username)
+        print('--------------')
+        print('Currrent Expectations DF: ')
+        print(pd.DataFrame(current_expectations.values()))
+        print('---------------')
+        
         max_date = current_expectations.latest('date').date
         current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).values()[0])
 
