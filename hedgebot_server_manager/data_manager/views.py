@@ -318,7 +318,7 @@ def risk_management_table_api(request):
             return_values_dict[relevent_sim_variables[i] + '_lower'] = final_value_dict_lower[relevent_sim_variables[i]][0]
             return_values_dict[relevent_sim_variables[i] + '_upper'] = final_value_dict_upper[relevent_sim_variables[i]][0]
 
-        print(return_values_dict.keys())
+        return(return_values_dict)
 
 
 @api_view(['GET'])
