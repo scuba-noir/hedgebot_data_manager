@@ -253,54 +253,70 @@ def at_market_sim(initial_sim_data, prev_year_fin_df):
     final_value_dict = full_simulation_run.main(initial_sim_data, prev_year_fin_df, mc_meta_data_current_prices, 1)
     return final_value_dict
 
-def user_input_sim(username, user_input):
+def user_input_sim(user_input, initial_sim_data, prev_year_fin_df):
 
-    i = 1
+
+    most_recent_mc_date = monte_carlo_market_data.objects.latest('simulation_date').simulation_date
+    max_forecast_period = monte_carlo_market_data.objects.latest('simulation_date').forecast_period
+    mc_meta_data_current_prices_upper = pd.DataFrame(monte_carlo_market_data.objects.filter(simulation_date = most_recent_mc_date).filter(forecast_period = max_forecast_period).values())
+    mc_meta_data_current_prices_lower = mc_meta_data_current_prices_upper
+    relevent_market_var_ls = ['sugar_1','hydrous','anhydrous','usdbrl']
+    for i in range(0,len(relevent_market_var_ls)):
+        mc_meta_data_current_prices_upper['mean_returned'].loc[mc_meta_data_current_prices_upper['reference'] == relevent_market_var_ls[i]] = user_input[relevent_market_var_ls[i] + '_upper']
+        mc_meta_data_current_prices_lower['mean_returned'].loc[mc_meta_data_current_prices_upper['reference'] == relevent_market_var_ls[i]] = user_input[relevent_market_var_ls[i] + '_lower']
+        mc_meta_data_current_prices_upper['std_returned'].loc[mc_meta_data_current_prices_upper['reference'] == relevent_market_var_ls[i]] = 0
+        mc_meta_data_current_prices_lower['std_returned'].loc[mc_meta_data_current_prices_upper['reference'] == relevent_market_var_ls[i]] = 0
+
+    temp_yield = user_input['cane_yield']
+    temp_trs = user_input['trs']
+    temp_production_mix_sugar = user_input['production_mix_sugar']
+    temp_production_mix_hydrous = user_input['production_mix_hydrous']
+    temp_production_mix_anhydrous = user_input['production_mix_anhydrous']
+    temp_cane_area = initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Planting area') & (initial_sim_data['Data_group'] == 'Own Cane Assumptions')].values[0]
+    temp_atr = temp_cane_area * temp_yield * temp_trs + initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Third party cane') & (initial_sim_data['Units'] == '000 mt')].values[0]
+    temp_sugar_prod = (temp_atr * temp_production_mix_sugar)/1000/1.06
+    temp_hydrous_prod = (temp_atr * temp_production_mix_hydrous)/1000/1.53
+    temp_anhydrous_prod = (temp_atr * temp_production_mix_anhydrous)/1000/1.53
+    initial_sim_df = initial_sim_data
+    initial_sim_df['Value'].loc[(initial_sim_df['Variable_name_eng'] == 'Sugar production') & (initial_sim_df['Data_group'] == 'Final Volume Forecasts')] = temp_sugar_prod
+    initial_sim_df['Value'].loc[(initial_sim_df['Variable_name_eng'] == 'Hydrous production') & (initial_sim_df['Data_group'] == 'Final Volume Forecasts')] = temp_hydrous_prod
+    initial_sim_df['Value'].loc[(initial_sim_df['Variable_name_eng'] == 'Anydrous production') & (initial_sim_df['Data_group'] == 'Final Volume Forecasts')] = temp_anhydrous_prod
+
+    final_value_dict_lower = full_simulation_run(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_lower, 1) 
+    final_value_dict_upper = full_simulation_run(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_lower, 1)
+    return final_value_dict_lower, final_value_dict_upper
 
 @api_view(['GET','POST'])
 def risk_management_table_api(request):
 
     username = request.query_params.get('username')
-    print('---------')
-    print('Username: ' + username)
-    print('---------')
 
     if request.method == 'GET':
+
+        user_input = request.get_query_params
+        print('User Input: ' + user_input)
         initial_sim_variables = return_current_season_df(username)
         prev_season_df = return_prev_season_df(username)
         at_market_data = at_market_sim(initial_sim_data=initial_sim_variables, prev_year_fin_df=prev_season_df)
-        
         current_expectations = current_financial_simulations.objects.filter(user = username)
-
-        print('--------------')
-        print('Currrent Expectations DF: ')
-
         max_date = current_expectations.latest('date').date
         current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).values())
         current_expectations = pd.DataFrame(current_expectations.iloc[:1])
-        print(current_expectations)
-        print('---------------')
-        
+        final_value_dict_lower, final_value_dict_upper = user_input_sim(user_input, initial_sim_variables, prev_season_df)
 
         relevent_sim_variables = ['sugar_price','hydrous_price','anhydrous_price','fx_rate','sugar_revenues','hydrous_revenues','anhydrous_revenues','cogs', 'gross_profit','sga_costs','ebit','financial_costs','net_income']
-        
         return_values_dict = {}
-        
         for i in range(0,len(relevent_sim_variables)):
             relevent_std_var = relevent_sim_variables[i] + '_std'
-            print('--------------')
-            print('Relevent STD Var: ' + str(relevent_std_var))
             temp_mean_returned = current_expectations[relevent_sim_variables[i]]
             temp_std_returned = current_expectations[relevent_std_var]
-            print('Temp Var Returned : ' + str(temp_std_returned))
-            print('Temp Mean Returned: ' + str(temp_mean_returned))
-            print('--------------')
             return_values_dict[relevent_sim_variables[i]] = temp_mean_returned
             temp_dist = np.random.normal(loc=temp_mean_returned, scale=temp_std_returned, size = 1000)
             return_values_dict[relevent_sim_variables[i] + '_var'] = np.percentile(temp_dist, 5)
             return_values_dict[relevent_sim_variables[i] + '_at_market'] = at_market_data[relevent_sim_variables[i]]
+            return_values_dict[relevent_sim_variables[i] + '_lower'] = final_value_dict_lower[relevent_sim_variables[i]]
+            return_values_dict[relevent_sim_variables[i] + '_upper'] = final_value_dict_upper[relevent_sim_variables[i]]
 
-        print(return_values_dict)
         
 @api_view(['GET'])
 def market_data_api(request):
