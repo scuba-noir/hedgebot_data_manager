@@ -281,8 +281,8 @@ def user_input_sim(user_input, initial_sim_data, prev_year_fin_df):
     initial_sim_df['Value'].loc[(initial_sim_df['Variable_name_eng'] == 'Hydrous production') & (initial_sim_df['Data_group'] == 'Final Volume Forecasts')] = temp_hydrous_prod
     initial_sim_df['Value'].loc[(initial_sim_df['Variable_name_eng'] == 'Anydrous production') & (initial_sim_df['Data_group'] == 'Final Volume Forecasts')] = temp_anhydrous_prod
 
-    final_value_dict_lower = full_simulation_run(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_lower, 1) 
-    final_value_dict_upper = full_simulation_run(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_lower, 1)
+    final_value_dict_lower = full_simulation_run.main(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_lower, 1) 
+    final_value_dict_upper = full_simulation_run.main(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_lower, 1)
     return final_value_dict_lower, final_value_dict_upper
 
 @api_view(['GET','POST'])
