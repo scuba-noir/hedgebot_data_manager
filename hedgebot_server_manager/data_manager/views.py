@@ -784,5 +784,5 @@ def range_probabilities_api(request):
     lower_percentile = percentileofscore(normal_dist, lower_val)
     prob = upper_percentile - lower_percentile
     probability = range_probability_score.objects.create(probability = prob)
-    serializer = ProbabilityRangeScoresSerializer(probability, context={'request':request}, many=True)
+    serializer = ProbabilityRangeScoresSerializer(probability)
     return Response(serializer.data)
