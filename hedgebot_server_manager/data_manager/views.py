@@ -28,6 +28,10 @@ from data_manager.serializers import RiskManagementUserInputTableSerializer, Pro
 
 from . import full_simulation_run
 
+class Probability(object):
+    def __init__(self, probability, created = None):
+        self.probability = probability
+
 def findnth(string, substring, n):
    parts = string.split(substring, n + 1)
    if len(parts) <= n + 1:

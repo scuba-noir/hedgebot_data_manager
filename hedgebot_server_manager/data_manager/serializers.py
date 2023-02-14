@@ -99,8 +99,6 @@ class RiskManagementUserInputTableSerializer(serializers.ModelSerializer):
         model = risk_management_user_input_table
         fields = '__all__'
 
-class ProbabilityRangeScoresSerializer(serializers.ModelSerializer):
+class ProbabilityRangeScoresSerializer(serializers.Serilizer):
 
-    class Meta:
-        model = range_probability_score
-        fields = ('probability')
+    probability = models.FloatField(default = 0)
