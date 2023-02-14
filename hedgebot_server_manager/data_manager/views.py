@@ -765,8 +765,6 @@ def range_probabilities_api(request):
     var_name = request.query_params.get('var_name')
     upper_val = request.query_params.get('upper')
     lower_val = request.query_params.get('lower')
-    print(upper_val)
-    print(lower_val)
     probability = 0
     relevant_factors = [var_name]
     max_date = monte_carlo_market_data.objects.latest('simulation_date').simulation_date    
@@ -775,6 +773,9 @@ def range_probabilities_api(request):
     data = data.filter(forecast_period = max_forecast_period)
     data_df = pd.DataFrame(list(data.values()))
     normal_dist = np.random.normal(loc = data_df['mean_returned'], scale = data_df['std_returned'], size = 10000)
+    print(normal_dist)
+    print(upper_val)
+    print(lower_val)
     upper_percentile = percentileofscore(normal_dist, upper_val)
     lower_percentile = percentileofscore(normal_dist, lower_val)
     prob = upper_percentile - lower_percentile
