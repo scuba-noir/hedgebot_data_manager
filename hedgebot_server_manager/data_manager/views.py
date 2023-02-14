@@ -761,6 +761,7 @@ def return_current_season_df_api(request):
 @api_view(['GET'])
 def range_probabilities_api(request):
 
+    print("Range Probability GET Request")
     var_name = request.query_params.get('var_name')
     upper_val = request.query_params.get('upper')
     lower_val = request.query_params.get('lower')
