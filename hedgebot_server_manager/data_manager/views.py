@@ -765,7 +765,6 @@ def return_current_season_df_api(request):
 @api_view(['GET'])
 def range_probabilities_api(request):
 
-    print("Range Probability GET Request")
     var_name = request.query_params.get('var_name')
     upper_val = float(request.query_params.get('upper'))
     lower_val = float(request.query_params.get('lower'))
@@ -777,12 +776,9 @@ def range_probabilities_api(request):
     data = data.filter(forecast_period = max_forecast_period)
     data_df = pd.DataFrame(list(data.values()))
     normal_dist = np.random.normal(loc = data_df['mean_returned'], scale = data_df['std_returned'], size = 10000)
-    print(normal_dist)
-    print(upper_val)
-    print(lower_val)
     upper_percentile = percentileofscore(normal_dist, upper_val)
     lower_percentile = percentileofscore(normal_dist, lower_val)
     prob = upper_percentile - lower_percentile
     probability = range_probability_score.objects.create(probability = prob)
-    serializer = ProbabilityRangeScoresSerializer(probability)
+    serializer = ProbabilityRangeScoresSerializer(probability, context={'request':request})
     return Response(serializer.data)
