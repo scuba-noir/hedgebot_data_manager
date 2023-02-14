@@ -16,7 +16,7 @@ from data_manager.models import financial_simulations_results
 from data_manager.models import monte_carlo_market_data
 from data_manager.models import market_data, risk_management_user_input_table
 from data_manager.models import sugar_position_info_2
-from data_manager.models import user_list, target_prices, hedgebot_results_meta_data, user_forecasts_assumptions_results, current_financial_simulations
+from data_manager.models import user_list, target_prices, hedgebot_results_meta_data, user_forecasts_assumptions_results, current_financial_simulations, range_probability_score
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from rest_framework.response import Response
@@ -24,7 +24,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status, generics
 from data_manager.serializers import SugarPosition2Serializers, MonteCarloDataSerializer, MarketDataSerializer, FinSimMetaDataSerializer, UserListSerializers, HistMCDataSerializer, HedgebotBestSerializer
 from rest_framework.renderers import JSONRenderer
-from data_manager.serializers import RiskManagementUserInputTableSerializer
+from data_manager.serializers import RiskManagementUserInputTableSerializer, ProbabilityRangeScoresSerializer
 
 from . import full_simulation_run
 
@@ -772,6 +772,10 @@ def range_probabilities_api(request):
     max_forecast_period = data.latest('forecast_period').forecast_period
     data = data.filter(forecast_period = max_forecast_period)
     data_df = pd.DataFrame(list(data.values()))
-    serializer = MonteCarloDataSerializer(data, context={'request':request}, many=True)
-    print(data_df)
+    normal_dist = np.random.normal(loc = data_df['mean_returned'], scale = data_df['std_returned'], size = 10000)
+    upper_percentile = percentileofscore(normal_dist, upper_val)
+    lower_percentile = percentileofscore(normal_dist, lower_val)
+    prob = upper_percentile - lower_percentile
+    probability = range_probability_score(probability = prob)
+    serializer = ProbabilityRangeScoresSerializer(probability, context={'request':request}, many=True)
     return Response(serializer.data)

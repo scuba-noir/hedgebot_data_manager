@@ -1002,3 +1002,7 @@ class risk_management_user_input_table(models.Model):
     ebit_lower = models.FloatField()
     financial_costs_lower = models.FloatField()
     net_income_lower = models.FloatField()
+
+class range_probability_score(models.Model):
+
+    probability = models.FloatField()

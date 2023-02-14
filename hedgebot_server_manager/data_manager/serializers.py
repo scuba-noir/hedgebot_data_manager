@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 from .models import sugar_position_info, monte_carlo_market_data, market_data, financial_simulation_meta_data_historical, sugar_position_info_2, user_list
-from .models import current_mc_data, market_data, current_financial_simulations, hedgebot_results, risk_management_user_input_table
+from .models import current_mc_data, market_data, current_financial_simulations, hedgebot_results, risk_management_user_input_table, range_probability_score
 from django.db import models
 
 class SugarPositionSerializers(serializers.ModelSerializer):
@@ -98,3 +98,9 @@ class RiskManagementUserInputTableSerializer(serializers.ModelSerializer):
     class Meta:
         model = risk_management_user_input_table
         fields = '__all__'
+
+class ProbabilityRangeScoresSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = range_probability_score
+        fields = ('probability')
