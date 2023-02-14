@@ -334,7 +334,6 @@ def risk_management_table_api(request):
 
         return Response(data)
 
-
 @api_view(['GET'])
 def market_data_api(request):
 
