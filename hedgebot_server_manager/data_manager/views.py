@@ -771,6 +771,7 @@ def range_probabilities_api(request):
     data = monte_carlo_market_data.objects.filter(reference__in = relevant_factors).filter(simulation_date = max_date)
     max_forecast_period = data.latest('forecast_period').forecast_period
     data = data.filter(forecast_period = max_forecast_period)
+    data_df = pd.DataFrame(data)
     serializer = MonteCarloDataSerializer(data, context={'request':request}, many=True)
-    print(serializer.data)
+    print(data_df)
     return Response(serializer.data)
