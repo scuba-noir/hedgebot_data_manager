@@ -765,6 +765,8 @@ def range_probabilities_api(request):
     var_name = request.query_params.get('var_name')
     upper_val = request.query_params.get('upper')
     lower_val = request.query_params.get('lower')
+    print(upper_val)
+    print(lower_val)
     probability = 0
     relevant_factors = [var_name]
     max_date = monte_carlo_market_data.objects.latest('simulation_date').simulation_date    
