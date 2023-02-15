@@ -145,9 +145,10 @@ def financial_sim_update(username, num_sims = 1000):
     final_value_dict = full_simulation_run.main(current_season_df, prev_season_df, mc_meta_data, num_sims)
     
     pd.DataFrame.from_dict(final_value_dict).to_csv('final_value_dict_output.csv')
-    for keys in final_value_dict.keys():
+    final_value_dict = pd.DataFrame.from_dict(final_value_dict)
+    for keys in final_value_dict.columns:
         print(keys)
-        print(statistics.stdev(final_value_dict[keys]))
+        print(final_value_dict[keys])
 
     temp = current_financial_simulations.objects.create(
         user = username,
