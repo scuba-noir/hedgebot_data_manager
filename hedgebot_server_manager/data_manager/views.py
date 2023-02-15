@@ -832,6 +832,7 @@ def update_user_forecast_assumptions(request):
 
 
     if request.method == "POST":
+        date = datetime.datetime(datetime.datetime.now().year, datetime.datetime.now().month, datetime.datetime.now().day)
         username = request.query_params.get('username')
         form_2324 = userInputForm(request.POST, prefix = "form_2324")
         form_2223 = userInputForm(request.POST, prefix = "form_2223")
@@ -844,7 +845,7 @@ def update_user_forecast_assumptions(request):
             form_2324.save(commit=False)
             form_2324.set_season(season = '2023_24')
             form_2324.set_username(username)
-            form_new_2324 = user_forecasts_assumptions_results.objects.get_or_create(date = form_2324['date'])
+            form_new_2324 = user_forecasts_assumptions_results.objects.get_or_create(date = date)
             for keys in form_2324.data:
                 if form_2324.data[keys] != None:
                     form_new_2324.set_field_value(keys, form_2324.data[keys])
@@ -863,7 +864,7 @@ def update_user_forecast_assumptions(request):
             form_2223.save(commit=False)
             form_2223.set_season(season ='2022_23')
             form_2223.set_username(username)
-            form_new_2223 = user_forecasts_assumptions_results.objects.get_or_create(date = form_2223.data['date'])
+            form_new_2223 = user_forecasts_assumptions_results.objects.get_or_create(date = date)
             for keys in form_2223.data:
                 if form_2223.data[keys] != None:
                     form_new_2223.set_field_value(keys, form_2223.data[keys])
@@ -881,7 +882,7 @@ def update_user_forecast_assumptions(request):
             form_2122.save(commit=False)
             form_2122.set_season(season = '2021_22')
             form_2122.set_username(username)
-            form_new_2122 = user_forecasts_assumptions_results.objects.get_or_create(date = form_2122.data['date'])
+            form_new_2122 = user_forecasts_assumptions_results.objects.get_or_create(date = date)
             for keys in form_2122.data:
                 if form_2122.data[keys] != None:
                     form_new_2122.set_field_value(keys, form_2122.data[keys])
