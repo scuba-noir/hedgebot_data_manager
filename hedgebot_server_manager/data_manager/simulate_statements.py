@@ -221,13 +221,20 @@ def Simulate_Liabilities_Sheet(assumptions_data_dict, financial_performance_df, 
 
 def Simulate_Financial_Indices(assumptions_data_dict, income_statement_df, cash_flow_df, assets_df, liabilities_df):
 
+    cane_crushed = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Cane crushed') & (assumptions_data_dict['Data_group'] == 'Final Volume Forecasts')].values[0]
+
+    if cane_crushed == 0:
+        cane_crushed = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Own cane') & (assumptions_data_dict['Data_group'] == 'Own Cane Assumptions')].values[0]
+        third_party_cane = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Third party cane') & (assumptions_data_dict['Data_group'] == 'Third Party Cane Assumptions')].values[0]
+        cane_crushed = (float(cane_crushed) + float(third_party_cane))
+
     gross_margin = income_statement_df['Gross Profit BRL'].values[0] / income_statement_df['Total Revenues BRL'].values[0]
     ebitda = income_statement_df['EBIT'].values[0]  + income_statement_df['Depreciation BRL'].values[0]
     ebitda_margin = ebitda / income_statement_df['Total Revenues BRL'].values[0]
     net_margin = income_statement_df['Net Income BRL'].values[0] / income_statement_df['Total Revenues BRL'].values[0]
     net_debt_brl = liabilities_df['Total liabilities (000 R$)'].values[0] - assets_df['Cash (000 R$)'].values[0]
     net_debt_ebitda = net_debt_brl / ebitda
-    net_debt_mt_cane = net_debt_brl / assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Cane crushed') & (assumptions_data_dict['Data_group'] == 'Final Volume Forecasts')].values[0]
+    net_debt_mt_cane = net_debt_brl / cane_crushed
     indebtness = net_debt_brl / assets_df['Total assets (000 R$)'].values[0]
     st_debt_percent = liabilities_df['Short term debt (000 R$)'].values[0] / liabilities_df['Total liabilities (000 R$)'].values[0]
     current_ratio = assets_df['Total current assets (000 R$)'].values[0] / liabilities_df['Total current liabilities (000 R$)'].values[0]
