@@ -9,7 +9,10 @@ admin.site.register(simulation_drivers)
 admin.site.register(hedgebot_results)
 admin.site.register(sugar_position_info)
 admin.site.register(user_list)
-admin.site.register(current_financial_simulations)
+
+@admin.register(current_financial_simulations)
+class userForAssumAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in current_financial_simulations._meta.get_fields()]
 
 @admin.register(market_data)
 class marketAdmin(admin.ModelAdmin):
