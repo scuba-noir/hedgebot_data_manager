@@ -367,6 +367,10 @@ def risk_management_table_api(request):
 
         relevent_sim_variables = ['sugar_price','hydrous_price','anhydrous_price','fx_rate','sugar_revenues','hydrous_revenues','anhydrous_revenues','cogs', 'gross_profit','sga_costs','ebit','financial_costs','net_income']
         return_values_dict = {}
+        print('---------------')
+        print('Current Expectations')
+        print(current_expectations)
+        print('------------------')
         for i in range(0,len(relevent_sim_variables)):
             relevent_std_var = relevent_sim_variables[i] + '_std'
             temp_mean_returned = current_expectations[relevent_sim_variables[i]][0]
