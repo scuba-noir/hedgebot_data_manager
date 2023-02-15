@@ -122,6 +122,12 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1, n
             'Inflation':inflation_rate, 
             'Crude oil':crude_price, 
             'Fertilizers':fertilizer_price}
+        
+        if num_sims == 1:
+            print('--------------')
+            print('New Drivers Dict')
+            print(new_drivers_dict)
+            print('--------------')
 
         forecast_chg = create_assumptions_dict.main(new_drivers_dict, new_drivers_ls, prev_year_financial_df, initial_simulation_variables)
         temp_income_statement_df, temp_cash_flow_df, temp_assets_df, temp_liabilities_df, temp_financial_indices_df = simulate_statements.Simulate_Three_Statements(forecast_chg, prev_year_financial_df)
