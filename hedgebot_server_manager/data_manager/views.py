@@ -279,7 +279,7 @@ def user_input_sim(user_input, initial_sim_data, prev_year_fin_df):
     most_recent_mc_date = monte_carlo_market_data.objects.latest('simulation_date').simulation_date
     max_forecast_period = monte_carlo_market_data.objects.latest('simulation_date').forecast_period
     mc_meta_data_current_prices_upper = pd.DataFrame(monte_carlo_market_data.objects.filter(simulation_date = most_recent_mc_date).filter(forecast_period = max_forecast_period).values())
-    mc_meta_data_current_prices_lower = mc_meta_data_current_prices_upper
+    mc_meta_data_current_prices_lower = mc_meta_data_current_prices_upper.copy()
     relevent_market_var_ls = ['sugar_1','hydrous','anhydrous','usdbrl']
     for i in range(0,len(relevent_market_var_ls)):
         mc_meta_data_current_prices_upper['mean_returned'].loc[mc_meta_data_current_prices_upper['reference'] == relevent_market_var_ls[i]] = float(user_input[relevent_market_var_ls[i] + '_upper'])
