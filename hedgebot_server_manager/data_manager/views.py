@@ -393,11 +393,8 @@ def historical_mc_data_api(request):
 
     temp_date = datetime.datetime.today() + relativedelta(months=-12)
     forecast_date = monte_carlo_market_data.objects.latest('forecast_period').forecast_period
-    #print('Forecast period: ' + forecast_date.strftime("%Y-%m-%d"))
-    #print('Simulation Date: ' + temp_date.strftime("%Y-%m-%d"))
     data = monte_carlo_market_data.objects.filter(simulation_date__gte = temp_date).filter(forecast_period__gte = forecast_date)
     serializer = MonteCarloDataSerializer(data, context={'request':request}, many=True)
-    #print(data.values())
     return Response(serializer.data)
 
 @api_view(['GET'])
@@ -826,10 +823,6 @@ def update_user_forecast_assumptions(request):
 
     if request.method == "POST":
         username = request.query_params.get('username')
-        print('-----------')
-        print('Username Here')
-        print(username)
-        print('-----------')
         form_2324 = userInputForm(request.POST, prefix = "form_2324")
         form_2223 = userInputForm(request.POST, prefix = "form_2223")
         form_2122 = userInputForm(request.POST, prefix = "form_2122")
