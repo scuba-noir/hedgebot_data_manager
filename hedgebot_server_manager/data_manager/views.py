@@ -43,6 +43,8 @@ def return_current_season_df(username):
     
     current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='2023_24')
     verbose_name_dict = user_forecasts_assumptions_results.return_verbose(user_forecasts_assumptions_results)
+    max_sim_date = current_season_df.latest('date').date
+    current_season_df = current_season_df.filter(date = max_sim_date)
     max_id = current_season_df.latest('id').id
     current_season_df = current_season_df.filter(id = max_id)
     current_season_df = pd.DataFrame(current_season_df.values())
@@ -305,8 +307,6 @@ def risk_management_table_api(request):
     if request.method == 'GET':
         username = request.query_params.get('username')
         user_input = request.query_params
-        print(user_input)
-
         initial_sim_variables = return_current_season_df(username)
 
         prev_season_df = return_prev_season_df(username)
@@ -347,8 +347,9 @@ def risk_management_table_api(request):
         prev_season_df = return_prev_season_df(username)
         at_market_data = at_market_sim(initial_sim_data=initial_sim_variables, prev_year_fin_df=prev_season_df)
         current_expectations = current_financial_simulations.objects.filter(user = username)
+        max_date = current_expectations.latest('date').date
         max_current_expectation_id = current_expectations.latest('id').id
-        current_expectations = pd.DataFrame.from_dict(current_expectations.filter(id = max_current_expectation_id).values())
+        current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).filter(id = max_current_expectation_id).values())
         current_expectations = pd.DataFrame(current_expectations.iloc[:1])
         final_value_dict_lower, final_value_dict_upper = user_input_sim(user_input, initial_sim_variables, prev_season_df)
 
