@@ -87,17 +87,26 @@ def return_current_season_df(username):
             df_temp = pd.DataFrame([temp_ls], columns = ['Original','Value','Variable_name_eng','Data_group','Units'])
             temp_df = pd.concat([temp_df, df_temp], ignore_index=True)
         counter += 1
+    print('----------------')
+    print('Current Season DF')
+    print(temp_df)
+    print('----------------')
 
     return temp_df
 
 def return_prev_season_df(username):
-    current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='22_23')
+    current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='2022_23')
     verbose_name_dict = user_forecasts_assumptions_results.return_verbose(user_forecasts_assumptions_results)
+    max_id = user_forecasts_assumptions_results.last('id').id
+    current_season_df = current_season_df.filter(id = max_id)
     current_season_df = pd.DataFrame(current_season_df.values())
     current_season_df['date'] = pd.to_datetime(current_season_df['date'])
     current_season_df = current_season_df.loc[current_season_df['date'] == max(current_season_df['date'])]
     counter = 0
-
+    print('-------------')
+    print('Prev Season Df')
+    print(current_season_df)
+    print('-------------')
     for key in verbose_name_dict:
         temp_ls = []
         temp_str = verbose_name_dict[key]
@@ -266,7 +275,7 @@ def at_market_sim(initial_sim_data, prev_year_fin_df):
 
 def user_input_sim(user_input, initial_sim_data, prev_year_fin_df):
 
-
+    print(user_input)
     most_recent_mc_date = monte_carlo_market_data.objects.latest('simulation_date').simulation_date
     max_forecast_period = monte_carlo_market_data.objects.latest('simulation_date').forecast_period
     mc_meta_data_current_prices_upper = pd.DataFrame(monte_carlo_market_data.objects.filter(simulation_date = most_recent_mc_date).filter(forecast_period = max_forecast_period).values())
