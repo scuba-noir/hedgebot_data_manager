@@ -15,6 +15,8 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1, n
 
     max_date = mc_meta_data_1['simulation_date'].max()
     mc_meta_data_1 = mc_meta_data_1.loc[(mc_meta_data_1['simulation_date'] == max_date) & (mc_meta_data_1['end_date'] == pd.to_datetime('2024-03-31', dayfirst=False))]
+    max_forecast_date = mc_meta_data_1['forecast_period'].max()
+    mc_meta_data_1 = mc_meta_data_1.loc[mc_meta_data_1['forecast_period'] == max_forecast_date]
     driver_values['Value'].loc[(driver_values['Variable_name_eng'] == 'Domestic interest rate')].values[0] * 100,
     temp_values = {
         'Anhydrous Ethanol':[],
@@ -25,20 +27,10 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1, n
         'Energy Prices':[],
         'Fertilizer Costs':[],
     }
-    ls_name = ['Anhydrous Ethanol',
-        'Hydrous Ethanol',
-        'NY No.11',
-        'USDBRL',
-        'Fertilizer Costs',
-        'Brent Crude',
-        'Energy Prices'
-        ]
-    counter = 0
 
     mc_meta_data = mc_meta_data_1.loc[mc_meta_data_1['reference'].isin(mc_market_var_list)]
     
     for row, values in mc_meta_data.iterrows():
-        temp_sim = []
         label_index = mc_market_var_list.index(values.reference)
         mean = values.mean_returned
         std = values.std_returned
