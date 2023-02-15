@@ -133,6 +133,7 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1, n
             prev_year_financial_df.to_csv('prev_year.csv')
             initial_simulation_variables.to_csv("initial_sim_vars.csv")
         forecast_chg = create_assumptions_dict.main(new_drivers_dict, new_drivers_ls, prev_year_financial_df, initial_simulation_variables)
+        forecast_chg.to_csv('final_test_feb14.csv')
         temp_income_statement_df, temp_cash_flow_df, temp_assets_df, temp_liabilities_df, temp_financial_indices_df = simulate_statements.Simulate_Three_Statements(forecast_chg, prev_year_financial_df)
         income_statement_final_df = pd.DataFrame(temp_income_statement_df)
         cash_flow_final_df = pd.DataFrame(temp_cash_flow_df)
