@@ -332,6 +332,7 @@ def risk_management_table_api(request):
         print('---------------')
         print('Current Expectations')
         print(current_expectations)
+        current_expectations.to_csv("current_expectations_feb15.csv")
         print('------------------')
         final_value_dict_lower, final_value_dict_upper = user_input_sim(user_input, initial_sim_variables, prev_season_df)
 
