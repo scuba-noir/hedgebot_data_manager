@@ -761,9 +761,42 @@ def return_current_season_df_api(request):
     data = json.dumps(temp_df.to_dict(orient = 'list'))
     return Response(data)
 
+def return_percentiles(mu, std):
+
+    temp_array = np.arange(0,100,1)
+    temp_dist = np.random.normal(mu, std, 1000)
+    return np.percentile(temp_dist, temp_array)
+
+
 @api_view(['GET'])
 def range_probabilities_api(request):
+    
+    
+    relevant_factors = ['sugar_1', 'hydrous', 'anhydrous', 'usdbrl']
+    max_date = monte_carlo_market_data.objects.latest('simulation_date').simulation_date    
+    data = monte_carlo_market_data.objects.filter(reference__in = relevant_factors).filter(simulation_date = max_date)
+    max_forecast_period = data.latest('forecast_period').forecast_period
+    data = pd.DataFrame(list(data.filter(forecast_period = max_forecast_period).values())    
+    temp_array = np.arange(0,100)
+    print(temp_array)
+    final_dict = {
 
+    }
+    
+    for i in range(0,len(relevant_factors)):
+        temp_factor = relevant_factors[i]
+        temp_mu = data['mean_returned'].loc[data['reference'] == temp_factor]
+        temp_std = data['std_returned'].loc[data['reference'] == temp_factor]
+        final_dict[temp_factor] = return_percentiles(temp_mu, temp_std)
+
+    final_dict = json.dumps(final_dict)
+    print(final_dict)
+    return final_dict
+
+
+    """
+    serializer = MonteCarloDataSerializer(data, context={'request':request}, many=True)
+    
     var_name = request.query_params.get('var_name')
     upper_val = float(request.query_params.get('upper'))
     lower_val = float(request.query_params.get('lower'))
@@ -781,3 +814,4 @@ def range_probabilities_api(request):
     probability = range_probability_score.objects.create(probability = prob)
     serializer = ProbabilityRangeScoresSerializer(probability, context={'request':request})
     return Response(serializer.data)
+    """
