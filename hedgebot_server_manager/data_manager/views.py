@@ -844,7 +844,7 @@ def financial_account_range_probabilities(request):
 
     if request.method == 'GET':
 
-
+        print(username)
         current_expectations = current_financial_simulations.objects.filter(user = username)
         max_current_expectation_id = current_expectations.latest('id').id
         current_expectations = pd.DataFrame.from_dict(current_expectations.filter(id = max_current_expectation_id).values())
