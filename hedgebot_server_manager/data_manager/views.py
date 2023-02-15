@@ -287,8 +287,6 @@ def user_input_sim(user_input, initial_sim_data, prev_year_fin_df):
         mc_meta_data_current_prices_upper['std_returned'].loc[mc_meta_data_current_prices_upper['reference'] == relevent_market_var_ls[i]] = 0
         mc_meta_data_current_prices_lower['std_returned'].loc[mc_meta_data_current_prices_lower['reference'] == relevent_market_var_ls[i]] = 0
     
-    print(mc_meta_data_current_prices_upper)
-    print(mc_meta_data_current_prices_lower)
     initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Yield') & (initial_sim_data['Data_group'] == 'Own Cane Assumption')] = float(user_input['cane_yield'])
     initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Average TRS') & (initial_sim_data['Data_group'] == 'Production Mix Assumption')] = float(user_input['trs'])
     initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Sugar') & (initial_sim_data['Data_group'] == 'Production Mix Assumption')] = float(user_input['production_mix_sugar'])
@@ -298,21 +296,16 @@ def user_input_sim(user_input, initial_sim_data, prev_year_fin_df):
     initial_sim_df = initial_sim_data
 
     final_value_dict_lower = full_simulation_run.main(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_lower, 1) 
-    initial_sim_df.to_csv("Initial_user_input_sim.csv")
-    mc_meta_data_current_prices_lower.to_csv("initial_mc_lower.csv")
-    pd.DataFrame.from_dict(final_value_dict_lower).to_csv("lower_dict_final.csv")
     final_value_dict_upper = full_simulation_run.main(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_upper, 1)
-    pd.DataFrame.from_dict(final_value_dict_upper).to_csv("upper_dict_final.csv")
 
     return final_value_dict_lower, final_value_dict_upper
 
 @api_view(['GET','POST'])
 def risk_management_table_api(request):
 
-    username = request.query_params.get('username')
 
     if request.method == 'GET':
-
+        username = request.query_params.get('username')
         user_input = request.query_params
         print(user_input)
 
@@ -346,20 +339,24 @@ def risk_management_table_api(request):
         return Response(data)
     
     if request.method == 'POST':
-
+        username = request.query_params.get('username')
+        print(username)
         user_input = request.query_params
+        print(user_input)
+
         initial_sim_variables = return_current_season_df(username)
+
         prev_season_df = return_prev_season_df(username)
         at_market_data = at_market_sim(initial_sim_data=initial_sim_variables, prev_year_fin_df=prev_season_df)
         current_expectations = current_financial_simulations.objects.filter(user = username)
         max_date = current_expectations.latest('date').date
-        current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).values())
+        max_current_expectation_id = current_expectations.latest('id').id
+        current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).filter(id = max_current_expectation_id).values())
         current_expectations = pd.DataFrame(current_expectations.iloc[:1])
         final_value_dict_lower, final_value_dict_upper = user_input_sim(user_input, initial_sim_variables, prev_season_df)
 
         relevent_sim_variables = ['sugar_price','hydrous_price','anhydrous_price','fx_rate','sugar_revenues','hydrous_revenues','anhydrous_revenues','cogs', 'gross_profit','sga_costs','ebit','financial_costs','net_income']
         return_values_dict = {}
-
         for i in range(0,len(relevent_sim_variables)):
             relevent_std_var = relevent_sim_variables[i] + '_std'
             temp_mean_returned = current_expectations[relevent_sim_variables[i]][0]
@@ -371,9 +368,6 @@ def risk_management_table_api(request):
             return_values_dict[relevent_sim_variables[i] + '_lower'] = [float("{:.2f}".format(final_value_dict_lower[relevent_sim_variables[i]][0]))]
             return_values_dict[relevent_sim_variables[i] + '_upper'] = [float("{:.2f}".format(final_value_dict_upper[relevent_sim_variables[i]][0]))]
 
-        #data_obj = risk_management_user_input_table.objects.update_or_create(**return_values_dict)
-        #serializer = RiskManagementUserInputTableSerializer(data_obj, context = {'request':request}, many = True)
-        
         data = return_values_dict
         data = json.dumps(data)
 
