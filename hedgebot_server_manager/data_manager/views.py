@@ -339,7 +339,7 @@ def risk_management_table_api(request):
     if request.method == 'POST':
         username = request.query_params.get('username')
         print(username)
-        user_input = request.query_params
+        user_input = request.POST
         print(user_input)
 
         initial_sim_variables = return_current_season_df(username)
