@@ -48,7 +48,21 @@ def Simulate_Income_Statement(assumptions_data_dict):
     income_tax_rate = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Income tax rate') & (assumptions_data_dict['Data_group'] == 'Balance Sheet Assumptions')].values[0]
     financial_expenses = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Total financial expenses') & (assumptions_data_dict['Data_group'] == 'Indebtness Assumptions')].values[0]
 
-    sugar_revenues_USD = (sugar_NY * sugar_production * 22.0462) 
+    if sugar_production == 0:
+        trs_sugar = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'TRS x Sugar') & (assumptions_data_dict['Data_group'] == 'Production Mix Assumptions')].values[0]
+        trs_hydrous = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'ATR x Hydrous') & (assumptions_data_dict['Data_group'] == 'Production Mix Assumptions')].values[0]
+        trs_anhydrous = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'ATR x Anhydrous') & (assumptions_data_dict['Data_group'] == 'Production Mix Assumptions')].values[0]
+        atr_average = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Average TRS') & (assumptions_data_dict['Data_group'] == 'Production Mix Assumptions')].values[0]
+        sugar_mix = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Sugar') & (assumptions_data_dict['Data_group'] == 'Production Mix Assumptions')].values[0]
+        hydrous_mix = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Hydrous') & (assumptions_data_dict['Data_group'] == 'Production Mix Assumptions')].values[0]
+        anhydrous_mix = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Anhydrous') & (assumptions_data_dict['Data_group'] == 'Production Mix Assumptions')].values[0]
+        cane_crushed = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Own cane') & (assumptions_data_dict['Data_group'] == 'Own Cane Assumptions')].values[0]
+        third_party_cane = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Own cane') & (assumptions_data_dict['Data_group'] == 'Third Party Cane Assumptions')].values[0]
+        temp_atr = (float(cane_crushed) + float(third_party_cane)) * float(atr_average)
+        temp_sugar_prod = (trs_sugar * sugar_mix)/1000/1.06
+        temp_hydrous_prod = (trs_hydrous * hydrous_mix)/1000/1.53
+        temp_anhydrous_prod = (trs_anhydrous * anhydrous_mix)/1000/1.53
+        sugar_revenues_USD = (sugar_NY * sugar_production * 22.0462) 
     #print('Sugar Production Stuff:'
     #+ '/n' + 'Sugar Price: ' + str(sugar_NY) +
     #'/n' + 'Sugar Production: ' + str(sugar_production) +
