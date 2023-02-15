@@ -41,7 +41,7 @@ def findnth(string, substring, n):
 
 def return_current_season_df(username):
     
-    current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='23_24')
+    current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='2023_24')
     verbose_name_dict = user_forecasts_assumptions_results.return_verbose(user_forecasts_assumptions_results)
     max_sim_date = current_season_df.latest('date').date
     current_season_df = current_season_df.filter(date = max_sim_date)
