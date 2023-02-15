@@ -863,6 +863,7 @@ def financial_account_range_probabilities(request):
                 temp_std_returned = current_expectations[relevent_std_var][0]
                 if temp_std_returned == 0:
                     temp_std_returned = temp_mean_returned * 0.01
+                    print(temp_mean_returned)
                 return_values_dict[relevent_sim_variables[i]] = list(return_percentiles(temp_mean_returned, temp_std_returned))
 
         data = return_values_dict
