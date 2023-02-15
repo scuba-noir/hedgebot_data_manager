@@ -307,8 +307,13 @@ def risk_management_table_api(request):
     if request.method == 'GET':
 
         user_input = request.query_params
+
         initial_sim_variables = return_current_season_df(username)
+        print('-----------------')
+        print('Initial Sim Variables')
         print(initial_sim_variables)
+
+        print('-----------------')
         prev_season_df = return_prev_season_df(username)
         at_market_data = at_market_sim(initial_sim_data=initial_sim_variables, prev_year_fin_df=prev_season_df)
         current_expectations = current_financial_simulations.objects.filter(user = username)
@@ -746,7 +751,6 @@ def risk_var_table_api(request):
 def return_current_season_df_api(request):
     
     username = request.query_params.get('username')
-    print(username)
     season_list = ['23_24', '2023_24']
     current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season__in =season_list)
     verbose_name_dict = user_forecasts_assumptions_results.return_verbose(user_forecasts_assumptions_results)
