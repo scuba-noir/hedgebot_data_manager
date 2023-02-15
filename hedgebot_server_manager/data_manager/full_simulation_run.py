@@ -142,6 +142,7 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1, n
         financial_indices_final_df = pd.DataFrame(temp_financial_indices_df)
 
         final_df = simulate_statements.aggregate_fin_sim_results(income_statement_final_df, cash_flow_final_df, assets_final_df, liabilities_final_df, financial_indices_final_df)
+        final_df.to_csv('aggregated_sim_dataFeb14.csv')
         if num_sims == 1:
             print('--------------')
             print('Returned Sim Data')
