@@ -382,7 +382,6 @@ def market_data_api(request):
 def sugar_position_api(request):
 
     if request.method == "GET":
-        print(request)
         username = request.query_params.get('username')
         data = sugar_position_info_2.objects.filter(username = username)
         serializer = SugarPosition2Serializers(data, context={'request': request}, many=True)
@@ -826,18 +825,18 @@ def update_user_forecast_assumptions(request):
 
 
     if request.method == "POST":
-
+        username = request.query_params.get('username')
         form_2324 = userInputForm(request.POST, prefix = "form_2324")
         form_2223 = userInputForm(request.POST, prefix = "form_2223")
         form_2122 = userInputForm(request.POST, prefix = "form_2122")
-
-        print(form_2324)        
+    
 
         if form_2324.is_valid():
             
             form_2324.data = form_2324.cleaned_data
             form_2324.save(commit=False)
             form_2324.set_season(season = '2023_24')
+            form_2324.set_username(username)
             form_new_2324 = user_forecasts_assumptions_results.objects.create()
             for keys in form_2324.data:
                 if form_2324.data[keys] != None:
@@ -855,6 +854,7 @@ def update_user_forecast_assumptions(request):
             form_2223.data = form_2223.cleaned_data
             form_2223.save(commit=False)
             form_2223.set_season(season ='2022_23')
+            form_2223.set_username(username)
             form_new_2223 = user_forecasts_assumptions_results.objects.create()
             for keys in form_2223.data:
                 if form_2223.data[keys] != None:
@@ -870,9 +870,9 @@ def update_user_forecast_assumptions(request):
         if form_2122.is_valid():
 
             form_2122.data = form_2122.cleaned_data
-            print('saved 2122')
             form_2122.save(commit=False)
             form_2122.set_season(season = '2021_22')
+            form_2122.set_username(username)
             form_new_2122 = user_forecasts_assumptions_results.objects.create()
             for keys in form_2122.data:
                 if form_2122.data[keys] != None:

@@ -14,6 +14,7 @@ class userInputForm(ModelForm):
         fields = ['season','own_area', 'leased_area', 'yield_mt', 'own_cane', 'lease_cost', 'avg_trs', 'lease_cost_2', 'planting_area', 'third_party_cane', 'avg_trs_cane_contract', 'third_party_cane_cost', 'avg_trs_2', 'sugar_mix', 'hydrous_mix', 'anhydrous_mix', 'trs_sugar', 'atr_hydrous', 'atr_anhydrous', 'energy_production', 'sugar_price', 'hydrous_price', 'anhydrous_price', 'energy_price', 'fx_rate', 'trs_price', 'dom_ir', 'foreign_ir', 'inflation', 'crude_oil', 'fertilizers', 'initial_cash', 'acc_rec', 'inventories', 'orther_current_assets', 'other_non_current_assets', 'st_acc_pay', 'other_current_liabilities', 'other_non_current_liabilities', 'issued_capital', 'income_tax_rate', 'sales_expense', 'admin_expense', 'other_sga', 'avg_cost_usd_debt_libor', 'avg_cost_usd_debt_cdi', 'usd_debt_st_usd', 'usd_debt_lt_usd', 'usd_debt_lt_brl', 'usd_debt_st_brl',  'brl_debt_st', 'brl_debt_lt', 'fin_expenses_usd_debt', 'fin_expenses_brl_debt', 'total_financial_expenses', 'inputs', 'fuel', 'freights', 'labor_cost', 'industrial_cost', 'depreciation_prod_cost', 'planting_cost', 'cane_crushed', 'sugar_production', 'hydrous_production', 'anhydrous_production', 'energy_production_2', 'sugar_revenues_usd', 'sugar_revenues_brl', 'hydrous_revenues', 'anhydrous_revenues', 'energy_revenues', 'total_revenues', 'lease_cost_3', 'third_party_cane_cost_2', 'inputs_2', 'fuel_2', 'freights_2', 'labor_cost_2', 'industrial_cost_2', 'depreciation_2', 'planting_cost_2', 'total_cogs', 'gross_profit', 'sales_expenses', 'administrative_expenses', 'other_sga_2', 'total_sga', 'ebit', 'financial_expenses', 'profit_before_taxes', 'income_tax', 'net_income', 'depreciation', 'working_capital_variation', 'cash_flow_from_operations', 'capex', 'write_offs', 'cash_flow_from_investment_activities', 'debt_amortization', 'new_debt', 'cash_financing', 'change_in_cash', 'initial_cash_2', 'ending_cash', 'minimum_refinancing', 'cash', 'accounts_receivable', 'inventories_2', 'other_current_assets', 'total_current_assets', 'ppe', 'other_non_current_assets_2', 'total_non_current_assets', 'total_assets', 'short_term_accounts_payable', 'short_term_debt', 'other_current_liabilities_2', 'total_current_liabilities', 'long_term_debt', 'other_non_current_liabilities_2', 'total_non_current_liabilities', 'total_liabilities', 'issued_capital_2', 'retained_earnings', 'total_equity', 'liabilities_plus_equity', 'gross_margin', 'ebitda', 'ebitda_margin', 'net_income_margin', 'net_debt', 'net_debt_ebitda', 'net_debt_mt_of_cane', 'indebtedness', 'short_term', 'current_ratio', 'revenue_variation', 'income_variation', 'dscr']
         widgets = {
             'season':forms.TextInput(attrs=attribute_dict),
+            'username':forms.TextInput(attrs=attribute_dict),
             'own_area':forms.NumberInput(attrs=attribute_dict),
             'leased_area':forms.NumberInput(attrs=attribute_dict),
             'yield_mt':forms.NumberInput(attrs=attribute_dict),
@@ -165,4 +166,9 @@ class userInputForm(ModelForm):
     def set_season(self, season):
         data = self.data.copy()
         data['season'] = season
+        self.data = data
+
+    def set_username(self, username):
+        data = self.data.copy()
+        data['username'] = username
         self.data = data
