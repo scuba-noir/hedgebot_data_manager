@@ -43,9 +43,10 @@ def return_current_season_df(username):
     
     current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='23_24')
     verbose_name_dict = user_forecasts_assumptions_results.return_verbose(user_forecasts_assumptions_results)
+    max_sim_date = current_season_df.latest('date').date
+    current_season_df = current_season_df.filter(date = max_sim_date)
     current_season_df = pd.DataFrame(current_season_df.values())
     current_season_df['date'] = pd.to_datetime(current_season_df['date'])
-    current_season_df = current_season_df.loc[current_season_df['date'] == max(current_season_df['date'])]
     counter = 0
 
     for key in verbose_name_dict:
