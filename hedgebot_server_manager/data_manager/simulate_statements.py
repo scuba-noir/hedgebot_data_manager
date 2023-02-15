@@ -57,7 +57,7 @@ def Simulate_Income_Statement(assumptions_data_dict):
         hydrous_mix = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Hydrous') & (assumptions_data_dict['Data_group'] == 'Production Mix Assumptions')].values[0]
         anhydrous_mix = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Anhydrous') & (assumptions_data_dict['Data_group'] == 'Production Mix Assumptions')].values[0]
         cane_crushed = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Own cane') & (assumptions_data_dict['Data_group'] == 'Own Cane Assumptions')].values[0]
-        third_party_cane = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Own cane') & (assumptions_data_dict['Data_group'] == 'Third Party Cane Assumptions')].values[0]
+        third_party_cane = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Third party cane') & (assumptions_data_dict['Data_group'] == 'Third Party Cane Assumptions')].values[0]
         temp_atr = (float(cane_crushed) + float(third_party_cane)) * float(atr_average)
         sugar_production = (temp_atr * sugar_mix)/1000/trs_sugar
         hydrous_production = (temp_atr * hydrous_mix)/1000/trs_hydrous
