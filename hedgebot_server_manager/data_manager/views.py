@@ -46,6 +46,8 @@ def return_current_season_df(username):
     verbose_name_dict = user_forecasts_assumptions_results.return_verbose(user_forecasts_assumptions_results)
     max_sim_date = current_season_df.latest('date').date
     current_season_df = current_season_df.filter(date = max_sim_date)
+    max_id = current_season_df.latest('id').id
+    current_season_df = current_season_df.filter(id = max_id)
     print(current_season_df.values())
     current_season_df = pd.DataFrame(current_season_df.values())
     current_season_df['date'] = pd.to_datetime(current_season_df['date'])
