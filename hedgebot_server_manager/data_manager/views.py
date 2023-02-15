@@ -844,7 +844,7 @@ def update_user_forecast_assumptions(request):
             form_2324.save(commit=False)
             form_2324.set_season(season = '2023_24')
             form_2324.set_username(username)
-            form_new_2324 = user_forecasts_assumptions_results.objects.create()
+            form_new_2324 = user_forecasts_assumptions_results.objects.get_or_create(date = form_2324['date'])
             for keys in form_2324.data:
                 if form_2324.data[keys] != None:
                     form_new_2324.set_field_value(keys, form_2324.data[keys])
@@ -863,7 +863,7 @@ def update_user_forecast_assumptions(request):
             form_2223.save(commit=False)
             form_2223.set_season(season ='2022_23')
             form_2223.set_username(username)
-            form_new_2223 = user_forecasts_assumptions_results.objects.create()
+            form_new_2223 = user_forecasts_assumptions_results.objects.get_or_create(date = form_2223.data['date'])
             for keys in form_2223.data:
                 if form_2223.data[keys] != None:
                     form_new_2223.set_field_value(keys, form_2223.data[keys])
@@ -881,7 +881,7 @@ def update_user_forecast_assumptions(request):
             form_2122.save(commit=False)
             form_2122.set_season(season = '2021_22')
             form_2122.set_username(username)
-            form_new_2122 = user_forecasts_assumptions_results.objects.create()
+            form_new_2122 = user_forecasts_assumptions_results.objects.get_or_create(date = form_2122.data['date'])
             for keys in form_2122.data:
                 if form_2122.data[keys] != None:
                     form_new_2122.set_field_value(keys, form_2122.data[keys])
