@@ -349,9 +349,8 @@ def risk_management_table_api(request):
         prev_season_df = return_prev_season_df(username)
         at_market_data = at_market_sim(initial_sim_data=initial_sim_variables, prev_year_fin_df=prev_season_df)
         current_expectations = current_financial_simulations.objects.filter(user = username)
-        max_date = current_expectations.latest('date').date
         max_current_expectation_id = current_expectations.latest('id').id
-        current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).filter(id = max_current_expectation_id).values())
+        current_expectations = pd.DataFrame.from_dict(current_expectations.filter(id = max_current_expectation_id).values())
         current_expectations = pd.DataFrame(current_expectations.iloc[:1])
         final_value_dict_lower, final_value_dict_upper = user_input_sim(user_input, initial_sim_variables, prev_season_df)
 
