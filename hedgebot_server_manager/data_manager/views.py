@@ -302,7 +302,7 @@ def user_input_sim(user_input, initial_sim_data, prev_year_fin_df):
     mc_meta_data_current_prices_lower.to_csv("initial_mc_lower.csv")
     pd.DataFrame.from_dict(final_value_dict_lower).to_csv("lower_dict_final.csv")
     final_value_dict_upper = full_simulation_run.main(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_upper, 1)
-    pd.DataFrame.from_dict(final_value_dict_upper).to_csv("lower_dict_final.csv")
+    pd.DataFrame.from_dict(final_value_dict_upper).to_csv("upper_dict_final.csv")
 
     return final_value_dict_lower, final_value_dict_upper
 
