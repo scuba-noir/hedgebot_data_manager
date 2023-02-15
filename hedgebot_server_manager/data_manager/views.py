@@ -48,7 +48,6 @@ def return_current_season_df(username):
     max_id = current_season_df.latest('id').id
     current_season_df = current_season_df.filter(id = max_id)
     current_season_df = pd.DataFrame(current_season_df.values())
-    current_season_df['date'] = pd.to_datetime(current_season_df['date'])
     counter = 0
 
     for key in verbose_name_dict:
@@ -761,9 +760,11 @@ def return_current_season_df_api(request):
     season_list = ['23_24', '2023_24']
     current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season__in =season_list)
     verbose_name_dict = user_forecasts_assumptions_results.return_verbose(user_forecasts_assumptions_results)
-    current_season_df = pd.DataFrame(current_season_df.values())
-    current_season_df['date'] = pd.to_datetime(current_season_df['date'])
-    current_season_df = current_season_df.loc[current_season_df['date'] == max(current_season_df['date'])]
+    max_sim_date = current_season_df.latest('date').date
+    current_season_df = current_season_df.filter(date = max_sim_date)
+    max_id = current_season_df.latest('id').id
+    current_season_df = current_season_df.filter(id = max_id)
+    current_season_df = pd.DataFrame.from_dict(current_season_df.values())
     current_season_df = current_season_df.drop(['date'], axis = 1)
     counter = 0
 
@@ -843,11 +844,7 @@ def financial_account_range_probabilities(request):
 
     if request.method == 'GET':
 
-        user_input = request.query_params
 
-        initial_sim_variables = return_current_season_df(username)
-
-        prev_season_df = return_prev_season_df(username)
         current_expectations = current_financial_simulations.objects.filter(user = username)
         max_date = current_expectations.latest('date').date
         max_current_expectation_id = current_expectations.latest('id').id
