@@ -857,7 +857,7 @@ def financial_account_range_probabilities(request):
             temp_std_returned = current_expectations[relevent_std_var][0]
             temp_dist = np.random.normal(loc=temp_mean_returned, scale=temp_std_returned, size = 1000)
             return_values_dict[relevent_sim_variables[i]] = temp_dist
-
+        print(return_values_dict)
         data = return_values_dict
         data = json.dumps(data)
 
