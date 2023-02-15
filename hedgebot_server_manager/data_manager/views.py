@@ -883,3 +883,5 @@ def update_user_forecast_assumptions(request):
             print('form 2122 non-valid')
             print(form_2122.errors)
 
+        return Response("Success")
+
