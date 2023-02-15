@@ -776,7 +776,7 @@ def range_probabilities_api(request):
     max_date = monte_carlo_market_data.objects.latest('simulation_date').simulation_date    
     data = monte_carlo_market_data.objects.filter(reference__in = relevant_factors).filter(simulation_date = max_date)
     max_forecast_period = data.latest('forecast_period').forecast_period
-    data = pd.DataFrame(list(data.filter(forecast_period = max_forecast_period).values())    
+    data = pd.DataFrame(list(data.filter(forecast_period = max_forecast_period).values()))
     temp_array = np.arange(0,100)
     print(temp_array)
     final_dict = {
