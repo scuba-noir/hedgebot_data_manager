@@ -846,9 +846,8 @@ def financial_account_range_probabilities(request):
 
 
         current_expectations = current_financial_simulations.objects.filter(user = username)
-        max_date = current_expectations.latest('date').date
         max_current_expectation_id = current_expectations.latest('id').id
-        current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).filter(id = max_current_expectation_id).values())
+        current_expectations = pd.DataFrame.from_dict(current_expectations.filter(id = max_current_expectation_id).values())
         current_expectations = pd.DataFrame(current_expectations.iloc[:1])
         relevent_sim_variables = ['sugar_revenues','hydrous_revenues','anhydrous_revenues','cogs', 'gross_profit','sga_costs','ebit','financial_costs','net_income']
         return_values_dict = {}
