@@ -746,7 +746,9 @@ def risk_var_table_api(request):
 def return_current_season_df_api(request):
     
     username = request.query_params.get('username')
-    current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='23_24')
+    print(username)
+    season_list = ['23_24', '2023_24']
+    current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season__in =season_list)
     verbose_name_dict = user_forecasts_assumptions_results.return_verbose(user_forecasts_assumptions_results)
     current_season_df = pd.DataFrame(current_season_df.values())
     current_season_df['date'] = pd.to_datetime(current_season_df['date'])
