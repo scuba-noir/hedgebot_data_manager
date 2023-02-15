@@ -787,8 +787,8 @@ def range_probabilities_api(request):
         temp_factor = relevant_factors[i]
         temp_mu = data['mean_returned'].loc[data['reference'] == temp_factor]
         temp_std = data['std_returned'].loc[data['reference'] == temp_factor]
-        final_dict[temp_factor] = return_percentiles(temp_mu, temp_std)
-
+        final_dict[temp_factor] = list(return_percentiles(temp_mu, temp_std))
+    print(final_dict)
     final_dict = json.dumps(final_dict)
     print(final_dict)
     return final_dict
