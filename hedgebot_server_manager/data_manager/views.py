@@ -777,8 +777,6 @@ def range_probabilities_api(request):
     data = monte_carlo_market_data.objects.filter(reference__in = relevant_factors).filter(simulation_date = max_date)
     max_forecast_period = data.latest('forecast_period').forecast_period
     data = pd.DataFrame(list(data.filter(forecast_period = max_forecast_period).values()))
-    temp_array = np.arange(0,100)
-    print(temp_array)
     final_dict = {
 
     }
@@ -788,30 +786,6 @@ def range_probabilities_api(request):
         temp_mu = data['mean_returned'].loc[data['reference'] == temp_factor]
         temp_std = data['std_returned'].loc[data['reference'] == temp_factor]
         final_dict[temp_factor] = list(return_percentiles(temp_mu, temp_std))
-    print(final_dict)
     final_dict = json.dumps(final_dict)
-    print(final_dict)
     return Response(final_dict)
 
-
-    """
-    serializer = MonteCarloDataSerializer(data, context={'request':request}, many=True)
-    
-    var_name = request.query_params.get('var_name')
-    upper_val = float(request.query_params.get('upper'))
-    lower_val = float(request.query_params.get('lower'))
-    probability = 0
-    relevant_factors = [var_name]
-    max_date = monte_carlo_market_data.objects.latest('simulation_date').simulation_date    
-    data = monte_carlo_market_data.objects.filter(reference__in = relevant_factors).filter(simulation_date = max_date)
-    max_forecast_period = data.latest('forecast_period').forecast_period
-    data = data.filter(forecast_period = max_forecast_period)
-    data_df = pd.DataFrame(list(data.values()))
-    normal_dist = np.random.normal(loc = data_df['mean_returned'], scale = data_df['std_returned'], size = 10000)
-    upper_percentile = percentileofscore(normal_dist, upper_val)
-    lower_percentile = percentileofscore(normal_dist, lower_val)
-    prob = upper_percentile - lower_percentile
-    probability = range_probability_score.objects.create(probability = prob)
-    serializer = ProbabilityRangeScoresSerializer(probability, context={'request':request})
-    return Response(serializer.data)
-    """
