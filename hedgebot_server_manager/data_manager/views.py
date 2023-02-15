@@ -848,6 +848,7 @@ def update_user_forecast_assumptions(request):
             
             form_new_2324.full_clean()
             form_new_2324.save()
+            financial_sim_update(username)
 
         else:
             print('form 2324 non-valid')
