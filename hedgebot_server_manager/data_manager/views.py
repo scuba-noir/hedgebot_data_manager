@@ -844,9 +844,19 @@ def financial_account_range_probabilities(request):
         max_current_expectation_id = current_expectations.latest('id').id
         current_expectations = pd.DataFrame.from_dict(current_expectations.filter(id = max_current_expectation_id).values())
         current_expectations = pd.DataFrame(current_expectations.iloc[:1])
-        relevent_sim_variables = ['sugar_revenues','hydrous_revenues','anhydrous_revenues','cogs', 'gross_profit','sga_costs','ebit','financial_costs','net_income']
+        relevent_sim_variables = ['sugar_revenues','hydrous_revenues','anhydrous_revenues','cogs', 'gross_profit','sga_costs','ebit','financial_costs','net_income','ethanol_revenues']
         return_values_dict = {}
         for i in range(0,len(relevent_sim_variables)):
+            if relevent_sim_variables[i] == 'ethanol_revenues':
+                relevent_std_var_1 = 'hydrous_revenues_std'
+                relevent_std_var_2 = 'anhydrous_revenues_std'
+                temp_mean_returned_1 = current_expectations['hydrous_revenues'][0]
+                temp_mean_returned_2 = current_expectations['anhydrous_revenues'][0]
+                temp_std_returned_1 = current_expectations[relevent_std_var_1][0]
+                temp_std_returned_2 = current_expectations[relevent_std_var_2][0]
+                temp_mu = temp_mean_returned_1 + temp_mean_returned_2
+                temp_sigma = temp_std_returned_1 + temp_std_returned_2
+                return_values_dict[relevent_sim_variables[i]] = list(return_percentiles(temp_mu, temp_sigma))
             relevent_std_var = relevent_sim_variables[i] + '_std'
             temp_mean_returned = current_expectations[relevent_sim_variables[i]][0]
             temp_std_returned = current_expectations[relevent_std_var][0]
