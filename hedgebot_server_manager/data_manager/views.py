@@ -17,6 +17,7 @@ from data_manager.models import monte_carlo_market_data
 from data_manager.models import market_data, risk_management_user_input_table
 from data_manager.models import sugar_position_info_2
 from data_manager.models import user_list, target_prices, hedgebot_results_meta_data, user_forecasts_assumptions_results, current_financial_simulations, range_probability_score
+from data_manager.forms import userInputForm
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from rest_framework.response import Response
@@ -311,7 +312,39 @@ def risk_management_table_api(request):
         current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).values())
         current_expectations = pd.DataFrame(current_expectations.iloc[:1])
         final_value_dict_lower, final_value_dict_upper = user_input_sim(user_input, initial_sim_variables, prev_season_df)
-        print(at_market_data)
+
+        relevent_sim_variables = ['sugar_price','hydrous_price','anhydrous_price','fx_rate','sugar_revenues','hydrous_revenues','anhydrous_revenues','cogs', 'gross_profit','sga_costs','ebit','financial_costs','net_income']
+        return_values_dict = {}
+        for i in range(0,len(relevent_sim_variables)):
+            relevent_std_var = relevent_sim_variables[i] + '_std'
+            temp_mean_returned = current_expectations[relevent_sim_variables[i]][0]
+            temp_std_returned = current_expectations[relevent_std_var][0]
+            return_values_dict[relevent_sim_variables[i]] = [float("{:.2f}".format(temp_mean_returned))]
+            temp_dist = np.random.normal(loc=temp_mean_returned, scale=temp_std_returned, size = 1000)
+            return_values_dict[relevent_sim_variables[i] + '_var'] = [float("{:.2f}".format(np.percentile(temp_dist, 5)))]
+            return_values_dict[relevent_sim_variables[i] + '_at_market'] = [float("{:.2f}".format(at_market_data[relevent_sim_variables[i]][0]))]
+            return_values_dict[relevent_sim_variables[i] + '_lower'] = [float("{:.2f}".format(final_value_dict_lower[relevent_sim_variables[i]][0]))]
+            return_values_dict[relevent_sim_variables[i] + '_upper'] = [float("{:.2f}".format(final_value_dict_upper[relevent_sim_variables[i]][0]))]
+
+        #data_obj = risk_management_user_input_table.objects.update_or_create(**return_values_dict)
+        #serializer = RiskManagementUserInputTableSerializer(data_obj, context = {'request':request}, many = True)
+        
+        data = return_values_dict
+        data = json.dumps(data)
+
+        return Response(data)
+    
+    if request.method == 'POST':
+
+        user_input = request.query_params
+        initial_sim_variables = return_current_season_df(username)
+        prev_season_df = return_prev_season_df(username)
+        at_market_data = at_market_sim(initial_sim_data=initial_sim_variables, prev_year_fin_df=prev_season_df)
+        current_expectations = current_financial_simulations.objects.filter(user = username)
+        max_date = current_expectations.latest('date').date
+        current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).values())
+        current_expectations = pd.DataFrame(current_expectations.iloc[:1])
+        final_value_dict_lower, final_value_dict_upper = user_input_sim(user_input, initial_sim_variables, prev_season_df)
 
         relevent_sim_variables = ['sugar_price','hydrous_price','anhydrous_price','fx_rate','sugar_revenues','hydrous_revenues','anhydrous_revenues','cogs', 'gross_profit','sga_costs','ebit','financial_costs','net_income']
         return_values_dict = {}
@@ -767,7 +800,6 @@ def return_percentiles(mu, std):
     temp_dist = np.random.normal(mu, std, 1000)
     return np.percentile(temp_dist, temp_array)
 
-
 @api_view(['GET'])
 def range_probabilities_api(request):
     
@@ -788,4 +820,67 @@ def range_probabilities_api(request):
         final_dict[temp_factor] = list(return_percentiles(temp_mu, temp_std))
     final_dict = json.dumps(final_dict)
     return Response(final_dict)
+
+@api_view(['POST'])
+def update_user_forecast_assumptions(request):
+
+
+    if request.method == "POST":
+
+        form_2324 = userInputForm(request.POST, prefix = "form_2324")
+        form_2223 = userInputForm(request.POST, prefix = "form_2223")
+        form_2122 = userInputForm(request.POST, prefix = "form_2122")
+        
+
+        if form_2324.is_valid():
+            
+            form_2324.data = form_2324.cleaned_data
+            form_2324.save(commit=False)
+            form_2324.set_season(season = '2023_24')
+            form_new_2324 = user_forecasts_assumptions_results.objects.create()
+            for keys in form_2324.data:
+                if form_2324.data[keys] != None:
+                    form_new_2324.set_field_value(keys, form_2324.data[keys])
+            
+            form_new_2324.full_clean()
+            form_new_2324.save()
+
+        else:
+            print('form 2324 non-valid')
+            print(form_2324.errors)
+
+        if form_2223.is_valid():
+
+            form_2223.data = form_2223.cleaned_data
+            form_2223.save(commit=False)
+            form_2223.set_season(season ='2022_23')
+            form_new_2223 = user_forecasts_assumptions_results.objects.create()
+            for keys in form_2223.data:
+                if form_2223.data[keys] != None:
+                    form_new_2223.set_field_value(keys, form_2223.data[keys])
+            
+            form_new_2223.full_clean()
+            form_new_2223.save()
+
+        else:
+            print('form 2223 non-valid')
+            print(form_2223.errors)
+
+        if form_2122.is_valid():
+
+            form_2122.data = form_2122.cleaned_data
+            print('saved 2122')
+            form_2122.save(commit=False)
+            form_2122.set_season(season = '2021_22')
+            form_new_2122 = user_forecasts_assumptions_results.objects.create()
+            for keys in form_2122.data:
+                if form_2122.data[keys] != None:
+                    form_new_2122.set_field_value(keys, form_2122.data[keys])
+            
+            form_new_2122.full_clean()
+            form_new_2122.save()
+
+        else:
+            print('form 2122 non-valid')
+            print(form_2122.errors)
 
