@@ -141,7 +141,7 @@ def financial_sim_update(username):
     mc_meta_data = pd.DataFrame(monte_carlo_market_data.objects.all().values())
     final_value_dict = full_simulation_run.main(current_season_df, prev_season_df, mc_meta_data, 1000)
     
-    temp = current_financial_simulations.objects.create(
+    temp = current_financial_simulations.objects.update_or_create(
         user = username,
         sugar_price = statistics.mean(list(final_value_dict['sugar_price'])),
         hydrous_price = statistics.mean(list(final_value_dict['hydrous_price'])),
