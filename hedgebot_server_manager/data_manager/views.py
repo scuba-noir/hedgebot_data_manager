@@ -329,7 +329,10 @@ def risk_management_table_api(request):
         current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).values())
         current_expectations = pd.DataFrame(current_expectations.iloc[:1])
 
-
+        print('---------------')
+        print('Current Expectations')
+        print(current_expectations)
+        print('------------------')
         final_value_dict_lower, final_value_dict_upper = user_input_sim(user_input, initial_sim_variables, prev_season_df)
 
         relevent_sim_variables = ['sugar_price','hydrous_price','anhydrous_price','fx_rate','sugar_revenues','hydrous_revenues','anhydrous_revenues','cogs', 'gross_profit','sga_costs','ebit','financial_costs','net_income']
@@ -371,6 +374,7 @@ def risk_management_table_api(request):
         print('Current Expectations')
         print(current_expectations)
         print('------------------')
+
         for i in range(0,len(relevent_sim_variables)):
             relevent_std_var = relevent_sim_variables[i] + '_std'
             temp_mean_returned = current_expectations[relevent_sim_variables[i]][0]
