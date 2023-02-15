@@ -791,7 +791,7 @@ def range_probabilities_api(request):
     print(final_dict)
     final_dict = json.dumps(final_dict)
     print(final_dict)
-    return final_dict
+    return JSONRenderer(final_dict)
 
 
     """
