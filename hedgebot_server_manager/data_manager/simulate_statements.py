@@ -65,6 +65,8 @@ def Simulate_Income_Statement(assumptions_data_dict):
         sugar_revenues_USD = (sugar_NY * sugar_production * 22.0462) 
         energy_production = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Energy production') & (assumptions_data_dict['Data_group'] == 'Production Mix Assumptions')].values[0]
     
+    else:
+        sugar_revenues_USD = (sugar_NY * sugar_production * 22.0462) 
 
     sugar_revenues_BRL = (sugar_revenues_USD * usdbrl) 
     hydrous_revenues_BRL = (hydrous_esalq * hydrous_production) 
