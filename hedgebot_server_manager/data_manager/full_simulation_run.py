@@ -121,19 +121,8 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1, n
             'Inflation':inflation_rate, 
             'Crude oil':crude_price, 
             'Fertilizers':fertilizer_price}
-        
-        if num_sims == 1:
-            print('--------------')
-            print('New Drivers Dict')
-            print(new_drivers_dict)
-            print('--------------')
-            print('Initial Sim Variables')
-            print(initial_simulation_variables)
-            print('--------------')
-            prev_year_financial_df.to_csv('prev_year.csv')
-            initial_simulation_variables.to_csv("initial_sim_vars.csv")
+
         forecast_chg = create_assumptions_dict.main(new_drivers_dict, new_drivers_ls, prev_year_financial_df, initial_simulation_variables)
-        forecast_chg.to_csv('final_test_feb_15.csv')
         temp_income_statement_df, temp_cash_flow_df, temp_assets_df, temp_liabilities_df, temp_financial_indices_df = simulate_statements.Simulate_Three_Statements(forecast_chg, prev_year_financial_df)
         income_statement_final_df = pd.DataFrame(temp_income_statement_df)
         cash_flow_final_df = pd.DataFrame(temp_cash_flow_df)
@@ -141,20 +130,8 @@ def main(initial_simulation_variables, prev_year_financial_df, mc_meta_data_1, n
         liabilities_final_df = pd.DataFrame(temp_liabilities_df)
         financial_indices_final_df = pd.DataFrame(temp_financial_indices_df)
 
-        income_statement_final_df.to_csv('income_statement_testfeb_15.csv')
-        cash_flow_final_df.to_csv('cash_flow_testfeb_15.csv')
-        assets_final_df.to_csv('assets_testfeb_15.csv')
-        liabilities_final_df.to_csv('liabilities_testfeb_15.csv')
-        financial_indices_final_df.to_csv('financial_indices_testfeb_15.csv')
-
 
         final_df = simulate_statements.aggregate_fin_sim_results(income_statement_final_df, cash_flow_final_df, assets_final_df, liabilities_final_df, financial_indices_final_df)
-        final_df.to_csv('aggregated_sim_datafeb_15.csv')
-        if num_sims == 1:
-            print('--------------')
-            print('Returned Sim Data')
-            print(final_df)
-            print('--------------')
         final_df['Mean Returned'] = pd.to_numeric(final_df['Mean Returned'].astype(str).str.replace(',',''), errors='coerce').fillna(0).astype(int)
 
         
