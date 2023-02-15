@@ -826,7 +826,7 @@ def update_user_forecast_assumptions(request):
 
     if request.method == "POST":
         username = request.query_params.get('username')
-        print(username)
+        print(request.user.username)
         form_2324 = userInputForm(request.POST, prefix = "form_2324")
         form_2223 = userInputForm(request.POST, prefix = "form_2223")
         form_2122 = userInputForm(request.POST, prefix = "form_2122")
