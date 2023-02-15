@@ -287,7 +287,8 @@ def user_input_sim(user_input, initial_sim_data, prev_year_fin_df):
         mc_meta_data_current_prices_upper['std_returned'].loc[mc_meta_data_current_prices_upper['reference'] == relevent_market_var_ls[i]] = 0
         mc_meta_data_current_prices_lower['std_returned'].loc[mc_meta_data_current_prices_lower['reference'] == relevent_market_var_ls[i]] = 0
     
-
+    print(mc_meta_data_current_prices_upper)
+    print(mc_meta_data_current_prices_lower)
     initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Yield') & (initial_sim_data['Data_group'] == 'Own Cane Assumption')] = float(user_input['cane_yield'])
     initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Average TRS') & (initial_sim_data['Data_group'] == 'Production Mix Assumption')] = float(user_input['trs'])
     initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Sugar') & (initial_sim_data['Data_group'] == 'Production Mix Assumption')] = float(user_input['production_mix_sugar'])
@@ -301,7 +302,7 @@ def user_input_sim(user_input, initial_sim_data, prev_year_fin_df):
     mc_meta_data_current_prices_lower.to_csv("initial_mc_lower.csv")
     pd.DataFrame.from_dict(final_value_dict_lower).to_csv("lower_dict_final.csv")
     final_value_dict_upper = full_simulation_run.main(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_upper, 1)
-
+    pd.DataFrame.from_dict(final_value_dict_upper).to_csv("lower_dict_final.csv")
 
     return final_value_dict_lower, final_value_dict_upper
 
