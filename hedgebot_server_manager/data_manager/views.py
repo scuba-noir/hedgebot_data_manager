@@ -305,6 +305,8 @@ def user_input_sim(user_input, initial_sim_data, prev_year_fin_df):
     initial_sim_df['Value'].loc[(initial_sim_df['Variable_name_eng'] == 'Anydrous production') & (initial_sim_df['Data_group'] == 'Final Volume Forecasts')] = temp_anhydrous_prod
 
     final_value_dict_lower = full_simulation_run.main(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_lower, 1) 
+    initial_sim_df.to_csv("Initial_user_input_sim.csv")
+    mc_meta_data_current_prices_lower.to_csv("initial_mc_lower.csv")
     pd.DataFrame.from_dict(final_value_dict_lower).to_csv("lower_dict_final.csv")
     final_value_dict_upper = full_simulation_run.main(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_upper, 1)
 
