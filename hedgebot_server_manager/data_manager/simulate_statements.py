@@ -59,10 +59,11 @@ def Simulate_Income_Statement(assumptions_data_dict):
         cane_crushed = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Own cane') & (assumptions_data_dict['Data_group'] == 'Own Cane Assumptions')].values[0]
         third_party_cane = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Own cane') & (assumptions_data_dict['Data_group'] == 'Third Party Cane Assumptions')].values[0]
         temp_atr = (float(cane_crushed) + float(third_party_cane)) * float(atr_average)
-        temp_sugar_prod = (trs_sugar * sugar_mix)/1000/1.06
-        temp_hydrous_prod = (trs_hydrous * hydrous_mix)/1000/1.53
-        temp_anhydrous_prod = (trs_anhydrous * anhydrous_mix)/1000/1.53
+        sugar_production = (temp_atr * sugar_mix)/1000/trs_sugar
+        hydrous_production = (temp_atr * hydrous_mix)/1000/trs_hydrous
+        anhydrous_production = (temp_atr * anhydrous_mix)/1000/trs_anhydrous
         sugar_revenues_USD = (sugar_NY * sugar_production * 22.0462) 
+    
     #print('Sugar Production Stuff:'
     #+ '/n' + 'Sugar Price: ' + str(sugar_NY) +
     #'/n' + 'Sugar Production: ' + str(sugar_production) +
