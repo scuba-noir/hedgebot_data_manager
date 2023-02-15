@@ -59,9 +59,9 @@ def Simulate_Income_Statement(assumptions_data_dict):
         cane_crushed = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Own cane') & (assumptions_data_dict['Data_group'] == 'Own Cane Assumptions')].values[0]
         third_party_cane = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Third party cane') & (assumptions_data_dict['Data_group'] == 'Third Party Cane Assumptions')].values[0]
         temp_atr = (float(cane_crushed) + float(third_party_cane)) * float(atr_average)
-        sugar_production = (temp_atr * sugar_mix)/1000/trs_sugar
-        hydrous_production = (temp_atr * hydrous_mix)/1000/trs_hydrous
-        anhydrous_production = (temp_atr * anhydrous_mix)/1000/trs_anhydrous
+        sugar_production = (temp_atr * sugar_mix)/trs_sugar
+        hydrous_production = (temp_atr * hydrous_mix)/trs_hydrous
+        anhydrous_production = (temp_atr * anhydrous_mix)/trs_anhydrous
         sugar_revenues_USD = (sugar_NY * sugar_production * 22.0462) 
         energy_production = assumptions_data_dict['Value'].loc[(assumptions_data_dict['Variable_name_eng'] == 'Energy production') & (assumptions_data_dict['Data_group'] == 'Production Mix Assumptions')].values[0]
     
@@ -79,10 +79,10 @@ def Simulate_Income_Statement(assumptions_data_dict):
     else:
         anhydrous_revenues_BRL = anhydrous_esalq * anhydrous_production
 
-    energy_revenues_BRL = (energy_px * energy_production) / 1000
+    energy_revenues_BRL = (energy_px * energy_production)
     total_revenues_BRL = sugar_revenues_BRL + hydrous_revenues_BRL + anhydrous_revenues_BRL + energy_revenues_BRL
     
-    lease_cost = -1 * lease_cost_BRL * leased_area / 1000
+    lease_cost = -1 * lease_cost_BRL * leased_area
     third_party_cane_cost = -1 * third_party_cane_mt * third_party_cane_cost_BRLperMT
     input_cost = -1 * inputs_BRLperMT * cane_crushed
     fuel_cost = -1 * fuel_BRLperMT * cane_crushed
@@ -90,7 +90,7 @@ def Simulate_Income_Statement(assumptions_data_dict):
     labor_cost = -1 * labor_cost_perMT * cane_crushed
     industrial_cost = -1 * industrial_cost_perMT * cane_crushed
     depreciation = -1 * depreciation_cost_perMT * cane_crushed
-    planting_cost = -1 * planting_cost_perHa * planted_area / 1000
+    planting_cost = -1 * planting_cost_perHa * planted_area
     total_COGS = lease_cost + third_party_cane_cost + input_cost + fuel_cost + freight_cost + labor_cost + industrial_cost + depreciation + planting_cost
     
     gross_profit = total_revenues_BRL + total_COGS
