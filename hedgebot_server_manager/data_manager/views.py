@@ -288,21 +288,13 @@ def user_input_sim(user_input, initial_sim_data, prev_year_fin_df):
         mc_meta_data_current_prices_lower['std_returned'].loc[mc_meta_data_current_prices_lower['reference'] == relevent_market_var_ls[i]] = 0
     
 
-    temp_yield = float(user_input['cane_yield'])
-    temp_trs = float(user_input['trs'])
-    temp_production_mix_sugar = float(user_input['production_mix_sugar'])
-    temp_production_mix_hydrous = float(user_input['production_mix_hydrous'])
-    temp_production_mix_anhydrous = float(user_input['production_mix_anhydrous'])
-    temp_cane_area = float(initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Planting area') & (initial_sim_data['Data_group'] == 'Own Cane Assumptions')])
-    temp_atr = float(temp_cane_area) * float(temp_yield) * float(temp_trs) + initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Third party cane') & (initial_sim_data['Units'] == '000 mt')]
-    temp_sugar_prod = (temp_atr * temp_production_mix_sugar)/1000/1.06
-    temp_hydrous_prod = (temp_atr * temp_production_mix_hydrous)/1000/1.53
-    temp_anhydrous_prod = (temp_atr * temp_production_mix_anhydrous)/1000/1.53
+    initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Yield') & (initial_sim_data['Data_group'] == 'Own Cane Assumption')] = float(user_input['cane_yield'])
+    initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Average TRS') & (initial_sim_data['Data_group'] == 'Production Mix Assumption')] = float(user_input['trs'])
+    initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Sugar') & (initial_sim_data['Data_group'] == 'Production Mix Assumption')] = float(user_input['production_mix_sugar'])
+    initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Hydrous') & (initial_sim_data['Data_group'] == 'Production Mix Assumption')] = float(user_input['production_mix_hydrous'])
+    initial_sim_data['Value'].loc[(initial_sim_data['Variable_name_eng'] == 'Anhydrous') & (initial_sim_data['Data_group'] == 'Production Mix Assumption')] = float(user_input['production_mix_anhydrous'])
     
     initial_sim_df = initial_sim_data
-    initial_sim_df['Value'].loc[(initial_sim_df['Variable_name_eng'] == 'Sugar production') & (initial_sim_df['Data_group'] == 'Final Volume Forecasts')] = temp_sugar_prod
-    initial_sim_df['Value'].loc[(initial_sim_df['Variable_name_eng'] == 'Hydrous production') & (initial_sim_df['Data_group'] == 'Final Volume Forecasts')] = temp_hydrous_prod
-    initial_sim_df['Value'].loc[(initial_sim_df['Variable_name_eng'] == 'Anydrous production') & (initial_sim_df['Data_group'] == 'Final Volume Forecasts')] = temp_anhydrous_prod
 
     final_value_dict_lower = full_simulation_run.main(initial_sim_df, prev_year_fin_df, mc_meta_data_current_prices_lower, 1) 
     initial_sim_df.to_csv("Initial_user_input_sim.csv")
