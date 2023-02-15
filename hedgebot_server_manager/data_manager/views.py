@@ -329,12 +329,6 @@ def risk_management_table_api(request):
         max_current_expectation_id = current_expectations.latest('id').id
         current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).filter(id = max_current_expectation_id).values())
         current_expectations = pd.DataFrame(current_expectations.iloc[:1])
-
-        print('---------------')
-        print('Current Expectations')
-        print(current_expectations)
-        current_expectations.to_csv("current_expectations_feb15.csv")
-        print('------------------')
         final_value_dict_lower, final_value_dict_upper = user_input_sim(user_input, initial_sim_variables, prev_season_df)
 
         relevent_sim_variables = ['sugar_price','hydrous_price','anhydrous_price','fx_rate','sugar_revenues','hydrous_revenues','anhydrous_revenues','cogs', 'gross_profit','sga_costs','ebit','financial_costs','net_income']
@@ -350,9 +344,6 @@ def risk_management_table_api(request):
             return_values_dict[relevent_sim_variables[i] + '_lower'] = [float("{:.2f}".format(final_value_dict_lower[relevent_sim_variables[i]][0]))]
             return_values_dict[relevent_sim_variables[i] + '_upper'] = [float("{:.2f}".format(final_value_dict_upper[relevent_sim_variables[i]][0]))]
 
-        #data_obj = risk_management_user_input_table.objects.update_or_create(**return_values_dict)
-        #serializer = RiskManagementUserInputTableSerializer(data_obj, context = {'request':request}, many = True)
-        
         data = return_values_dict
         data = json.dumps(data)
 
@@ -372,10 +363,6 @@ def risk_management_table_api(request):
 
         relevent_sim_variables = ['sugar_price','hydrous_price','anhydrous_price','fx_rate','sugar_revenues','hydrous_revenues','anhydrous_revenues','cogs', 'gross_profit','sga_costs','ebit','financial_costs','net_income']
         return_values_dict = {}
-        print('---------------')
-        print('Current Expectations')
-        print(current_expectations)
-        print('------------------')
 
         for i in range(0,len(relevent_sim_variables)):
             relevent_std_var = relevent_sim_variables[i] + '_std'
@@ -846,6 +833,39 @@ def range_probabilities_api(request):
         final_dict[temp_factor] = list(return_percentiles(temp_mu, temp_std))
     final_dict = json.dumps(final_dict)
     return Response(final_dict)
+
+
+@api_view(['GET'])
+def financial_account_range_probabilities(request):
+    
+    
+    username = request.query_params.get('username')
+
+    if request.method == 'GET':
+
+        user_input = request.query_params
+
+        initial_sim_variables = return_current_season_df(username)
+
+        prev_season_df = return_prev_season_df(username)
+        current_expectations = current_financial_simulations.objects.filter(user = username)
+        max_date = current_expectations.latest('date').date
+        max_current_expectation_id = current_expectations.latest('id').id
+        current_expectations = pd.DataFrame.from_dict(current_expectations.filter(date = max_date).filter(id = max_current_expectation_id).values())
+        current_expectations = pd.DataFrame(current_expectations.iloc[:1])
+        relevent_sim_variables = ['sugar_revenues','hydrous_revenues','anhydrous_revenues','cogs', 'gross_profit','sga_costs','ebit','financial_costs','net_income']
+        return_values_dict = {}
+        for i in range(0,len(relevent_sim_variables)):
+            relevent_std_var = relevent_sim_variables[i] + '_std'
+            temp_mean_returned = current_expectations[relevent_sim_variables[i]][0]
+            temp_std_returned = current_expectations[relevent_std_var][0]
+            temp_dist = np.random.normal(loc=temp_mean_returned, scale=temp_std_returned, size = 1000)
+            return_values_dict[relevent_sim_variables[i]] = temp_dist
+
+        data = return_values_dict
+        data = json.dumps(data)
+
+        return Response(data)
 
 @api_view(['POST'])
 def update_user_forecast_assumptions(request):
