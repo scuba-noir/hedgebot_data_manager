@@ -857,10 +857,11 @@ def financial_account_range_probabilities(request):
                 temp_mu = temp_mean_returned_1 + temp_mean_returned_2
                 temp_sigma = temp_std_returned_1 + temp_std_returned_2
                 return_values_dict[relevent_sim_variables[i]] = list(return_percentiles(temp_mu, temp_sigma))
-            relevent_std_var = relevent_sim_variables[i] + '_std'
-            temp_mean_returned = current_expectations[relevent_sim_variables[i]][0]
-            temp_std_returned = current_expectations[relevent_std_var][0]
-            return_values_dict[relevent_sim_variables[i]] = list(return_percentiles(temp_mean_returned, temp_std_returned))
+            else:
+                relevent_std_var = relevent_sim_variables[i] + '_std'
+                temp_mean_returned = current_expectations[relevent_sim_variables[i]][0]
+                temp_std_returned = current_expectations[relevent_std_var][0]
+                return_values_dict[relevent_sim_variables[i]] = list(return_percentiles(temp_mean_returned, temp_std_returned))
 
         data = return_values_dict
         data = json.dumps(data)
