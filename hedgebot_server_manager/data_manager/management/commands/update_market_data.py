@@ -10,7 +10,9 @@ class Command(BaseCommand):
 
         old_data = pd.DataFrame(market_data.objects.all().values())
         all_tickers = old_data['ticker'].unique()
-        print(all_tickers)
+        print(all_tickers.tolist())
+        pd.DataFrame(all_tickers).to_csv("test_ticker_ls_file.csv")
+        
         old_data_df = pd.DataFrame(columns=['id','date','ticker','value','units'])
         for ticker in all_tickers:
             temp_max_date = max(old_data['date'].loc[old_data['ticker'] == ticker])
