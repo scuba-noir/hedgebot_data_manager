@@ -9,20 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        old_data = pd.DataFrame(market_data.objects.all().values())
-        all_tickers = ['SBMAY1 Comdty', 'SBJUL1 Comdty', 'SBOCT1 Comdty', 'SBMAR2 Comdty', 'Fert_Costs', 'CL1 Comdty', 'Energy_Costs', 'SBMAR1 Comdty','SB1 Comdty', 'USDBRL Curncy', 'BAAWHYDP Index', 'BAAWANAU Index']
-        
-        old_data_df = pd.DataFrame(columns=['id','date','ticker','value','units'])
-        for ticker in all_tickers:
-            try:
-                temp_max_date = max(old_data['date'].loc[old_data['ticker'] == ticker])
-                temp_row = old_data.loc[(old_data['ticker'] == ticker) & (old_data['date'] == temp_max_date)]
-                old_data_df = pd.concat([old_data_df, temp_row])
-            except:
-                temp_row = pd.DataFrame(data=[[0,datetime.datetime(2019,1,1), ticker, 0, 'temp_fill']], columns=['id','date','ticker','value','units'])
-                old_data_df = pd.concat([old_data_df, temp_row])
-        print(old_data_df)
-
+        check_entries_bool = True
 
         ticker_ls = all_tickers
         db = pymysql.connect(host = 'database-1.c8dbzf9wtrjo.us-east-2.rds.amazonaws.com', user = 'admin', password = 'Ktr321ugh!')
@@ -30,6 +17,29 @@ class Command(BaseCommand):
 
         sql = '''use collateral_prices'''
         cursor.execute(sql)
+
+
+        old_data = pd.DataFrame(market_data.objects.all().values())
+        all_tickers = ['SBMAY1 Comdty', 'SBJUL1 Comdty', 'SBOCT1 Comdty', 'SBMAR2 Comdty', 'GCFPUBGC Index', 'CL1 Comdty', 'BZCESECA Index', 'SBMAR1 Comdty','SB1 Comdty', 'USDBRL Curncy', 'BAAWHYDP Index', 'BAAWANAB Index']
+        labels_ls = ['SBMAY1 Comdty', 'SBJUL1 Comdty', 'SBOCT1 Comdty', 'SBMAR2 Comdty', 'Fert_Costs', 'CL1 Comdty', 'Energy_Costs', 'SBMAR1 Comdty','SB1 Comdty', 'USDBRL Curncy', 'BAAWHYDP Index', 'BAAWANAB Index']
+        
+        if check_entries_bool == True:
+
+            obj_delete = market_data.objects.exclude(ticker__in = labels_ls)
+            print(obj_delete.values())
+        
+        old_data_df = pd.DataFrame(columns=['id','date','ticker','value','units'])
+        
+        for ticker in all_tickers:
+
+            temp_max_date = max(old_data['date'].loc[old_data['ticker'] == ticker])
+            temp_row = old_data.loc[(old_data['ticker'] == ticker) & (old_data['date'] == temp_max_date)]
+            print(temp_row)
+
+            sql = '''
+                SELECT * FROM market_data_prices WHERE ticker 
+            
+            '''
 
         columns = ['Id','Ticker', 'Description', 'Origin', 'Dashboard', 'Units', 'Date','Value','Most Recent']
         sql = '''
