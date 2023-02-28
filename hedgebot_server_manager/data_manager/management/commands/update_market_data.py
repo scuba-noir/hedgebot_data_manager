@@ -13,6 +13,7 @@ class Command(BaseCommand):
         
         old_data_df = pd.DataFrame(columns=['id','date','ticker','value','units'])
         for ticker in all_tickers:
+            print(ticker)
             temp_max_date = max(old_data['date'].loc[old_data['ticker'] == ticker])
             temp_row = old_data.loc[(old_data['ticker'] == ticker) & (old_data['date'] == temp_max_date)]
             old_data_df = pd.concat([old_data_df, temp_row])
