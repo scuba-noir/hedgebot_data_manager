@@ -567,7 +567,7 @@ def risk_var_table_api(request):
             temp_comp_forecast = temp_comp_forecast
 
         temp_perc_comp_fore = percentileofscore(temp_distribution, temp_comp_forecast, kind = 'weak')
-        temp_prev_season = old_company_forecast[account].values.tolist()[0]
+        temp_prev_season = old_company_forecast[company_forecast_account].values.tolist()[0]
 
         try:
             temp_prev_season = temp_prev_season[0]
