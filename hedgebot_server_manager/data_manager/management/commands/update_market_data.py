@@ -26,16 +26,14 @@ class Command(BaseCommand):
             print(pd.DataFrame(obj_delete.values())['ticker'].unique().tolist())
             obj_delete.delete()
         
+        sql = '''SELECT * from market_data_prices'''
+        full_market_prices_df = pd.read_sql(sql = sql, con = db)
             
-        for ticker in labels_ls:
-
-            temp_max_date = max(old_data['date'].loc[old_data['ticker'] == ticker])
-            temp_row = old_data.loc[(old_data['ticker'] == ticker) & (old_data['date'] == temp_max_date)]
-
-            sql = '''SELECT * FROM market_data_prices WHERE ticker = "'''
-            sql = sql + str(ticker)
-            sql = sql + '''" AND date > ''' + temp_max_date.strftime("%Y-%m-%d")
-            temp_data_df = pd.read_sql(sql = sql, con = db)
+        for index in range(len(labels_ls)):
+            hedgebot_label = labels_ls[index]
+            ticker = labels_ls[index]
+            temp_max_date = max(old_data['date'].loc[old_data['ticker'] == hedgebot_label])
+            temp_data_df = full_market_prices_df.loc[(full_market_prices_df['ticker'] == ticker) & (full_market_prices_df['date'] > temp_max_date)]
             print(temp_data_df)
             #for row, items in temp_data_df.iterrows():
             #    print(items)
