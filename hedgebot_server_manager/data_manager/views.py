@@ -229,8 +229,6 @@ def financial_sim_update(username, num_sims = 1000):
         current_ratio_std = statistics.stdev(final_value_dict['current_ratio'])       
     )
 
-
-# Create your views here.
 def transformPrices(daily_chgs, price_data, price_date_ls):
 
     mc_dates_final = pd.to_datetime(daily_chgs['target_date'], format = "%Y-%m-%d")
@@ -530,183 +528,37 @@ def hedgebot_best_path_api2(request):
 
 @api_view(['GET'])
 def risk_var_table_api(request):
-    
-    desc_names = [
-            'Id',
-            'Date',
-            'Season',
-            'Own area-Own Cane Assumptions-ha', 
-            'Leased area-Own Cane Assumptions-ha',
-            'Yield-Own Cane Assumptions-mt of cane/ha',
-            'Own cane-Own Cane Assumptions-000 mt',
-            'Lease cost-Own Cane Assumptions-mt of cane/ha',
-            'Average TRS, lease contract-Own Cane Assumptions-kg/mt of cane',
-            'Lease cost-Own Cane Assumptions-BRL/ha',
-            'Planting area-Own Cane Assumptions-000 ha',
-            'Third party cane-Third Party Cane Assumptions-000 mt',
-            'Average TRS, cane contract-Third Party Cane Assumptions-kg/mt of cane',
-            'Third party cane cost-Third Party Cane Assumptions-BRL/mt of cane',
-            'Average TRS-Production Mix Assumptions-kg/mt of cane',
-            'Sugar-Production Mix Assumptions-%',
-            'Hydrous-Production Mix Assumptions-%',
-            'Anhydrous-Production Mix Assumptions-%',
-            'TRS x Sugar-Production Mix Assumptions-kg x kg',
-            'ATR x Hydrous-Production Mix Assumptions-kg x l',
-            'ATR x Anhydrous-Production Mix Assumptions-kg x l',
-            'Energy production-Production Mix Assumptions-MWh',
-            'Sugar-Price Assumptions-cts/lb',
-            'Hydrous-Price Assumptions-BRL/m3',
-            'Anhydrous-Price Assumptions-BRL/m3',
-            'Energy-Price Assumptions-BRL/MWh',
-            'Exchange rate-Price Assumptions-BRL/USD',
-            'TRS-Price Assumptions-BRL/kg',
-            'Domestic interest rate-Price Assumptions-% p.a.',
-            'Foreign interest rate-Price Assumptions-% p.a.',
-            'Inflation-Price Assumptions-% a.a',
-            'Crude oil-Price Assumptions-USD/bbl',
-            'Fertilizers-Price Assumptions-USD/mt',
-            'Initial cash-Balance Sheet Assumptions-000 BRL',
-            'Accounts receivable-Balance Sheet Assumptions-days',
-            'Inventories-Balance Sheet Assumptions-days',
-            'Other current assets-Balance Sheet Assumptions-% of revenues',
-            'Other non current assets-Balance Sheet Assumptions-% of revenues',
-            'Short term accounts payable-Balance Sheet Assumptions-days',
-            'Other current liabilities-Balance Sheet Assumptions-% of COGS',
-            'Other non current liabilities-Balance Sheet Assumptions-% of COGS',
-            'Issued capital-Balance Sheet Assumptions-000 BRL',
-            'Income tax rate-Balance Sheet Assumptions-%',
-            'Sales expenses-SGA Assumptions-BRL/mt of cane',
-            'Administrative expenses-SGA Assumptions-BRL/mt of cane',
-            'Other SG&A-SGA Assumptions-BRL/mt of cane',
-            'Average cost (coupon), USD debt-Indebtness Assumptions-Libor +, p.a.',
-            'Average cost (coupon), USD debt-Indebtness Assumptions-CDI +, p.a.',
-            'US$ debt, short term-Indebtness Assumptions-000 USD',
-            'US$ debt, long term-Indebtness Assumptions-000 USD',
-            'US$ debt, total-Indebtness Assumptions-000 USD',
-            'US$ debt, short term-Indebtness Assumptions-000 BRL',
-            'US$ debt, long term-Indebtness Assumptions-000 BRL',
-            'US$ debt, total-Indebtness Assumptions-000 BRL',
-            'R$ debt, short term-Indebtness Assumptions-000 BRL',
-            'R$ debt, long term-Indebtness Assumptions-000 BRL',
-            'Total debt, short term-Indebtness Assumptions-000 BRL',
-            'Total debt, long term-Indebtness Assumptions-000 BRL',
-            'Total debt-Indebtness Assumptions-000 BRL',
-            'Financial expenses, US$ debt-Indebtness Assumptions-000 BRL',
-            'Financial expenses, R$ debt-Indebtness Assumptions-000 BRL',
-            'Total financial expenses-Indebtness Assumptions-000 BRL',
-            'Inputs-Production Cost Assumptions-BRL/mt of cane',
-            'Fuel-Production Cost Assumptions-BRL/mt of cane',
-            'Freights-Production Cost Assumptions-BRL/mt of cane',
-            'Labor cost-Production Cost Assumptions-BRL/mt of cane',
-            'Industrial cost-Production Cost Assumptions-BRL/mt of cane',
-            'Depreciation-Production Cost Assumptions-BRL/mt of cane',
-            'Planting cost-Production Cost Assumptions-BRL/ha',
-            'Cane crushed-Final Volume Forecasts-000 mt',
-            'Sugar production-Final Volume Forecasts-000 mt',
-            'Hydrous production-Final Volume Forecasts-000 m3',
-            'Anhydrous production-Final Volume Forecasts-000 m3',
-            'Energy production-Final Volume Forecasts-MWh',
-            'Sugar revenues-Income Statement Forecasts-000 USD',
-            'Sugar Revenues-Income Statement Forecasts-000 BRL',
-            'Hydrous revenues-Income Statement Forecasts-000 BRL',
-            'Anhydrous revenues-Income Statement Forecasts-000 BRL',
-            'Energy revenues-Income Statement Forecasts-000 BRL',
-            'Total revenues-Income Statement Forecasts-000 BRL',
-            'Lease cost-Income Statement Forecasts-000 BRL',
-            'Third party cane cost-Income Statement Forecasts-000 BRL',
-            'Inputs-Income Statement Forecasts-000 BRL',
-            'Fuel-Income Statement Forecasts-000 BRL',
-            'Freights-Income Statement Forecasts-000 BRL',
-            'Labor cost-Income Statement Forecasts-000 BRL',
-            'Industrial cost-Income Statement Forecasts-000 BRL',
-            'Depreciation-Income Statement Forecasts-000 BRL',
-            'Planting cost-Income Statement Forecasts-000 BRL',
-            'Total COGS-Income Statement Forecasts-000 BRL',
-            'Gross profit-Income Statement Forecasts-000 BRL',
-            'Sales expenses-Cash Flow Statement Forecasts-000 BRL',
-            'Administrative expenses-Cash Flow Statement Forecasts-000 BRL',
-            'Other SG&A-Cash Flow Statement Forecasts-000 BRL',
-            'Total SG&A-Cash Flow Statement Forecasts-000 BRL',
-            'EBIT-Cash Flow Statement Forecasts-000 BRL',
-            'Financial expenses-Cash Flow Statement Forecasts-000 BRL',
-            'Profit before taxes-Cash Flow Statement Forecasts-000 BRL',
-            'Income tax-Cash Flow Statement Forecasts-000 BRL',
-            'Net income-Cash Flow Statement Forecasts-000 BRL',
-            'Depreciation-Cash Flow Statement Forecasts-000 BRL',
-            'Working capital variation-Cash Flow Statement Forecasts-000 BRL',
-            'Cash flow from operations-Cash Flow Statement Forecasts-000 BRL',
-            'CAPEX-Cash Flow Statement Forecasts-000 BRL',
-            'Write offs-Cash Flow Statement Forecasts-000 BRL',
-            'Cas flow from investment activities-Cash Flow Statement Forecasts-000 BRL',
-            'Debt amortization-Cash Flow Statement Forecasts-000 BRL',
-            'New debt-Cash Flow Statement Forecasts-000 BRL',
-            'Cash flow from financing activities-Cash Flow Statement Forecasts-000 BRL',
-            'Change in cash-Cash Flow Statement Forecasts-000 BRL',
-            'Initial cash-Cash Flow Statement Forecasts-000 BRL',
-            'Ending cash-Cash Flow Statement Forecasts-000 BRL',
-            'Minimum refinancing-Cash Flow Statement Forecasts-000 BRL',
-            'Cash-Asset Sheet Forecasts-000 BRL',
-            'Accounts receivable-Asset Sheet Forecasts-000 BRL',
-            'Inventories-Asset Sheet Forecasts-000 BRL',
-            'Other current assets-Asset Sheet Forecasts-000 BRL',
-            'Total current assets-Asset Sheet Forecasts-000 BRL',
-            'PP&E-Asset Sheet Forecasts-000 BRL',
-            'Other non current assets-Asset Sheet Forecasts-000 BRL',
-            'Total non current assets-Asset Sheet Forecasts-000 BRL',
-            'Total assets-Asset Sheet Forecasts-000 BRL',
-            'Short term accounts payable-Liabilities Sheet Forecasts-000 BRL',
-            'Short term debt-Liabilities Sheet Forecasts-000 BRL',
-            'Other current liabilities-Liabilities Sheet Forecasts-000 BRL',
-            'Total current liabilities-Liabilities Sheet Forecasts-000 BRL',
-            'Long term debt-Liabilities Sheet Forecasts-000 BRL',
-            'Other non current liabilities-Liabilities Sheet Forecasts-000 BRL',
-            'Total non current liabilities-Liabilities Sheet Forecasts-000 BRL',
-            'Total liabilities-Liabilities Sheet Forecasts-000 BRL',
-            'Issued capital-Liabilities Sheet Forecasts-000 BRL',
-            'Retained earnings-Liabilities Sheet Forecasts-000 BRL',
-            'Total equity-Liabilities Sheet Forecasts-000 BRL',
-            'Liabilities + equity-Liabilities Sheet Forecasts-000 BRL',
-            'Gross margin-Financial KPI Forecasts-%',
-            'EBITDA-Financial KPI Forecasts-000 BRL',
-            'EBITDA margin-Financial KPI Forecasts-%',
-            'Net income margin-Financial KPI Forecasts-%',
-            'Net debt-Financial KPI Forecasts-000 BRL',
-            'Net debt/EBITDA-Financial KPI Forecasts-%',
-            'Net debt/mt of cane-Financial KPI Forecasts-%',
-            'Indebtedness-Financial KPI Forecasts-%',
-            'Short term-Financial KPI Forecasts-% of total',
-            'Current ratio-Financial KPI Forecasts-%',
-            'Revenue variation-Financial KPI Forecasts-% YoY',
-            'Income variation-Financial KPI Forecasts-% YoY',
-            'DSCR-Financial KPI Forecasts-%',
-            'Username'
-            ]
 
-    data = financial_simulation_meta_data_historical.objects.filter(username = request.user).filter(season = '23_24')
+    username = request.query_params.get('username')
+    data = current_financial_simulations.objects.filter(username = username)
     max_date = data.latest('simulation_date').simulation_date
-    data_df = pd.DataFrame(data.filter(simulation_date = max_date).values())
-    temp_ls = []
-    company_forecast_df = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = request.user).filter(season='23_24').values())
+    data_df = pd.DataFrame(data.filter(date = max_date).values())
+    company_forecast_df = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = request.user).filter(season='2023_24').values())
     company_forecast_df.columns = desc_names
-    obj, created = user_forecasts_assumptions_results.objects.get_or_create(username = request.user, season = '23_24')
-    obj, created = user_forecasts_assumptions_results.objects.get_or_create(username = request.user, season = '22_23')
-    old_company_forecast = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = request.user).filter(season='22_23').values())
-    old_company_forecast.columns = desc_names
-    relevant_accounts = ['Total assets','Net debt/mt of cane','EBITDA','Gross margin','Total revenues','Net income']
-    account_labels = ['CMV Total (000 R$)','Dívida Líquida/EBITDA','EBITDA (000 R$)','Margem Líquida (%)','Receita Total (000 R$)','Resultado Líquido (000 R$)']
+    obj, created = user_forecasts_assumptions_results.objects.get_or_create(username = request.user, season = '2023_24')
+    obj, created = user_forecasts_assumptions_results.objects.get_or_create(username = request.user, season = '2022_23')
+    old_company_forecast = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = request.user).filter(season='2022_23').values())
+    relevant_accounts = ['current_ratio','net_debt_to_mt_cane','gross_profit','gross_margin','net_income']
+    company_forecast_accounts = ['current_ratio', 'net_debt_mt_of_cane', 'gross_profit', 'gross_margin', 'net_income']
+    account_labels = ['Current Ratio','Dívida Líquida/EBITDA','EBITDA (000 R$)','Margem Líquida (%)','Resultado Líquido (000 R$)']
     data_df = data_df.loc[data_df['account'].isin(relevant_accounts)]
-    for row, items in data_df.iterrows():
-        temp_account = items['account']
+    final_dict = {
+        'label':[],
+        'prev_season':[],
+        'actual_estimate':[],
+        'low_10':[],
+        'high_90':[],
+        'prob_estimate':[]
+    }
+    for account in relevant_accounts:
+        temp_account = data_df[account]
         if (temp_account in relevant_accounts) == False:
             continue
         final_label = account_labels[relevant_accounts.index(temp_account)]
-        temp_datagroup = items['datagroup']
-        subs = temp_account + '-' + temp_datagroup
-        temp_index_name = [i for i in desc_names if subs in i]
-        temp_mu = items['mean_returned']
-        temp_sigma = items['std_returned']
+        temp_mu = data_df[account]
+        temp_sigma = data_df[account+'_std']
         temp_distribution = np.random.normal(temp_mu, temp_sigma, 1000)
-        temp_comp_forecast = company_forecast_df[temp_index_name].values.tolist()[0]
+        temp_comp_forecast = company_forecast_df[account].values.tolist()[0]
         try:
             temp_comp_forecast = temp_comp_forecast[0]
         except:
@@ -718,7 +570,7 @@ def risk_var_table_api(request):
             temp_comp_forecast = temp_comp_forecast
 
         temp_perc_comp_fore = percentileofscore(temp_distribution, temp_comp_forecast, kind = 'weak')
-        temp_prev_season = old_company_forecast[temp_index_name].values.tolist()[0]
+        temp_prev_season = old_company_forecast[account].values.tolist()[0]
 
         try:
             temp_prev_season = temp_prev_season[0]
@@ -734,13 +586,19 @@ def risk_var_table_api(request):
         temp_high_90 = np.percentile(temp_distribution, 90)
 
         try:
-            obj = risk_var_table.objects.update_or_create(label = final_label, prev_season = int(temp_prev_season), actual_estimate = int(temp_comp_forecast), low_10 = int(temp_low_10), high_90 = int(temp_high_90), prob_estimate = temp_perc_comp_fore, username = request.user)
+            final_dict['label'].append(final_label)
+            final_dict['prev_season'].append(int(temp_prev_season))
+            final_dict['actual_estimate'].append(int(temp_comp_forecast))
+            final_dict['low_10'].append(int(temp_low_10))
+            final_dict['high_90'].append(int(temp_high_90))
+            final_dict['prob_estimate'].append(temp_perc_comp_fore)
+            
         except:
             continue
 
-    data = risk_var_table.objects.filter(username = request.user)
-    serializer = RiskVarTableSerializer(data, context={'request': request}, many=True)
-    return Response(serializer.data)   
+    print(final_dict)
+    final_dict = json.dumps(final_dict)
+    return Response(final_dict)   
 
 @api_view(['GET'])
 def return_current_season_df_api(request):
@@ -824,10 +682,8 @@ def range_probabilities_api(request):
     final_dict = json.dumps(final_dict)
     return Response(final_dict)
 
-
 @api_view(['GET'])
 def financial_account_range_probabilities(request):
-    
     
     username = request.query_params.get('username')
 
