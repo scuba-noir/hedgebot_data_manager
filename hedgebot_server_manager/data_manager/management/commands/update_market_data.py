@@ -33,11 +33,14 @@ class Command(BaseCommand):
             temp_row = old_data.loc[(old_data['ticker'] == ticker) & (old_data['date'] == temp_max_date)]
             print(temp_row)
 
-            sql = '''
-                SELECT * FROM market_data_prices WHERE ticker 
-            
-            '''
+            sql = '''SELECT * FROM market_data_prices WHERE ticker = '''
+            sql = sql + str(ticker)
+            sql = sql + '''AND date > ''' + temp_max_date
+            temp_data_df = pd.read_sql(sql = sql, con = db)
+            print(temp_data_df.values.tolist())
 
+        
+        """    
         columns = ['Id','Ticker', 'Description', 'Origin', 'Dashboard', 'Units', 'Date','Value','Most Recent']
         sql = '''
             WITH list AS (
@@ -52,3 +55,4 @@ class Command(BaseCommand):
         data_df = data_df.loc[data_df['ticker'].isin(ticker_ls)]
 
         print(data_df)
+        """
