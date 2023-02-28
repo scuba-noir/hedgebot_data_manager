@@ -10,14 +10,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         check_entries_bool = True
-
-        ticker_ls = all_tickers
         db = pymysql.connect(host = 'database-1.c8dbzf9wtrjo.us-east-2.rds.amazonaws.com', user = 'admin', password = 'Ktr321ugh!')
         cursor = db.cursor()
-
         sql = '''use collateral_prices'''
         cursor.execute(sql)
-
 
         old_data = pd.DataFrame(market_data.objects.all().values())
         all_tickers = ['SBMAY1 Comdty', 'SBJUL1 Comdty', 'SBOCT1 Comdty', 'SBMAR2 Comdty', 'GCFPUBGC Index', 'CL1 Comdty', 'BZCESECA Index', 'SBMAR1 Comdty','SB1 Comdty', 'USDBRL Curncy', 'BAAWHYDP Index', 'BAAWANAB Index']
