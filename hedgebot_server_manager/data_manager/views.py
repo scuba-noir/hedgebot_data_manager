@@ -546,8 +546,7 @@ def risk_var_table_api(request):
         'prob_estimate':[]
     }
     for account in relevant_accounts:
-        temp_account = data_df[account]
-        final_label = account_labels[relevant_accounts.index(temp_account)]
+        final_label = account_labels[relevant_accounts.index(account)]
         temp_mu = data_df[account]
         temp_sigma = data_df[account+'_std']
         temp_distribution = np.random.normal(temp_mu, temp_sigma, 1000)
