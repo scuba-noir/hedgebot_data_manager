@@ -144,9 +144,7 @@ def financial_sim_update(username, num_sims = 1000):
     
     pd.DataFrame.from_dict(final_value_dict).to_csv('final_value_dict_output.csv')
     final_value_dict = pd.DataFrame.from_dict(final_value_dict)
-    for keys in final_value_dict.columns:
-        print(keys)
-        print(final_value_dict[keys])
+
 
     temp = current_financial_simulations.objects.create(
         user = username,
@@ -335,9 +333,7 @@ def risk_management_table_api(request):
     
     if request.method == 'POST':
         user_input = request.POST
-        print(user_input)
         username = user_input.get('username')
-        print(username)
 
         initial_sim_variables = return_current_season_df(username)
 
@@ -637,7 +633,6 @@ def risk_var_table_api(request):
         except:
             continue
 
-    print(final_dict)
     final_dict = json.dumps(final_dict)
     return Response(final_dict)   
 
@@ -730,7 +725,6 @@ def financial_account_range_probabilities(request):
 
     if request.method == 'GET':
 
-        print(username)
         current_expectations = current_financial_simulations.objects.filter(user = username)
         max_current_expectation_id = current_expectations.latest('id').id
         current_expectations = pd.DataFrame.from_dict(current_expectations.filter(id = max_current_expectation_id).values())
@@ -754,7 +748,6 @@ def financial_account_range_probabilities(request):
                 temp_std_returned = current_expectations[relevent_std_var][0]
                 if temp_std_returned == 0:
                     temp_std_returned = abs(temp_mean_returned * 0.01)
-                    print(temp_mean_returned)
                 return_values_dict[relevent_sim_variables[i]] = list(return_percentiles(temp_mean_returned, temp_std_returned))
 
         data = return_values_dict
@@ -836,10 +829,6 @@ def get_user_assumptions_results(request):
     username = request.query_params.get('username')
     season_list = ['23_24', '2023_24']
     current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season__in =season_list)
-    verbose_name_dict = user_forecasts_assumptions_results.return_verbose(user_forecasts_assumptions_results)
-    #max_sim_date = current_season_df.latest('date').date
-    #current_season_df = current_season_df.filter(date = max_sim_date)
     max_id = current_season_df.latest('id').id
     current_season_df = pd.DataFrame(current_season_df.filter(id = max_id).values())
-    print(current_season_df)
     return Response(current_season_df.to_dict(orient='list'))
