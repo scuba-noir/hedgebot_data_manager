@@ -545,6 +545,7 @@ def risk_var_table_api(request):
         'high_90':[],
         'prob_estimate':[]
     }
+    print(data_df)
     for account in relevant_accounts:
         final_label = account_labels[relevant_accounts.index(account)]
         temp_mu = data_df[account]
