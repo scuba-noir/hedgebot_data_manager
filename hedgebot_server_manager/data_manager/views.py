@@ -648,8 +648,8 @@ def return_current_season_df_api(request):
     season_list = ['23_24', '2023_24']
     current_season_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season__in =season_list)
     verbose_name_dict = user_forecasts_assumptions_results.return_verbose(user_forecasts_assumptions_results)
-    max_sim_date = current_season_df.latest('date').date
-    current_season_df = current_season_df.filter(date = max_sim_date)
+    #max_sim_date = current_season_df.latest('date').date
+    #current_season_df = current_season_df.filter(date = max_sim_date)
     max_id = current_season_df.latest('id').id
     current_season_df = current_season_df.filter(id = max_id)
     current_season_df = pd.DataFrame.from_dict(current_season_df.values())
