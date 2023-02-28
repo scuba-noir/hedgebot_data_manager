@@ -533,13 +533,9 @@ def risk_var_table_api(request):
     data = current_financial_simulations.objects.filter(user = username)
     max_date = data.latest('simulation_date').simulation_date
     data_df = pd.DataFrame(data.filter(date = max_date).values())
-    company_forecast_df = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = request.user).filter(season='2023_24').values())
-    company_forecast_df.columns = desc_names
-    obj, created = user_forecasts_assumptions_results.objects.get_or_create(username = request.user, season = '2023_24')
-    obj, created = user_forecasts_assumptions_results.objects.get_or_create(username = request.user, season = '2022_23')
-    old_company_forecast = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = request.user).filter(season='2022_23').values())
+    company_forecast_df = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = username).filter(season='2023_24').values())
+    old_company_forecast = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = username).filter(season='2022_23').values())
     relevant_accounts = ['current_ratio','net_debt_to_mt_cane','gross_profit','gross_margin','net_income']
-    company_forecast_accounts = ['current_ratio', 'net_debt_mt_of_cane', 'gross_profit', 'gross_margin', 'net_income']
     account_labels = ['Current Ratio','Dívida Líquida/EBITDA','EBITDA (000 R$)','Margem Líquida (%)','Resultado Líquido (000 R$)']
     data_df = data_df.loc[data_df['account'].isin(relevant_accounts)]
     final_dict = {
