@@ -554,7 +554,6 @@ def risk_var_table_api(request):
         temp_mu = data_df[account]
         temp_sigma = data_df[account+'_std']
         temp_distribution = np.random.normal(temp_mu, temp_sigma, 1000)
-        print(company_forecast_df)
         temp_comp_forecast = company_forecast_df[company_forecast_account].values.tolist()[0]
         try:
             temp_comp_forecast = temp_comp_forecast[0]
@@ -584,10 +583,10 @@ def risk_var_table_api(request):
 
         try:
             final_dict['label'].append(final_label)
-            final_dict['prev_season'].append(int(temp_prev_season))
-            final_dict['actual_estimate'].append(int(temp_comp_forecast))
-            final_dict['low_10'].append(int(temp_low_10))
-            final_dict['high_90'].append(int(temp_high_90))
+            final_dict['prev_season'].append(temp_prev_season)
+            final_dict['actual_estimate'].append(temp_comp_forecast)
+            final_dict['low_10'].append(temp_low_10)
+            final_dict['high_90'].append(temp_high_90)
             final_dict['prob_estimate'].append(temp_perc_comp_fore)
             
         except:
