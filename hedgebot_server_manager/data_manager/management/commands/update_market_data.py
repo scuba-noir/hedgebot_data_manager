@@ -24,7 +24,7 @@ class Command(BaseCommand):
         print(old_data_df)
 
 
-        ticker_ls = ['SB1 Comdty','USDBRL Curncy','BAAWHYDP Index','BAAWANAB Index']
+        ticker_ls = all_tickers
         db = pymysql.connect(host = 'database-1.c8dbzf9wtrjo.us-east-2.rds.amazonaws.com', user = 'admin', password = 'Ktr321ugh!')
         cursor = db.cursor()
 
