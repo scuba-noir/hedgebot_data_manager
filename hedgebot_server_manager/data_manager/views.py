@@ -533,9 +533,12 @@ def risk_var_table_api(request):
     data = current_financial_simulations.objects.filter(user = username)
     max_id = data.latest('id').id
     data_df = pd.DataFrame(data.filter(id = max_id).values())
-    company_forecast_df = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = username).filter(season='2023_24').values())
+    company_forecast_df = user_forecasts_assumptions_results.objects.filter(username = username).filter(season='2023_24')
+    max_company_forecast_id = company_forecast_df.latest('id').id
+    company_forecast_df = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(id=max_company_forecast_id).values())
     old_company_forecast = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = username).filter(season='2022_23').values())
     relevant_accounts = ['current_ratio','net_debt_to_mt_cane','gross_profit','gross_margin','net_income']
+    company_forecast_accounts = ['current_ratio','net_debt_mt_cane','gross_profit','gross_margin','net_income']
     account_labels = ['Current Ratio','Dívida Líquida/EBITDA','EBITDA (000 R$)','Margem Líquida (%)','Resultado Líquido (000 R$)']
     final_dict = {
         'label':[],
@@ -548,11 +551,12 @@ def risk_var_table_api(request):
     print(data_df)
     for account in relevant_accounts:
         final_label = account_labels[relevant_accounts.index(account)]
+        company_forecast_account = account_labels[relevant_accounts.index(account)]
         temp_mu = data_df[account]
         temp_sigma = data_df[account+'_std']
         temp_distribution = np.random.normal(temp_mu, temp_sigma, 1000)
         print(company_forecast_df)
-        temp_comp_forecast = company_forecast_df[account].values.tolist()[0]
+        temp_comp_forecast = company_forecast_df[company_forecast_account].values.tolist()[0]
         try:
             temp_comp_forecast = temp_comp_forecast[0]
         except:
