@@ -551,6 +551,7 @@ def risk_var_table_api(request):
         temp_mu = data_df[account]
         temp_sigma = data_df[account+'_std']
         temp_distribution = np.random.normal(temp_mu, temp_sigma, 1000)
+        print(company_forecast_df)
         temp_comp_forecast = company_forecast_df[account].values.tolist()[0]
         try:
             temp_comp_forecast = temp_comp_forecast[0]
