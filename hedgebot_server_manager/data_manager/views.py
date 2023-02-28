@@ -652,7 +652,7 @@ def return_current_season_df_api(request):
     #current_season_df = current_season_df.filter(date = max_sim_date)
     max_id = current_season_df.latest('id').id
     current_season_df = current_season_df.filter(id = max_id)
-     current_season_df = pd.DataFrame.from_dict(current_season_df.values())
+    current_season_df = pd.DataFrame.from_dict(current_season_df.values())
     current_season_df = current_season_df.drop(['date'], axis = 1)
     counter = 0
 
