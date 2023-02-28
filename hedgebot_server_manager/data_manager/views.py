@@ -537,7 +537,6 @@ def risk_var_table_api(request):
     old_company_forecast = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = username).filter(season='2022_23').values())
     relevant_accounts = ['current_ratio','net_debt_to_mt_cane','gross_profit','gross_margin','net_income']
     account_labels = ['Current Ratio','Dívida Líquida/EBITDA','EBITDA (000 R$)','Margem Líquida (%)','Resultado Líquido (000 R$)']
-    data_df = data_df.loc[data_df['account'].isin(relevant_accounts)]
     final_dict = {
         'label':[],
         'prev_season':[],
