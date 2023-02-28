@@ -32,5 +32,6 @@ urlpatterns = [
     re_path(r'^api/return_current_season_df_api/$', views.return_current_season_df_api),
     re_path(r'^api/probabily_range_api/$', views.range_probabilities_api),     
     re_path(r'^api/update_user_forecast_assumptions/$', views.update_user_forecast_assumptions),     
-    re_path(r'^api/financial_account_probability_range/$', views.financial_account_range_probabilities),         
+    re_path(r'^api/financial_account_probability_range/$', views.financial_account_range_probabilities),   
+    re_path(r'^api/user_assumptions_results/$', views.get_user_assumptions_results),         
     ]
