@@ -17,7 +17,7 @@ from data_manager.models import monte_carlo_market_data
 from data_manager.models import market_data, risk_management_user_input_table
 from data_manager.models import sugar_position_info_2
 from data_manager.models import user_list, target_prices, hedgebot_results_meta_data, user_forecasts_assumptions_results, current_financial_simulations, range_probability_score
-from data_manager.forms import userInputForm
+from data_manager.forms import userInputForm, userSugarPositionInput_2
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from rest_framework.response import Response
@@ -395,16 +395,44 @@ def market_data_api(request):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET'])
+@api_view(['GET','POST'])
 def sugar_position_api(request):
 
     if request.method == "GET":
+
         username = request.query_params.get('username')
         data = sugar_position_info_2.objects.filter(username = username)
+        max_id = data.latest('id').id
+        data = data.filter(id = max_id)
         serializer = SugarPosition2Serializers(data, context={'request': request}, many=True)
 
         return Response(serializer.data)
+    
+    if request.method == 'POST':
 
+        form = userSugarPositionInput_2(request.POST)
+                
+        if form.is_valid():
+            
+            form.data = form.cleaned_data
+            form.save(commit=False)
+            form.set_username(username = request.user)
+            form_new = sugar_position_info_2.objects.create()
+            for keys in form.data:
+                if form.data[keys] != None:
+                    form_new.set_field_value(keys, form.data[keys])
+            form_new.full_clean()
+
+            form_new.save()
+    
+        else:
+            print('non-valid')
+            print(form.errors)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    
 @api_view(['GET'])
 def historical_mc_data_api(request):
 

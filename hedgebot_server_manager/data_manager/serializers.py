@@ -17,6 +17,7 @@ class SugarPosition2Serializers(serializers.ModelSerializer):
     class Meta:
         model = sugar_position_info_2
         fields = (
+            'id',
             'date',
             'mar1_fxpassive_obligation',
             'mar1_fxpassive_fixed',
