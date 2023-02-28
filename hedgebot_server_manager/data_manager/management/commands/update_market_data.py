@@ -9,9 +9,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         old_data = pd.DataFrame(market_data.objects.all().values())
-        all_tickers = old_data['ticker'].unique()
-        print(all_tickers.tolist())
-        pd.DataFrame(all_tickers).to_csv("test_ticker_ls_file.csv")
+        all_tickers = ['SBMAY1 Comdty', 'SBJUL1 Comdty', 'SBOCT1 Comdty', 'SBMAR2 Comdty', 'Fert_Costs', 'CL1 Comdty', 'Energy_Costs', 'SBMAR1 Comdty','SB1 Comdty', 'USDBRL Curncy', 'BAAWHYDP Index', 'BAAWANAB Index']
         
         old_data_df = pd.DataFrame(columns=['id','date','ticker','value','units'])
         for ticker in all_tickers:
