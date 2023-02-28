@@ -34,6 +34,7 @@ class Command(BaseCommand):
             ticker = labels_ls[index]
             temp_max_date = max(old_data['date'].loc[old_data['ticker'] == hedgebot_label])
             temp_data_df = full_market_prices_df.loc[(full_market_prices_df['ticker'] == ticker) & (full_market_prices_df['date'] > temp_max_date)]
+            temp_data_df = temp_data_df.drop_duplicates(subset = 'date')
             print(temp_data_df)
             #for row, items in temp_data_df.iterrows():
             #    print(items)
