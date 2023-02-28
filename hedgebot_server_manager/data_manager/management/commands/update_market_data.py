@@ -37,15 +37,14 @@ class Command(BaseCommand):
             sql = sql + '''" AND date > ''' + temp_max_date.strftime("%Y-%m-%d")
             temp_data_df = pd.read_sql(sql = sql, con = db)
             print(temp_data_df)
-            for row, items in temp_data_df.iterrows():
-                print(items)
+            #for row, items in temp_data_df.iterrows():
+            #    print(items)
                 #try:
                 #    market_data.objects.get_or_create(ticker = items.ticker, value = items.value, units = items.units, date = items.date)
                 #except:
                 #    continue
             
-            if ticker == 'SBOCT1 Comdty':
-                break
+            
 
 
         
