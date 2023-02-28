@@ -416,7 +416,7 @@ def sugar_position_api(request):
             
             form.data = form.cleaned_data
             form.save(commit=False)
-            form.set_username(username = request.data.get('username'))
+            form.set_username(username = request.query_params.get('username'))
             form_new = sugar_position_info_2.objects.create()
             for keys in form.data:
                 if form.data[keys] != None:
