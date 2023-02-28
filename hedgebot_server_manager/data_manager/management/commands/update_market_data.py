@@ -31,7 +31,6 @@ class Command(BaseCommand):
 
             temp_max_date = max(old_data['date'].loc[old_data['ticker'] == ticker])
             temp_row = old_data.loc[(old_data['ticker'] == ticker) & (old_data['date'] == temp_max_date)]
-            print(temp_row)
 
             sql = '''SELECT * FROM market_data_prices WHERE ticker = "'''
             sql = sql + str(ticker)
