@@ -17,8 +17,8 @@ class userForAssumAdmin(admin.ModelAdmin):
 @admin.register(market_data)
 class marketAdmin(admin.ModelAdmin):
     list_display = ('ticker','date','value','units')
-    list_filter = ("ticker")
-    
+    list_filter = ('ticker','date')
+
 @admin.register(financial_simulation_meta_data_historical)
 class finSimMetaAdmin(admin.ModelAdmin):
     list_display = ('simulation_date', 'account', 'mean_returned', 'std_returned', 'username')
