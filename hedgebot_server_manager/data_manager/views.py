@@ -547,8 +547,6 @@ def risk_var_table_api(request):
     }
     for account in relevant_accounts:
         temp_account = data_df[account]
-        if (temp_account in relevant_accounts) == False:
-            continue
         final_label = account_labels[relevant_accounts.index(temp_account)]
         temp_mu = data_df[account]
         temp_sigma = data_df[account+'_std']
