@@ -841,4 +841,5 @@ def get_user_assumptions_results(request):
     #current_season_df = current_season_df.filter(date = max_sim_date)
     max_id = current_season_df.latest('id').id
     current_season_df = pd.DataFrame(current_season_df.filter(id = max_id).values())
+    print(current_season_df)
     return Response(current_season_df.to_dict(orient='list'))
