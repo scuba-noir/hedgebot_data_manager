@@ -540,8 +540,7 @@ def risk_var_table_api(request):
     relevant_accounts = ['current_ratio','net_debt_to_mt_cane','gross_profit','gross_margin','net_income']
     company_forecast_accounts = ['current_ratio','net_debt_mt_of_cane','gross_profit','gross_margin','net_income']
     account_labels = ['Current Ratio','Dívida Líquida/EBITDA','EBITDA (000 R$)','Margem Líquida (%)','Resultado Líquido (000 R$)']
-    final_dict = {
-    }
+    final_dict = []
 
     '''
     'label':[],
