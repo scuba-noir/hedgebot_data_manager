@@ -530,7 +530,7 @@ def hedgebot_best_path_api2(request):
 def risk_var_table_api(request):
 
     username = request.query_params.get('username')
-    data = current_financial_simulations.objects.filter(username = username)
+    data = current_financial_simulations.objects.filter(user = username)
     max_date = data.latest('simulation_date').simulation_date
     data_df = pd.DataFrame(data.filter(date = max_date).values())
     company_forecast_df = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = request.user).filter(season='2023_24').values())
