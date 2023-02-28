@@ -424,13 +424,11 @@ def sugar_position_api(request):
             form_new.full_clean()
 
             form_new.save()
-    
+            return Response(status=status.HTTP_201_CREATED)
         else:
             print('non-valid')
             print(form.errors)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
     
 @api_view(['GET'])
