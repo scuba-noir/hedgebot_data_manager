@@ -44,6 +44,8 @@ class Command(BaseCommand):
                 #except:
                 #    continue
             
+            if ticker == 'SBOCT1 Comdty':
+                break
 
 
         
