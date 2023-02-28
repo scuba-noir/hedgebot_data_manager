@@ -23,6 +23,7 @@ class Command(BaseCommand):
 
             obj_delete = market_data.objects.exclude(ticker__in = labels_ls)
             print(pd.DataFrame(obj_delete.values())['ticker'].unique().tolist())
+            obj_delete.delete()
         
         old_data_df = pd.DataFrame(columns=['id','date','ticker','value','units'])
         
