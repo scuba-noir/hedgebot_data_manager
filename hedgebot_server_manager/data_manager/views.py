@@ -538,7 +538,7 @@ def risk_var_table_api(request):
     company_forecast_df = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(id=max_company_forecast_id).values())
     old_company_forecast = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = username).filter(season='2022_23').values())
     relevant_accounts = ['current_ratio','net_debt_to_mt_cane','gross_profit','gross_margin','net_income']
-    company_forecast_accounts = ['current_ratio','net_debt_mt_cane','gross_profit','gross_margin','net_income']
+    company_forecast_accounts = ['current_ratio','net_debt_mt_of_cane','gross_profit','gross_margin','net_income']
     account_labels = ['Current Ratio','Dívida Líquida/EBITDA','EBITDA (000 R$)','Margem Líquida (%)','Resultado Líquido (000 R$)']
     final_dict = {
         'label':[],
@@ -548,7 +548,6 @@ def risk_var_table_api(request):
         'high_90':[],
         'prob_estimate':[]
     }
-    print(data_df)
     for account in relevant_accounts:
         final_label = account_labels[relevant_accounts.index(account)]
         company_forecast_account = company_forecast_accounts[relevant_accounts.index(account)]
