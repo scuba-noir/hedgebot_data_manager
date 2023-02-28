@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        check_entries_bool = True
+        check_entries_bool = False
         db = pymysql.connect(host = 'database-1.c8dbzf9wtrjo.us-east-2.rds.amazonaws.com', user = 'admin', password = 'Ktr321ugh!')
         cursor = db.cursor()
         sql = '''use collateral_prices'''
@@ -27,7 +27,7 @@ class Command(BaseCommand):
         
         old_data_df = pd.DataFrame(columns=['id','date','ticker','value','units'])
         
-        for ticker in all_tickers:
+        for ticker in labels_ls:
 
             temp_max_date = max(old_data['date'].loc[old_data['ticker'] == ticker])
             temp_row = old_data.loc[(old_data['ticker'] == ticker) & (old_data['date'] == temp_max_date)]
