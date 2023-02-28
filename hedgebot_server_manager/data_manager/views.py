@@ -541,13 +541,16 @@ def risk_var_table_api(request):
     company_forecast_accounts = ['current_ratio','net_debt_mt_of_cane','gross_profit','gross_margin','net_income']
     account_labels = ['Current Ratio','Dívida Líquida/EBITDA','EBITDA (000 R$)','Margem Líquida (%)','Resultado Líquido (000 R$)']
     final_dict = {
-        'label':[],
+    }
+
+    '''
+    'label':[],
         'prev_season':[],
         'actual_estimate':[],
         'low_10':[],
         'high_90':[],
         'prob_estimate':[]
-    }
+    '''
     for account in relevant_accounts:
         final_label = account_labels[relevant_accounts.index(account)]
         company_forecast_account = company_forecast_accounts[relevant_accounts.index(account)]
@@ -582,12 +585,15 @@ def risk_var_table_api(request):
         temp_high_90 = np.percentile(temp_distribution, 90)
 
         try:
-            final_dict['label'].append(final_label)
-            final_dict['prev_season'].append(temp_prev_season)
-            final_dict['actual_estimate'].append(temp_comp_forecast)
-            final_dict['low_10'].append(temp_low_10)
-            final_dict['high_90'].append(temp_high_90)
-            final_dict['prob_estimate'].append(temp_perc_comp_fore)
+            temp_dict = {
+                'label':final_label,
+                'prev_season':temp_prev_season,
+                'actual_estimate':temp_comp_forecast,
+                'low_10':temp_low_10,
+                'high_90':temp_high_90,
+                'prob_estimate':temp_perc_comp_fore
+            }
+            final_dict.append(temp_dict)
             
         except:
             continue
