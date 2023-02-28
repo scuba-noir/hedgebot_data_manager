@@ -24,7 +24,6 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status, generics
 from data_manager.serializers import SugarPosition2Serializers, MonteCarloDataSerializer, MarketDataSerializer, FinSimMetaDataSerializer, UserListSerializers, HistMCDataSerializer, HedgebotBestSerializer
-from rest_framework.renderers import JSONRenderer
 from data_manager.serializers import RiskManagementUserInputTableSerializer, ProbabilityRangeScoresSerializer
 
 from . import full_simulation_run
@@ -369,7 +368,7 @@ def risk_management_table_api(request):
 
         return Response(data)
 
-@api_view(['GET'])
+@api_view(['GET','POST'])
 def market_data_api(request):
 
     if request.method == "GET":
@@ -379,6 +378,22 @@ def market_data_api(request):
         serializer = MarketDataSerializer(data, context={'request': request}, many=True)
 
         return Response(serializer.data)
+    
+    if request.method == 'POST':
+
+        data = {
+            'ticker': request.data.get('ticker'),
+            'date': request.data.get('date'),
+            'value':request.data.get('value'),
+            'units':request.data.get('units')
+        }
+
+        serializer = MarketDataSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def sugar_position_api(request):
@@ -472,7 +487,6 @@ def userlist_api(request):
 
     if request.method == 'POST':
 
-        new_user = request.data.get('username')
         data = {
             'username': request.data.get('username'), 
             'create_date': request.data.get('create_date'), 
