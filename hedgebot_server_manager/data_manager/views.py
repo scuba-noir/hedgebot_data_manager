@@ -551,7 +551,7 @@ def risk_var_table_api(request):
     print(data_df)
     for account in relevant_accounts:
         final_label = account_labels[relevant_accounts.index(account)]
-        company_forecast_account = account_labels[relevant_accounts.index(account)]
+        company_forecast_account = company_forecast_accounts[relevant_accounts.index(account)]
         temp_mu = data_df[account]
         temp_sigma = data_df[account+'_std']
         temp_distribution = np.random.normal(temp_mu, temp_sigma, 1000)
