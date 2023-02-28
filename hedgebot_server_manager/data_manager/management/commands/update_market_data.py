@@ -39,9 +39,11 @@ class Command(BaseCommand):
             print(temp_data_df)
             for row, items in temp_data_df.iterrows():
                 print(items)
-                #market_data.objects.get_or_create(ticker = items.ticker, value = items.value, units = items.units, date = items.date)
+                #try:
+                #    market_data.objects.get_or_create(ticker = items.ticker, value = items.value, units = items.units, date = items.date)
+                #except:
+                #    continue
             
-            break
 
 
         
