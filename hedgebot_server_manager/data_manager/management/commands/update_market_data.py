@@ -37,7 +37,13 @@ class Command(BaseCommand):
             sql = sql + str(ticker)
             sql = sql + '''" AND date > ''' + str(temp_max_date)
             temp_data_df = pd.read_sql(sql = sql, con = db)
-            print(temp_data_df.values.tolist())
+            
+            for row, items in temp_data_df.iterrows():
+                print(items)
+                #market_data.objects.get_or_create(ticker = items.ticker, value = items.value, units = items.units, date = items.date)
+            
+            break
+
 
         
         """    
