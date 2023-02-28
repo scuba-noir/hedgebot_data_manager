@@ -16,6 +16,7 @@ class Command(BaseCommand):
         cursor.execute(sql)
 
         old_data = pd.DataFrame(market_data.objects.all().values())
+        old_data['date'] = pd.to_datetime(old_data['date'])
         all_tickers = ['SBMAY1 Comdty', 'SBJUL1 Comdty', 'SBOCT1 Comdty', 'SBMAR2 Comdty', 'GCFPUBGC Index', 'CL1 Comdty', 'BZCESECA Index', 'SBMAR1 Comdty','SB1 Comdty', 'USDBRL Curncy', 'BAAWHYDP Index', 'BAAWANAB Index']
         labels_ls = ['SBMAY1 Comdty', 'SBJUL1 Comdty', 'SBOCT1 Comdty', 'SBMAR2 Comdty', 'Fert_Costs', 'CL1 Comdty', 'Energy_Costs', 'SBMAR1 Comdty','SB1 Comdty', 'USDBRL Curncy', 'BAAWHYDP Index', 'BAAWANAB Index']
         
@@ -25,8 +26,7 @@ class Command(BaseCommand):
             print(pd.DataFrame(obj_delete.values())['ticker'].unique().tolist())
             obj_delete.delete()
         
-        old_data_df = pd.DataFrame(columns=['id','date','ticker','value','units'])
-        
+            
         for ticker in labels_ls:
 
             temp_max_date = max(old_data['date'].loc[old_data['ticker'] == ticker])
@@ -34,7 +34,7 @@ class Command(BaseCommand):
 
             sql = '''SELECT * FROM market_data_prices WHERE ticker = "'''
             sql = sql + str(ticker)
-            sql = sql + '''" AND date > ''' + str(temp_max_date)
+            sql = sql + '''" AND date > ''' + temp_max_date.strftime("%Y-%m-%d")
             temp_data_df = pd.read_sql(sql = sql, con = db)
             print(temp_data_df)
             for row, items in temp_data_df.iterrows():
