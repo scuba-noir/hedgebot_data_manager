@@ -531,7 +531,7 @@ def risk_var_table_api(request):
 
     username = request.query_params.get('username')
     data = current_financial_simulations.objects.filter(user = username)
-    max_date = data.latest('simulation_date').simulation_date
+    max_date = data.latest('date').date
     data_df = pd.DataFrame(data.filter(date = max_date).values())
     company_forecast_df = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = username).filter(season='2023_24').values())
     old_company_forecast = pd.DataFrame(user_forecasts_assumptions_results.objects.filter(username = username).filter(season='2022_23').values())
