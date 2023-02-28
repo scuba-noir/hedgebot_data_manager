@@ -3,6 +3,7 @@ from data_manager import models
 from data_manager.models import monte_carlo_market_data, market_data
 import pandas as pd
 import pymysql
+import datetime
 
 class Command(BaseCommand):
 
@@ -13,11 +14,13 @@ class Command(BaseCommand):
         
         old_data_df = pd.DataFrame(columns=['id','date','ticker','value','units'])
         for ticker in all_tickers:
-            print(ticker)
-            temp_max_date = max(old_data['date'].loc[old_data['ticker'] == ticker])
-            temp_row = old_data.loc[(old_data['ticker'] == ticker) & (old_data['date'] == temp_max_date)]
-            old_data_df = pd.concat([old_data_df, temp_row])
-
+            try:
+                temp_max_date = max(old_data['date'].loc[old_data['ticker'] == ticker])
+                temp_row = old_data.loc[(old_data['ticker'] == ticker) & (old_data['date'] == temp_max_date)]
+                old_data_df = pd.concat([old_data_df, temp_row])
+            except:
+                temp_row = pd.DataFrame(data=[datetime.datetime(2019,1,1), ticker, 0, 'temp_fill'], columns=['id','date','ticker','value','units'])
+                old_data_df = pd.concat([old_data_df, temp_row])
         print(old_data_df)
 
 
