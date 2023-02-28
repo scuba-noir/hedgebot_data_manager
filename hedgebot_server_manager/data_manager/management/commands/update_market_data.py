@@ -33,9 +33,9 @@ class Command(BaseCommand):
             temp_row = old_data.loc[(old_data['ticker'] == ticker) & (old_data['date'] == temp_max_date)]
             print(temp_row)
 
-            sql = '''SELECT * FROM market_data_prices WHERE ticker = '''
+            sql = '''SELECT * FROM market_data_prices WHERE ticker = "'''
             sql = sql + str(ticker)
-            sql = sql + '''AND date > ''' + str(temp_max_date)
+            sql = sql + '''" AND date > ''' + str(temp_max_date)
             temp_data_df = pd.read_sql(sql = sql, con = db)
             print(temp_data_df.values.tolist())
 
