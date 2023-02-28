@@ -19,7 +19,7 @@ class Command(BaseCommand):
                 temp_row = old_data.loc[(old_data['ticker'] == ticker) & (old_data['date'] == temp_max_date)]
                 old_data_df = pd.concat([old_data_df, temp_row])
             except:
-                temp_row = pd.DataFrame(data=[datetime.datetime(2019,1,1), ticker, 0, 'temp_fill'], columns=['id','date','ticker','value','units'])
+                temp_row = pd.DataFrame(data=[[datetime.datetime(2019,1,1), ticker, 0, 'temp_fill']], columns=['id','date','ticker','value','units'])
                 old_data_df = pd.concat([old_data_df, temp_row])
         print(old_data_df)
 
