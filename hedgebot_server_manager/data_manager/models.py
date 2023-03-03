@@ -1006,3 +1006,10 @@ class risk_management_user_input_table(models.Model):
 class range_probability_score(models.Model):
 
     probability = models.FloatField()
+
+class market_forecasts(models.Model):
+
+    published_date = models.DateField(default = django.utils.timezone.now)
+    description = models.CharField(max_length=30)
+    forecast_date = models.DateField()
+    value = models.FloatField()

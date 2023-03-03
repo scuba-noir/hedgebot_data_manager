@@ -3,11 +3,14 @@ import pandas as pd
 import math
 import pymysql
 import pdblp
+import requests
+import datetime as dt
 
 from datetime import datetime
 from datetime import timedelta
 from datetime import date
 from calendar import monthrange
+
 
 FORECASTS = {
     'NY No.11':{datetime(2023,3,31): 18.13, datetime(2024,3,31): 16.65},
@@ -24,15 +27,11 @@ FORECASTS = {
     'SBMAR2 Comdty':{datetime(2023,3,31): 18.13, datetime(2024,3,31): 16.65},
 }
 
-
 def attach_market_forecast(data_ls):
 
     date_df = pd.DataFrame(data_ls, columns = ['Date'])
     date_df['Date'] = pd.to_datetime(date_df['Date'], format= "%d/%m/%Y")
     forecasts_df = 1
-    print('Redo Forecast Addition')
-    return 0
-
     temp_ls = []
     for index, row in date_df.iterrows():
         quarter = row['Date'].quarter
@@ -52,9 +51,6 @@ def attach_market_forecast(data_ls):
         num_days = monthrange(year, month)[1]
         temp_date = pd.Timestamp(year = year, month = month, day = num_days)
         temp_ls.append(temp_date.strftime('%d/%m/%Y'))
-
-    #print(forecasts_df.head())
-
     date_df['Forecast Date'] = temp_ls
     final_column_ls = ['USDBRL','Energy Prices', 'Brent Crude','USD Risk Free Rate','Brazil Central Bank Rate','Fertilizer Costs','NY No.11','Anhydrous Ethanol','Hydrous Ethanol']
     column_ls = forecasts_df['Description'].drop_duplicates().to_list()
@@ -97,13 +93,19 @@ class GeometricBrownianMotion:
 
     def simulate_paths(self):
         while(self.T - self.dt > 0):
-            dWt = np.random.normal(0, math.sqrt(self.dt))  # Brownian motion
-            dYt = self.drift*self.dt + self.volatility*dWt  # Change in price
-            self.current_price += self.current_price*dYt  # Add the change to the current price
+            drift_n = self.drift
+            dWt = np.random.normal(0, np.sqrt(self.dt))  # Brownian motion
+            dYt = (drift_n - 0.5*(self.volatility**2))*self.dt + self.volatility*dWt
+            if (self.T == 1) and (self.print_bool == True):
+                print('Drift: ' + str(drift_n))
+                print('Dyt: ' + str(dYt))
+                print('dwt: ' + str(dWt))
+            self.current_price = self.current_price*(np.exp(dYt))  # Add the change to the current price
             self.prices.append(self.current_price)  # Append new price to series
             self.T -= self.dt  # Accound for the step in time
 
-    def __init__(self, initial_price, drift, volatility, dt, T):
+    def __init__(self, initial_price, drift, volatility, dt, T, average_returns, std_of_returns, forecast_value, print_bool):
+        self.print_bool = print_bool
         self.current_price = initial_price
         self.initial_price = initial_price
         self.drift = drift
@@ -111,26 +113,50 @@ class GeometricBrownianMotion:
         self.dt = dt
         self.T = T
         self.prices = []
+        self.average_returns = average_returns
+        self.std_of_returns = std_of_returns
+        self.forecast_value = forecast_value
         self.simulate_paths()
+       
 
-def add_variable_path(data_df, day_duration, forecast_value):
+def add_variable_path(data_df, day_duration, forecast_value, save_bool):
     data = data_df
     data.columns = ['price']
-    data['pct_chg'] = data.price.pct_change().fillna(0)
-    data['log_ret'] = (np.log(data.price) - np.log(data.price.shift(1))).fillna(0)
+    data = pd.DataFrame(data.iloc[::-1])
+    data['pct_chg'] = data.price.pct_change()
+    data_pct_chg = data['pct_chg'].iloc[1:]
+    data['log_ret'] = (np.log(data.price) - np.log(data.price.shift(1)))
+    data_log_ret = data['log_ret'].iloc[1:]
+    average_returns = data_pct_chg.mean()
+    std_of_returns = data_pct_chg.std()
+    if save_bool:
+        data.to_csv("pre_data.csv")
     paths = 1000
     initial_price = data.price.iat[-1]
-    drift = (forecast_value - initial_price) / initial_price
-    volatility =  data.log_ret.std()
-    dt = 1/day_duration
-    T = 1
+    volatility =  data_log_ret.std()
+    drift = ((forecast_value - initial_price) / initial_price) / day_duration
+    dt = 1
+    T = day_duration
     price_paths = []
 
+    if save_bool:
+        print('Initial Price: ' + str(initial_price))
+        print('Forecast Value: ' + str(forecast_value))
+        print('dt: ' + str(dt))
+        print('Day Duration: ' + str(day_duration))
+        print('Drift: ' + str(drift))
+        print('Volatility: ' + str(volatility))
+        print('Data PCT: ' +str(data_pct_chg))
+
+
     for i in range(0, paths):
-        price_paths.append(GeometricBrownianMotion(initial_price, drift, volatility, dt, T).prices)
+        price_path_obj = GeometricBrownianMotion(initial_price, drift, volatility, dt, T, average_returns, std_of_returns, forecast_value, save_bool)
+        price_paths.append(price_path_obj.prices)
 
     pct_chg_paths = pd.DataFrame(price_paths).T.pct_change().fillna(0)
-
+    if save_bool == True:
+        pd.DataFrame(price_paths).T.to_csv('230302_price_change_path.csv')
+        pct_chg_paths.to_csv('230302_percent_change_path.csv')
     return price_paths, pct_chg_paths
 
 def rescale_prices(data_df, initial_price):
@@ -161,21 +187,33 @@ def format_upload_new_data(data_df):
     
     return temp_row_ls
 
+def bizday_calc_func(start_date, num_days):
+    my_start_date = start_date
+    my_num_days = abs(num_days)
+    inc = 1 if num_days > 0 else -1
+    while my_num_days > 0:
+      my_start_date += timedelta(days=inc)
+      weekday = my_start_date.weekday()
+      if weekday >= 5:
+        continue
+      my_num_days -= 1
+    return my_start_date
+
 def mc_test_new(initial_date, end_date, data_df):
     
-    date_range = pd.date_range(start = initial_date, end = end_date, freq='D')
+    date_range = pd.date_range(start = initial_date, end = end_date, freq='W')
     temp = data_df
     temp['Date'] = pd.to_datetime(temp['Date'])
     temp = temp.loc[temp['Date'] <= initial_date]
-    diff = end_date - initial_date
+    diff = (end_date - initial_date)
     diff_days = len(date_range)
-    data_initial_date = initial_date-diff
+    data_initial_date = datetime.now() - dt.timedelta(days=3*365)
+
     temp = temp.loc[temp['Date'] >= data_initial_date]
 
     temp =temp.sort_index(axis = 0, ascending = False)
     temp = temp.drop(['Date'], axis = 1)
     temp = temp.dropna()
-
     corr = np.corrcoef(temp, rowvar = False)
     chol = np.linalg.cholesky(corr)
 
@@ -184,9 +222,12 @@ def mc_test_new(initial_date, end_date, data_df):
     initial_prices = {}
 
     for i in range(len(temp.columns)):
+        save_boolean = False
         temp_df = temp.loc[:,[temp.columns[i]]]
         forecast_value = FORECASTS[temp.columns[i]][end_date]
-        price_paths, pct_chg_paths = add_variable_path(temp_df, diff_days, forecast_value)
+        if i ==0:
+            save_boolean = False
+        price_paths, pct_chg_paths = add_variable_path(temp_df, diff_days, forecast_value, save_boolean)
         price_paths = pd.DataFrame(price_paths)
         initial_prices[temp.columns[i]] = price_paths[0].iat[0]
 
@@ -212,6 +253,7 @@ def mc_test_new(initial_date, end_date, data_df):
         df_3 = pd.DataFrame()
         for q in range(len(pct_chg_ls)):
             df_3[labels[q]] = pct_chg_ls[q].iloc[:,x]
+        
         corr_ret = pd.DataFrame(np.matmul(chol, df_3.to_numpy().T), index = labels).T
         sugar_ls_final.append(corr_ret['NY No.11'].values)
         hydrous_ls_final.append(corr_ret['Hydrous Ethanol'].values)
@@ -251,7 +293,7 @@ def mc_test_new(initial_date, end_date, data_df):
     jul1_df_final = rescale_prices(jul1_df, initial_prices['SBJUL1 Comdty'])
     oct1_df_final = rescale_prices(oct1_df, initial_prices['SBOCT1 Comdty'])
     mar2_df_final = rescale_prices(mar2_df, initial_prices['SBMAR2 Comdty'])
-
+    sugar_df_final.to_csv("final_sugar_price_paths.csv", index=False)
     sugar_df_final['reference'] = 'sugar_1'
     hydrous_df_final['reference'] = 'hydrous'
     anhydrous_df_final['reference'] = 'anhydrous'
@@ -265,7 +307,6 @@ def mc_test_new(initial_date, end_date, data_df):
     oct1_df_final['reference'] = 'sugar_oct1'
     mar2_df_final['reference'] = 'sugar_mar2'
 
-    date_range = pd.date_range(start = initial_date, end = end_date, freq='D')
     if date_range.shape[0] > sugar_df_final.shape[0]:
         diff_range = date_range.shape[0] - sugar_df_final.shape[0]
         date_range = date_range.delete(diff_range)
@@ -293,7 +334,7 @@ def mc_test_new(initial_date, end_date, data_df):
 
     
 
-DATES_to_SIM = [datetime(2022,11,4), datetime(2022,11,18), datetime(2022,12,2), datetime(2022,12,9), datetime(2022,12,16), datetime(2022,12,23), datetime(2023,1,6),datetime(2023,1,13),datetime(2023,1,20),datetime(2023,1,27),]
+DATES_to_SIM = [datetime(2023,2,17)]
 FINAL_DATES = [datetime(2024,3,31)]
 
 
@@ -325,7 +366,6 @@ def run_sim():
     end_date = end_date.strftime("%Y%m%d")
 
     data_df = con.bdh(ticker_ls, 'PX_LAST', start_date, end_date)
-
     
     column_ls = []
     for col in range(0, data_df.shape[1]):
@@ -334,13 +374,10 @@ def run_sim():
 
     data_df.columns = column_ls
     data_df['Date'] = data_df.index
-    data_df.to_csv('temp_price_data.csv')
-    return 0
     final_dict_ls = []
     final_df_aggregate = []
     for tt in range(len(FINAL_DATES)):
         for zzz in range(len(DATES_to_SIM)):
-            print(DATES_to_SIM[zzz])
             x = mc_test_new(DATES_to_SIM[zzz], FINAL_DATES[tt], data_df=data_df)
             final_dict_ls.append(x)
             x_df = pd.DataFrame.from_dict(x['sugar_1'])
@@ -350,9 +387,7 @@ def run_sim():
                     final_df_aggregate = temp_x_df
                 else:
                     final_df_aggregate = pd.concat([final_df_aggregate, temp_x_df], ignore_index=True, axis=0)
-        final_df_aggregate.to_csv('backup_save_' + str(zzz) + '.csv')
-        print(final_df_aggregate)
-    #final_df_aggregate.to_csv("final_output_mc_sim.csv")
+    return final_df_aggregate
 
 def column_reformate():
 
@@ -379,7 +414,5 @@ def column_reformate():
                 final_df_save = pd.concat([final_df_save, temp_df], axis = 0, ignore_index=True)
 
         prev_index = index
-
-    #final_df_save.to_csv("Final_Final_MC.csv", index=False)
 
 run_sim()

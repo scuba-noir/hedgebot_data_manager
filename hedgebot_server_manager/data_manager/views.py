@@ -14,9 +14,9 @@ from data_manager.models import hedgebot_results
 from data_manager.models import financial_simulation_meta_data_historical
 from data_manager.models import financial_simulations_results
 from data_manager.models import monte_carlo_market_data
-from data_manager.models import market_data, risk_management_user_input_table
+from data_manager.models import market_data, market_forecasts
 from data_manager.models import sugar_position_info_2
-from data_manager.models import user_list, target_prices, hedgebot_results_meta_data, user_forecasts_assumptions_results, current_financial_simulations, range_probability_score
+from data_manager.models import user_list, target_prices, user_forecasts_assumptions_results, current_financial_simulations
 from data_manager.forms import userInputForm, userSugarPositionInput_2
 from datetime import date
 from dateutil.relativedelta import relativedelta
@@ -832,3 +832,10 @@ def get_user_assumptions_results(request):
     max_id = current_season_df.latest('id').id
     current_season_df = pd.DataFrame(current_season_df.filter(id = max_id).values())
     return Response(current_season_df.to_dict(orient='list'))
+
+@api_view({'GET'})
+def get_market_forecasts_api(request):
+
+    data = market_forecasts.objects.filter.all()
+    serializer = MarketForecastSerializer(data, context={'request': request}, many=True)
+    return Response(serializer.data)
